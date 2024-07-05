@@ -56,8 +56,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ScrollableList(navController: NavController, items: List<Pair<String, String>>, title: String, screentype: String) {
 
-    val width = if(screentype == "Compact") 250.dp else if(screentype == "Medium") 450.dp else 250.dp
-    val height = if(screentype == "Compact") 450.dp else if(screentype == "Medium") 850.dp else 450.dp
+    val width = 250.dp
+    val height = 450.dp
 
     val titlesize = if(screentype == "Compact") 20.sp else if(screentype == "Medium") 30.sp else 20.sp
     val bodysize = if(screentype == "Compact") 15.sp else if(screentype == "Medium") 20.sp else 15.sp
