@@ -59,6 +59,10 @@ fun stof(stringArray: Array<String>): FloatArray {
     return stringArray.mapNotNull { it.toFloatOrNull() }.toFloatArray()
 }
 
+fun stoi(stringArray: Array<String>): IntArray {
+    return stringArray.mapNotNull { it.toIntOrNull() }.toIntArray()
+}
+
 fun stoff(stringArray: Array<String>): List<Float> {
     return stringArray.mapNotNull { it.toFloatOrNull() }
 }
@@ -122,6 +126,16 @@ fun Multinomial(
     val probability = viewModel.multinomialresult.observeAsState()
     val isSubmitted = remember { mutableStateOf(false) }
     val userId = authViewModel.getuserid()
+    val showDialog = remember { mutableStateOf(false) }
+
+    if(showDialog.value) {
+        DialogBox(
+            title = "Error",
+            text = "The Sum of all Probabilities should be 1 | The sum of all X should be n",
+            setShowDialog = showDialog,
+            onClick = { showDialog.value = false }
+        )
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -228,12 +242,17 @@ fun Multinomial(
                                 onClick = {
                                     keyboardController?.hide()
                                     if (n != "" && p.isNotEmpty() && x.isNotEmpty()) {
-                                        val multinomialrequest = MultinomialRequest(
-                                            n = n.toFloat(),
-                                            x = stof(x),
-                                            p = stof(p)
-                                        )
-                                        viewModel.getMultinomialAnswer(multinomialrequest)
+                                        if(stof(p).sum() != 1f || stoi(x).sum() != n.toInt()) {
+                                            showDialog.value = true
+                                        } else {
+                                            val multinomialrequest = MultinomialRequest(
+                                                n = n.toFloat(),
+                                                x = stof(x),
+                                                p = stof(p)
+                                            )
+                                            viewModel.getMultinomialAnswer(multinomialrequest)
+                                            showDialog.value = false
+                                        }
                                     }
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
@@ -343,7 +362,7 @@ fun Multinomial(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     keyboardController?.hide()
-                                    if (n != "" && p.isNotEmpty() && x.isNotEmpty()) {
+                                    if (n != "" && p.isNotEmpty() && x.isNotEmpty() && stof(p).sum() == 1f && stoi(x).sum() == n.toInt()) {
                                         val multinomialrequest = MultinomialRequest(
                                             n = n.toFloat(),
                                             x = stof(x),
@@ -459,7 +478,7 @@ fun Multinomial(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     keyboardController?.hide()
-                                    if (n != "" && p.isNotEmpty() && x.isNotEmpty()) {
+                                    if (n != "" && p.isNotEmpty() && x.isNotEmpty() && stof(p).sum() == 1f && stoi(x).sum() == n.toInt()) {
                                         val multinomialrequest = MultinomialRequest(
                                             n = n.toFloat(),
                                             x = stof(x),
