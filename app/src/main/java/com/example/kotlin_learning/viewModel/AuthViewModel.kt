@@ -409,6 +409,10 @@ class AuthViewModel : ViewModel() {
     val errorMessage: LiveData<String?> get() = _errorMessage
     private val _username = MutableStateFlow<String?>(null)
     val username: StateFlow<String?> = _username
+    private val _email = MutableStateFlow<String?>(null)
+    val email: StateFlow<String?> = _email
+    private val _nos = MutableStateFlow<Int>(0)
+    val nos: StateFlow<Int> = _nos
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading
 
@@ -468,6 +472,44 @@ class AuthViewModel : ViewModel() {
                 }
                 .addOnFailureListener {
                     _username.value = null
+                }
+                .addOnCompleteListener {
+                    _loading.value = false
+                }
+        }
+    }
+
+    fun getemail(userId: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            database.child("users")
+                .child(userId)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    val user = snapshot.getValue(Users::class.java)
+                    _email.value = user?.email
+                }
+                .addOnFailureListener {
+                    _email.value = null
+                }
+                .addOnCompleteListener {
+                    _loading.value = false
+                }
+        }
+    }
+
+    fun getnos(userId: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            database.child("users")
+                .child(userId)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    val user = snapshot.getValue(Users::class.java)
+                    _nos.value = user?.numberofSolutions!!
+                }
+                .addOnFailureListener {
+                    _nos.value = 0
                 }
                 .addOnCompleteListener {
                     _loading.value = false
