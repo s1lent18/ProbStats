@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.kotlin_learning.view.Account
 import com.example.kotlin_learning.view.Anova
 import com.example.kotlin_learning.view.BayesRule
 import com.example.kotlin_learning.view.Binomial
@@ -107,5 +108,9 @@ fun SetupNavgraph (
         ) { entry ->
             entry.arguments?.let { Printing(navController = navController, index = it.getInt("index"), tabindex = it.getInt("tabindex")) }
         }
+
+        this.composable(
+            route = Screen.Account.route
+        ) { Account(navController = navController) }
     }
 }

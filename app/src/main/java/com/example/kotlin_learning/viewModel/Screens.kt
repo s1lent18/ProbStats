@@ -15,4 +15,5 @@ sealed class Screen(val route: String) {
     data object Hypothesis: Screen(route = "Hypothesis_screen")
     data object History: Screen(route = "History_screen")
     data object Printing: Screen(route = "Printing_screen/{index}/{tabindex}")
+    data object Account: Screen(route = "Account_screen")
 }

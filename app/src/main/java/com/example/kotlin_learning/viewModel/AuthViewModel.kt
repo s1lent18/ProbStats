@@ -3,6 +3,7 @@ package com.example.kotlin_learning.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.kotlin_learning.data.forhistory.Anovaclass
 import com.example.kotlin_learning.data.forhistory.BayesRuleclass
 import com.example.kotlin_learning.data.forhistory.Binomialclass
@@ -18,6 +19,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
 
@@ -368,6 +372,10 @@ class AuthViewModel : ViewModel() {
     val loggedin: LiveData<Boolean> = _loggedin
     private val _errorMessage = MutableLiveData<String?>(null)
     val errorMessage: LiveData<String?> get() = _errorMessage
+    private val _username = MutableStateFlow<String?>(null)
+    val username: StateFlow<String?> = _username
+    private val _loading = MutableStateFlow(false)
+    val loading: StateFlow<Boolean> = _loading
 
     init {
         _loggedin.value = firebaseauth.currentUser != null
@@ -411,5 +419,24 @@ class AuthViewModel : ViewModel() {
 
     fun isUserSignedin() : Boolean {
         return firebaseauth.currentUser != null
+    }
+
+    fun getusername(userId: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            database.child("users")
+                .child(userId)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    val user = snapshot.getValue(Users::class.java)
+                    _username.value = user?.username
+                }
+                .addOnFailureListener {
+                    _username.value = null
+                }
+                .addOnCompleteListener {
+                    _loading.value = false
+                }
+        }
     }
 }

@@ -199,7 +199,9 @@ fun Home(
                             tint = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
                         )
                         Spacer(modifier = Modifier.height(30.dp))
-                        Text(text = "Account", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
+                        Text(modifier = Modifier.clickable {
+                            navController.navigate(route = Screen.Account.route)
+                        }, text = "Account", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
                         Spacer(modifier = Modifier.height(15.dp))
                         Text(modifier = Modifier.clickable {
                             navController.navigate(route = Screen.Home.route)
