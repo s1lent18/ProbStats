@@ -130,7 +130,7 @@ fun Account(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            OutlinedButton(onClick = { /*TODO*/ }) {
+            OutlinedButton(onClick = {  }) {
                 Icon(imageVector = Icons.Default.Settings, contentDescription = null)
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(text = "Change Password")
