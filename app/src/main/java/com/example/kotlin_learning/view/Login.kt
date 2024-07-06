@@ -98,12 +98,12 @@ fun LoginTextField(
     )
 }
 
-// Check Boolean Passed to differentiate between Google/FaceBook and drawable icons
-
 @Composable
-fun spacer50() {
+fun Spacer50() {
     Spacer(modifier = Modifier.height(50.dp))
 }
+
+// Check Boolean Passed to differentiate between Google/FaceBook and drawable icons
 
 @Composable
 fun SocialIconButton(
@@ -280,7 +280,11 @@ fun Login(
                                     onValueChange = setpassword,
                                     trailing = "Forgot?",
                                     modifier = Modifier.fillMaxWidth(fraction = 0.80f),
-                                    onClick = {}
+                                    onClick = {
+                                        if (email != "") {
+                                            authViewModel.sendPasswordviaemail(email)
+                                        }
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                                 Row (
@@ -430,7 +434,7 @@ fun Login(
                                         Spacer(modifier = Modifier.width(8.dp))
                                         SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.google, contentDescription = "Google", onClick = {}, check = false)
                                     }
-                                    spacer50()
+                                    Spacer50()
                                 }
                             }
                         }
@@ -541,7 +545,7 @@ fun Login(
                                         Spacer(modifier = Modifier.width(8.dp))
                                         SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.google, contentDescription = "Google", onClick = {}, check = false)
                                     }
-                                    spacer50()
+                                    Spacer50()
                                 }
                             }
                         }

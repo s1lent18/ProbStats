@@ -123,28 +123,28 @@ fun Binomial(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "n:",
                                 value = n,
                                 onValueChange = setn
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "x:",
                                 value = x,
                                 onValueChange = setx
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "p:",
                                 value = p,
                                 onValueChange = setp
                             )
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -174,21 +174,21 @@ fun Binomial(
                                         StringAnswer(text = "Failed to Load", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X<$x):", value = result.data.less)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X<=$x):", value = result.data.lessequal)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X>$x):", value = result.data.greater)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X>=$x):", value = result.data.greaterequal)
-                                        spacer50()
+                                        Spacer50()
                                         if (!isSubmitted.value && userId != null) {
                                             authViewModel.sendbinomial(
                                                 userId = userId,
@@ -229,28 +229,28 @@ fun Binomial(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "n:",
                                 value = n,
                                 onValueChange = setn
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "x:",
                                 value = x,
                                 onValueChange = setx
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "p:",
                                 value = p,
                                 onValueChange = setp
                             )
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -280,21 +280,21 @@ fun Binomial(
                                         StringAnswer(text = "Failed to Load", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X<$x):", value = result.data.less)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X<=$x):", value = result.data.lessequal)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X>$x):", value = result.data.greater)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X>=$x):", value = result.data.greaterequal)
-                                        spacer50()
+                                        Spacer50()
                                         if (!isSubmitted.value && userId != null) {
                                             authViewModel.sendbinomial(
                                                 userId = userId,
@@ -335,28 +335,28 @@ fun Binomial(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "n:",
                                 value = n,
                                 onValueChange = setn
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "x:",
                                 value = x,
                                 onValueChange = setx
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "p:",
                                 value = p,
                                 onValueChange = setp
                             )
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -386,21 +386,21 @@ fun Binomial(
                                         StringAnswer(text = "Failed to Load", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X<$x):", value = result.data.less)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X<=$x):", value = result.data.lessequal)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X>$x):", value = result.data.greater)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X>=$x):", value = result.data.greaterequal)
-                                        spacer50()
+                                        Spacer50()
                                         if (!isSubmitted.value && userId != null) {
                                             authViewModel.sendbinomial(
                                                 userId = userId,

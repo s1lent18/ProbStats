@@ -128,28 +128,28 @@ fun BayesRule(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(A):",
                                 value = pA,
                                 onValueChange = setpA
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(B):",
                                 value = pB,
                                 onValueChange = setpB
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(A|B):",
                                 value = pAB,
                                 onValueChange = setpAB
                             )
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -176,18 +176,18 @@ fun BayesRule(
                             if (pA.isNotEmpty() && pB.isNotEmpty() && pAB.isNotEmpty()) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(value = result.data.ans, text = "Probability: ")
-                                        spacer50()
+                                        Spacer50()
                                         if(userId != null && !isSubmitted.value) {
                                             authViewModel.sendbayesrule(
                                                 userId = userId,
@@ -228,28 +228,28 @@ fun BayesRule(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(A):",
                                 value = pA,
                                 onValueChange = setpA
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(B):",
                                 value = pB,
                                 onValueChange = setpB
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(A|B):",
                                 value = pAB,
                                 onValueChange = setpAB
                             )
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -276,18 +276,18 @@ fun BayesRule(
                             if (pA.isNotEmpty() && pB.isNotEmpty() && pAB.isNotEmpty()) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(value = result.data.ans, text = "Probability: ")
-                                        spacer50()
+                                        Spacer50()
                                         if(userId != null && !isSubmitted.value) {
                                             authViewModel.sendbayesrule(
                                                 userId = userId,
@@ -328,28 +328,28 @@ fun BayesRule(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(A):",
                                 value = pA,
                                 onValueChange = setpA
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(B):",
                                 value = pB,
                                 onValueChange = setpB
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(A|B):",
                                 value = pAB,
                                 onValueChange = setpAB
                             )
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -376,18 +376,18 @@ fun BayesRule(
                             if (pA.isNotEmpty() && pB.isNotEmpty() && pAB.isNotEmpty()) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(value = result.data.ans, text = "Probability: ")
-                                        spacer50()
+                                        Spacer50()
                                         if(userId != null && !isSubmitted.value) {
                                             authViewModel.sendbayesrule(
                                                 userId = userId,

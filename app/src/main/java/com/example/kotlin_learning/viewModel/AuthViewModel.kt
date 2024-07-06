@@ -415,6 +415,8 @@ class AuthViewModel : ViewModel() {
     val nos: StateFlow<Int> = _nos
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading
+    private val _send = MutableLiveData<String?>(null)
+    val send: LiveData<String?> get() = _send
 
     init {
         _loggedin.value = firebaseauth.currentUser != null
@@ -430,6 +432,8 @@ class AuthViewModel : ViewModel() {
                 }
             }
     }
+
+
 
     fun signup(email: String, password: String, username: String) {
         firebaseauth.createUserWithEmailAndPassword(email, password)
@@ -515,5 +519,16 @@ class AuthViewModel : ViewModel() {
                     _loading.value = false
                 }
         }
+    }
+
+    fun sendPasswordviaemail(email: String) {
+        firebaseauth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _send.value = "Password reset email sent."
+                } else {
+                    _send.value = "Failed to send password reset email."
+                }
+            }
     }
 }

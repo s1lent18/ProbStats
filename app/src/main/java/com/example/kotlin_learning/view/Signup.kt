@@ -296,7 +296,7 @@ fun Signup(
                                     Spacer(modifier = Modifier.width(8.dp))
                                     SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.google, contentDescription = "Google", onClick = {}, check = false)
                                 }
-                                spacer50()
+                                Spacer50()
                             }
                         }
                     }
@@ -383,7 +383,7 @@ fun Signup(
                                     Spacer(modifier = Modifier.width(8.dp))
                                     SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.google, contentDescription = "Google", onClick = {}, check = false)
                                 }
-                                spacer50()
+                                Spacer50()
                             }
                         }
                     }

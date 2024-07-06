@@ -131,46 +131,46 @@ fun Hypothesis(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Sample Mean:",
                                 value = smean,
                                 onValueChange = setsmean
                             )
-                            spacer50()
+                            Spacer50()
                             tail = tailSwitch (onSwitchChange = {newTail -> tail = newTail }, first = "One Tail", second = "Two Tails")
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Standard Deviation:",
                                 value = sd,
                                 onValueChange = setsd
                             )
-                            spacer50()
+                            Spacer50()
                             samplem = tailSwitch ({ newsamplem -> samplem = newsamplem }, first = "Sample Standard Deviation", second = "Population Standard Deviation")
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Significance Level:",
                                 value = sl,
                                 onValueChange = setsl
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Size:",
                                 value = n,
                                 onValueChange = setn
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Hypothesized Mean:",
                                 value = hmean,
                                 onValueChange = sethmean
                             )
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -198,22 +198,22 @@ fun Hypothesis(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            spacer50()
+                            Spacer50()
                             if (smean.isNotEmpty() && sd.isNotEmpty() && hmean.isNotEmpty() && n.isNotEmpty() && sl.isNotEmpty()) {
                                 when(val result = Result.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Failed to Load", modifier = Modifier.fillMaxWidth(fraction = 0.9f))
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         if(userId != null && !isSubmitted.value) {
                                             authViewModel.sendhypothesis(
                                                 userId = userId,
@@ -257,46 +257,46 @@ fun Hypothesis(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Sample Mean:",
                                 value = smean,
                                 onValueChange = setsmean
                             )
-                            spacer50()
+                            Spacer50()
                             tail = tailSwitch (onSwitchChange = {newTail -> tail = newTail }, first = "One Tail", second = "Two Tails")
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Standard Deviation:",
                                 value = sd,
                                 onValueChange = setsd
                             )
-                            spacer50()
+                            Spacer50()
                             samplem = tailSwitch ({ newsamplem -> samplem = newsamplem }, first = "Sample Standard Deviation", second = "Population Standard Deviation")
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Significance Level:",
                                 value = sl,
                                 onValueChange = setsl
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Size:",
                                 value = n,
                                 onValueChange = setn
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Hypothesized Mean:",
                                 value = hmean,
                                 onValueChange = sethmean
                             )
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -327,18 +327,18 @@ fun Hypothesis(
                             if (smean.isNotEmpty() && sd.isNotEmpty() && hmean.isNotEmpty() && n.isNotEmpty() && sl.isNotEmpty()) {
                                 when(val result = Result.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Failed to Load", modifier = Modifier.fillMaxWidth(fraction = 0.9f))
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         if(userId != null && !isSubmitted.value) {
                                             authViewModel.sendhypothesis(
                                                 userId = userId,
@@ -382,46 +382,46 @@ fun Hypothesis(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Sample Mean:",
                                 value = smean,
                                 onValueChange = setsmean
                             )
-                            spacer50()
+                            Spacer50()
                             tail = tailSwitch (onSwitchChange = {newTail -> tail = newTail }, first = "One Tail", second = "Two Tails")
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Standard Deviation:",
                                 value = sd,
                                 onValueChange = setsd
                             )
-                            spacer50()
+                            Spacer50()
                             samplem = tailSwitch ({ newsamplem -> samplem = newsamplem }, first = "Sample Standard Deviation", second = "Population Standard Deviation")
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Significance Level:",
                                 value = sl,
                                 onValueChange = setsl
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Size:",
                                 value = n,
                                 onValueChange = setn
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Hypothesized Mean:",
                                 value = hmean,
                                 onValueChange = sethmean
                             )
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -449,22 +449,22 @@ fun Hypothesis(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            spacer50()
+                            Spacer50()
                             if (smean.isNotEmpty() && sd.isNotEmpty() && hmean.isNotEmpty() && n.isNotEmpty() && sl.isNotEmpty()) {
                                 when(val result = Result.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Failed to Load", modifier = Modifier.fillMaxWidth(fraction = 0.9f))
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         if(userId != null && !isSubmitted.value) {
                                             authViewModel.sendhypothesis(
                                                 userId = userId,

@@ -241,21 +241,21 @@ fun Poisson(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "X:",
                                 value = x,
                                 onValueChange = setx
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Lambda(t):",
                                 value = lamda,
                                 onValueChange = setlamda
                             )
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -281,27 +281,27 @@ fun Poisson(
                             if (x != "" && lamda != "") {
                                 when(val result = probability.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Failed to Load", modifier = Modifier.fillMaxWidth(fraction = 0.9f))
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
                                         isSubmitted = false
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.less)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.lessequal)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.greater)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.greaterequal)
-                                        spacer50()
+                                        Spacer50()
                                         if (!isSubmitted && userId != null) {
                                             authViewModel.sendpoisson(
                                                 userId = userId,
@@ -345,21 +345,21 @@ fun Poisson(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "X:",
                                 value = x,
                                 onValueChange = setx
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Lambda(t):",
                                 value = lamda,
                                 onValueChange = setlamda
                             )
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -385,27 +385,27 @@ fun Poisson(
                             if (x != "" && lamda != "") {
                                 when(val result = probability.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Failed to Load", modifier = Modifier.fillMaxWidth(fraction = 0.9f))
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
                                         isSubmitted = false
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.less)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.lessequal)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.greater)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.greaterequal)
-                                        spacer50()
+                                        Spacer50()
                                         if (!isSubmitted && userId != null) {
                                             authViewModel.sendpoisson(
                                                 userId = userId,
@@ -449,21 +449,21 @@ fun Poisson(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "X:",
                                 value = x,
                                 onValueChange = setx
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Lambda(t):",
                                 value = lamda,
                                 onValueChange = setlamda
                             )
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -489,27 +489,27 @@ fun Poisson(
                             if (x != "" && lamda != "") {
                                 when(val result = probability.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Failed to Load", modifier = Modifier.fillMaxWidth(fraction = 0.9f))
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
                                         isSubmitted = false
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.less)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.lessequal)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.greater)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "P(X=$x):", value = result.data.greaterequal)
-                                        spacer50()
+                                        Spacer50()
                                         if (!isSubmitted && userId != null) {
                                             authViewModel.sendpoisson(
                                                 userId = userId,

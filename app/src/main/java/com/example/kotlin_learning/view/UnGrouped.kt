@@ -137,7 +137,7 @@ fun UnGrouped(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "Size:",
@@ -147,7 +147,7 @@ fun UnGrouped(
                                     setn(Array(newValue.toIntOrNull() ?: 0) { if (it < n.size) n[it] else "" })
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                         }
                         if (size.isNotEmpty()) {
                             items(size.toInt()) {
@@ -162,7 +162,7 @@ fun UnGrouped(
                             }
                         }
                         item {
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -182,43 +182,43 @@ fun UnGrouped(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            spacer50()
+                            Spacer50()
                             if (size.isNotEmpty() && n.isNotEmpty()) {
                                 when (val result = basic.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Mean:", value = result.data.mean)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Median:", value = result.data.median)
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Mode: ${result.data.mode}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Variance:", value = result.data.variance)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "µ±1σ:", value = result.data.one)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "µ±2σ:", value = result.data.two)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "µ±3σ:", value = result.data.three)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "First Quartile:", value = result.data.q1)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Third Quartile:", value = result.data.q3)
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Shape of The Distribution: ${result.data.Shape_of_the_Distribution}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Stem Leaf", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                         Spacer(modifier = Modifier.height(10.dp))
                                         Card (
@@ -276,7 +276,7 @@ fun UnGrouped(
                                                 }
                                             }
                                         }
-                                        spacer50()
+                                        Spacer50()
                                         if(userId != null && !isSubmitted.value) {
                                             val resultDataStemLeaf: Map<String, FloatArray> = result.data.stemleaf
                                             val convertedStemLeaf: Map<String, List<Float>> = resultDataStemLeaf.mapValues { entry ->
@@ -329,7 +329,7 @@ fun UnGrouped(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "Size:",
@@ -339,7 +339,7 @@ fun UnGrouped(
                                     setn(Array(newValue.toIntOrNull() ?: 0) { if (it < n.size) n[it] else "" })
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                         }
                         if (size.isNotEmpty()) {
                             items(size.toInt()) {
@@ -354,7 +354,7 @@ fun UnGrouped(
                             }
                         }
                         item {
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -374,43 +374,43 @@ fun UnGrouped(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            spacer50()
+                            Spacer50()
                             if (size.isNotEmpty() && n.isNotEmpty()) {
                                 when (val result = basic.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Mean:", value = result.data.mean)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Median:", value = result.data.median)
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Mode: ${result.data.mode}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Variance:", value = result.data.variance)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "µ±1σ:", value = result.data.one)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "µ±2σ:", value = result.data.two)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "µ±3σ:", value = result.data.three)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "First Quartile:", value = result.data.q1)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Third Quartile:", value = result.data.q3)
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Shape of The Distribution: ${result.data.Shape_of_the_Distribution}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Stem Leaf", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                         Spacer(modifier = Modifier.height(10.dp))
                                         Card (
@@ -468,7 +468,7 @@ fun UnGrouped(
                                                 }
                                             }
                                         }
-                                        spacer50()
+                                        Spacer50()
                                         if(userId != null && !isSubmitted.value) {
                                             val resultDataStemLeaf: Map<String, FloatArray> = result.data.stemleaf
                                             val convertedStemLeaf: Map<String, List<Float>> = resultDataStemLeaf.mapValues { entry ->
@@ -521,7 +521,7 @@ fun UnGrouped(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "Size:",
@@ -531,7 +531,7 @@ fun UnGrouped(
                                     setn(Array(newValue.toIntOrNull() ?: 0) { if (it < n.size) n[it] else "" })
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                         }
                         if (size.isNotEmpty()) {
                             items(size.toInt()) {
@@ -546,7 +546,7 @@ fun UnGrouped(
                             }
                         }
                         item {
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -566,43 +566,43 @@ fun UnGrouped(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            spacer50()
+                            Spacer50()
                             if (size.isNotEmpty() && n.isNotEmpty()) {
                                 when (val result = basic.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Mean:", value = result.data.mean)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Median:", value = result.data.median)
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Mode: ${result.data.mode}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Variance:", value = result.data.variance)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "µ±1σ:", value = result.data.one)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "µ±2σ:", value = result.data.two)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "µ±3σ:", value = result.data.three)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "First Quartile:", value = result.data.q1)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Third Quartile:", value = result.data.q3)
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Shape of The Distribution: ${result.data.Shape_of_the_Distribution}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Stem Leaf", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                         Spacer(modifier = Modifier.height(10.dp))
                                         Card (
@@ -660,7 +660,7 @@ fun UnGrouped(
                                                 }
                                             }
                                         }
-                                        spacer50()
+                                        Spacer50()
                                         if(userId != null && !isSubmitted.value) {
                                             val resultDataStemLeaf: Map<String, FloatArray> = result.data.stemleaf
                                             val convertedStemLeaf: Map<String, List<Float>> = resultDataStemLeaf.mapValues { entry ->

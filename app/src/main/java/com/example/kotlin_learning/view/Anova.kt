@@ -135,7 +135,7 @@ fun Anova(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "Significance level:",
@@ -144,7 +144,7 @@ fun Anova(
                                     setsl(newValue)
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "Number of Arrays in 2D Array:",
@@ -153,7 +153,7 @@ fun Anova(
                                     setarrayCount(newValue)
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "The size of the arrays:",
@@ -162,7 +162,7 @@ fun Anova(
                                     setarraySize(newValue)
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                         }
                         if (arrayCount.isNotEmpty() && arraySize.isNotEmpty()) {
                             val count = arrayCount.toIntOrNull() ?: 0
@@ -190,7 +190,7 @@ fun Anova(
                             }
                         }
                         item {
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -212,35 +212,35 @@ fun Anova(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            spacer50()
+                            Spacer50()
                             if (arrayCount.isNotEmpty() && arraySize.isNotEmpty() && n.isNotEmpty()) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "SS [Between]:", value = result.data.SSB)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "SS [Within]:", value = result.data.SSW)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "d.f [Between]:", value = result.data.dfB.toFloat())
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "d.f [Within]:", value = result.data.dfW.toFloat())
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "MS [Between]:", value = result.data.MSB)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "MS [Within]:", value = result.data.MSW)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "F Ratio:", value = result.data.fratio)
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         if (!isSubmitted.value && userId != null) {
                                             authViewModel.sendanova(
                                                 userId = userId,
@@ -287,7 +287,7 @@ fun Anova(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "Significance level:",
@@ -296,7 +296,7 @@ fun Anova(
                                     setsl(newValue)
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "Number of Arrays in 2D Array:",
@@ -305,7 +305,7 @@ fun Anova(
                                     setarrayCount(newValue)
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "The size of the arrays:",
@@ -314,7 +314,7 @@ fun Anova(
                                     setarraySize(newValue)
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                         }
                         if (arrayCount.isNotEmpty() && arraySize.isNotEmpty()) {
                             val count = arrayCount.toIntOrNull() ?: 0
@@ -342,7 +342,7 @@ fun Anova(
                             }
                         }
                         item {
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -364,35 +364,35 @@ fun Anova(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            spacer50()
+                            Spacer50()
                             if (arrayCount.isNotEmpty() && arraySize.isNotEmpty() && n.isNotEmpty()) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "SS [Between]:", value = result.data.SSB)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "SS [Within]:", value = result.data.SSW)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "d.f [Between]:", value = result.data.dfB.toFloat())
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "d.f [Within]:", value = result.data.dfW.toFloat())
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "MS [Between]:", value = result.data.MSB)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "MS [Within]:", value = result.data.MSW)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "F Ratio:", value = result.data.fratio)
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         if (!isSubmitted.value && userId != null) {
                                             authViewModel.sendanova(
                                                 userId = userId,
@@ -439,7 +439,7 @@ fun Anova(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "Significance level:",
@@ -448,7 +448,7 @@ fun Anova(
                                     setsl(newValue)
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "Number of Arrays in 2D Array:",
@@ -457,7 +457,7 @@ fun Anova(
                                     setarrayCount(newValue)
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "The size of the arrays:",
@@ -466,7 +466,7 @@ fun Anova(
                                     setarraySize(newValue)
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                         }
                         if (arrayCount.isNotEmpty() && arraySize.isNotEmpty()) {
                             val count = arrayCount.toIntOrNull() ?: 0
@@ -494,7 +494,7 @@ fun Anova(
                             }
                         }
                         item {
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -516,35 +516,35 @@ fun Anova(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            spacer50()
+                            Spacer50()
                             if (arrayCount.isNotEmpty() && arraySize.isNotEmpty() && n.isNotEmpty()) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "SS [Between]:", value = result.data.SSB)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "SS [Within]:", value = result.data.SSW)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "d.f [Between]:", value = result.data.dfB.toFloat())
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "d.f [Within]:", value = result.data.dfW.toFloat())
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "MS [Between]:", value = result.data.MSB)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "MS [Within]:", value = result.data.MSW)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "F Ratio:", value = result.data.fratio)
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         if (!isSubmitted.value && userId != null) {
                                             authViewModel.sendanova(
                                                 userId = userId,

@@ -75,19 +75,19 @@ fun PoissonItem(poisson: Poissonclass) {
         modifier = Modifier.fillMaxSize()
     ) {
         StringAnswer("X: ${poisson.x}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("Lamda: ${poisson.lamda}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("P(X=${poisson.x}) = ${poisson.equal}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("P(X=${poisson.x}) = ${poisson.less}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("P(X=${poisson.x}) = ${poisson.lessequal}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("P(X=${poisson.x}) = ${poisson.greater}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("P(X=${poisson.x}) = ${poisson.greaterequal}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
     }
 }
 
@@ -96,23 +96,23 @@ fun BinomialItem(binomial: Binomialclass) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        spacer50()
+        Spacer50()
         StringAnswer("X: ${binomial.x}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("n: ${binomial.n}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("p: ${binomial.p}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("P(X=${binomial.x}) = ${binomial.equal}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("P(X=${binomial.x}) = ${binomial.less}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("P(X=${binomial.x}) = ${binomial.lessequal}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("P(X=${binomial.x}) = ${binomial.greater}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("P(X=${binomial.x}) = ${binomial.greaterequal}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
     }
 }
 
@@ -121,25 +121,25 @@ fun MultinomialItem(multinomial: Multinomialclass) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        spacer50()
+        Spacer50()
         StringAnswer("n: ${multinomial.n}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("x", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         for (i in 0..<multinomial.x.size) {
             StringAnswer("x$i: ${multinomial.x[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
             Spacer( modifier = Modifier.height(20.dp))
         }
-        spacer50()
+        Spacer50()
         StringAnswer("p", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         for (i in 0..<multinomial.p.size) {
             StringAnswer("p$i: ${multinomial.p[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
             Spacer( modifier = Modifier.height(20.dp))
         }
-        spacer50()
+        Spacer50()
         StringAnswer("ans = ${multinomial.ans}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
     }
 }
 
@@ -148,32 +148,32 @@ fun AnovaItem(anova: Anovaclass) {
     Column (
         modifier = Modifier.fillMaxSize()
     ) {
-        spacer50()
+        Spacer50()
         for(i in 0 ..<anova.size) {
             StringAnswer("n$i : ${anova.n[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.height(20.dp))
         }
-        spacer50()
+        Spacer50()
         StringAnswer("n: ${anova.size}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("sl: ${anova.sl}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("MSB: ${anova.MSB}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("MSW: ${anova.MSW}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("SSB: ${anova.SSB}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("SSW: ${anova.SSW}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("dfB: ${anova.dfB}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("dfW: ${anova.dfW}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("fratio: ${anova.fratio}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("Hypothesis: ${anova.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
     }
 }
 
@@ -183,13 +183,13 @@ fun BayesRuleItem(bayesrule: BayesRuleclass) {
         modifier = Modifier.fillMaxSize()
     ) {
         StringAnswer("pa: ${bayesrule.pa}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("pb: ${bayesrule.pb}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("pab: ${bayesrule.pab}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("Probability: ${bayesrule.ans}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
     }
 }
 
@@ -199,30 +199,30 @@ fun SLRItem(slr: SLRclass) {
         modifier = Modifier.fillMaxSize()
     ) {
         StringAnswer("size: ${slr.n}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         for(i in 0 ..<slr.n) {
             StringAnswer("$i : ${slr.x[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.height(20.dp))
         }
-        spacer50()
+        Spacer50()
         for(i in 0 ..<slr.n) {
             StringAnswer("$i : ${slr.y[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.height(20.dp))
         }
-        spacer50()
+        Spacer50()
         StringAnswer("alpha: ${slr.alpha}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         val temp = if (!slr.tail) "Two Tails" else "One Tail"
         StringAnswer("Tail: $temp", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("hypothesis: ${slr.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         FloatAnswer(value = slr.r, text = "r: ")
-        spacer50()
+        Spacer50()
         FloatAnswer(value = slr.t, text = "t: ")
-        spacer50()
+        Spacer50()
         StringAnswer("Y: ${slr.Y}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
     }
 }
 
@@ -232,34 +232,34 @@ fun UnGroupedItem(ungrouped: UnGroupedclass) {
         modifier = Modifier.fillMaxSize()
     ) {
         StringAnswer("size: ${ungrouped.n}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         for(i in 0 ..<ungrouped.n.size) {
             StringAnswer("$i : ${ungrouped.n[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.height(20.dp))
         }
-        spacer50()
+        Spacer50()
         StringAnswer("Shape of the Distribution: ${ungrouped.Shape_of_the_Distribution}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("mean: ${ungrouped.mean}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("median: ${ungrouped.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("mode: ${ungrouped.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("one: ${ungrouped.one}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("two: ${ungrouped.two}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("three: ${ungrouped.three}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("q1: ${ungrouped.q1}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("q3: ${ungrouped.q3}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("sd: ${ungrouped.sd}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("Stem Leaf: ", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         Card (
             modifier = Modifier.fillMaxWidth(fraction = 0.9f),
             shape = RoundedCornerShape(20.dp),
@@ -315,9 +315,9 @@ fun UnGroupedItem(ungrouped: UnGroupedclass) {
                 }
             }
         }
-        spacer50()
+        Spacer50()
         StringAnswer("variance: ${ungrouped.variance}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
     }
 
 }
@@ -327,9 +327,9 @@ fun GroupedItem(grouped: Groupedclass) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        spacer50()
+        Spacer50()
         StringAnswer("size: ${grouped.first.size}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -347,20 +347,20 @@ fun GroupedItem(grouped: Groupedclass) {
                         Spacer(modifier = Modifier.width(20.dp))
                         StringAnswer("$i : ${grouped.freq[i]}", modifier = Modifier.weight(1f).height(50.dp))
                     }
-                    spacer50()
+                    Spacer50()
                 }
             }
         }
         StringAnswer("mean: ${grouped.mean}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("median: ${grouped.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("mode: ${grouped.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("sd: ${grouped.sd}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("variance: ${grouped.variance}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
     }
 }
 
@@ -370,23 +370,23 @@ fun HypothesisItem(hypothesis: Hypothesisclass) {
         modifier = Modifier.fillMaxSize()
     ) {
         StringAnswer("Sample Mean: ${hypothesis.smean}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("Hypothesized Mean: ${hypothesis.hmean}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("Size of the Sample: ${hypothesis.n}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("Standard Deviation: ${hypothesis.sd}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("Significance Level: ${hypothesis.sl}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         StringAnswer("Hypothesis: ${hypothesis.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         val temp1 = if (!hypothesis.tail) "Two Tails" else "One Tail"
         StringAnswer("Tail: $temp1", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
         val temp2 = if (!hypothesis.samplem) "Population Mean" else "Sample Mean"
         StringAnswer("Tail: $temp2", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        spacer50()
+        Spacer50()
     }
 }
 

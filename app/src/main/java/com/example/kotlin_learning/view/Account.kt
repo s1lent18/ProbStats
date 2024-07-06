@@ -15,18 +15,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -92,48 +87,52 @@ fun Account(
             .fillMaxSize()
             .background(if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
-                .background(if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
-                .padding(20.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                modifier = Modifier.fillMaxHeight(fraction = 0.35f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center) {
-                Spacer(modifier = Modifier.height(8.dp))
-                username?.let {
-                    Text(
-                        text = "Hey $it!",
-                        color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+        if(isLoading) {
+            CircularProgressIndicator()
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
+                    .background(if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
+                    .padding(20.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxHeight(fraction = 0.35f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    username?.let {
+                        Text(
+                            text = "Hey $it!",
+                            color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            email?.let { DetailRow("Email", Icons.Default.Email, it) }
-            Spacer(modifier = Modifier.height(10.dp))
-            DetailRow("Number Of Solutions", Icons.Default.AddCircle, numberofsolutions.toString())
-        }
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            OutlinedButton(onClick = {  }) {
-                Icon(imageVector = Icons.Default.Settings, contentDescription = null)
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(text = "Change Password")
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                email?.let { DetailRow("Email", Icons.Default.Email, it) }
+                Spacer(modifier = Modifier.height(10.dp))
+                DetailRow("Number Of Solutions", Icons.Default.AddCircle, numberofsolutions.toString())
+            }
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                OutlinedButton(onClick = {  }) {
+                    Icon(imageVector = Icons.Default.Settings, contentDescription = null)
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(text = "Change Password")
+                }
             }
         }
     }

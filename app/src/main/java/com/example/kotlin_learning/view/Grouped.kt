@@ -132,7 +132,7 @@ fun Grouped(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "Size:",
@@ -144,7 +144,7 @@ fun Grouped(
                                     setfreq(Array(newValue.toIntOrNull() ?: 0) { if ( it < freq.size) freq[it] else ""})
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                         }
                         if (n.isNotEmpty()) {
                             items(n.toInt()) {
@@ -181,7 +181,7 @@ fun Grouped(
                             }
                         }
                         item {
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -203,31 +203,31 @@ fun Grouped(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            spacer50()
+                            Spacer50()
                             if (first.isNotEmpty() && second.isNotEmpty() && freq.isNotEmpty()) {
                                 when (val result = basic.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer("Failed To Load", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Mean:", value = result.data.mean)
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Median: ${result.data.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Mode: ${result.data.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Variance:", value = result.data.variance)
-                                        spacer50()
+                                        Spacer50()
                                         if(!isSubmitted.value && userId != null) {
                                             authViewModel.sendgrouped(
                                                 userId = userId,
@@ -271,7 +271,7 @@ fun Grouped(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "Size:",
@@ -283,7 +283,7 @@ fun Grouped(
                                     setfreq(Array(newValue.toIntOrNull() ?: 0) { if ( it < freq.size) freq[it] else ""})
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                         }
                         if (n.isNotEmpty()) {
                             items(n.toInt()) {
@@ -320,7 +320,7 @@ fun Grouped(
                             }
                         }
                         item {
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -342,31 +342,31 @@ fun Grouped(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            spacer50()
+                            Spacer50()
                             if (first.isNotEmpty() && second.isNotEmpty() && freq.isNotEmpty()) {
                                 when (val result = basic.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer("Failed To Load", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Mean:", value = result.data.mean)
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Median: ${result.data.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Mode: ${result.data.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Variance:", value = result.data.variance)
-                                        spacer50()
+                                        Spacer50()
                                         if(!isSubmitted.value && userId != null) {
                                             authViewModel.sendgrouped(
                                                 userId = userId,
@@ -410,7 +410,7 @@ fun Grouped(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
-                            spacer50()
+                            Spacer50()
                             Floatinput(
                                 modifier = Modifier.fillMaxWidth(0.9f),
                                 label = "Size:",
@@ -422,7 +422,7 @@ fun Grouped(
                                     setfreq(Array(newValue.toIntOrNull() ?: 0) { if ( it < freq.size) freq[it] else ""})
                                 }
                             )
-                            spacer50()
+                            Spacer50()
                         }
                         if (n.isNotEmpty()) {
                             items(n.toInt()) {
@@ -459,7 +459,7 @@ fun Grouped(
                             }
                         }
                         item {
-                            spacer50()
+                            Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
@@ -481,31 +481,31 @@ fun Grouped(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            spacer50()
+                            Spacer50()
                             if (first.isNotEmpty() && second.isNotEmpty() && freq.isNotEmpty()) {
                                 when (val result = basic.value) {
                                     is NetworkResponse.Failure -> {
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer("Failed To Load", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        spacer50()
+                                        Spacer50()
                                         CircularProgressIndicator()
-                                        spacer50()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Mean:", value = result.data.mean)
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Median: ${result.data.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         StringAnswer(text = "Mode: ${result.data.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
-                                        spacer50()
+                                        Spacer50()
                                         FloatAnswer(text = "Variance:", value = result.data.variance)
-                                        spacer50()
+                                        Spacer50()
                                         if(!isSubmitted.value && userId != null) {
                                             authViewModel.sendgrouped(
                                                 userId = userId,
