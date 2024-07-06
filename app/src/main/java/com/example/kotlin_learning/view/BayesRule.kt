@@ -196,6 +196,7 @@ fun BayesRule(
                                                 pab = pAB.toFloat(),
                                                 ans = result.data.ans
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -295,6 +296,7 @@ fun BayesRule(
                                                 pab = pAB.toFloat(),
                                                 ans = result.data.ans
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -394,6 +396,7 @@ fun BayesRule(
                                                 pab = pAB.toFloat(),
                                                 ans = result.data.ans
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }

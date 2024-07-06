@@ -256,6 +256,7 @@ fun Anova(
                                                 hypothesis = result.data.hypothesis,
                                                 size = arraySize.toInt()
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -407,6 +408,7 @@ fun Anova(
                                                 hypothesis = result.data.hypothesis,
                                                 size = arraySize.toInt()
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -558,6 +560,7 @@ fun Anova(
                                                 hypothesis = result.data.hypothesis,
                                                 size = arraySize.toInt()
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }

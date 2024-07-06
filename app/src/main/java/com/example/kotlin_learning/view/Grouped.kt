@@ -240,6 +240,7 @@ fun Grouped(
                                                 sd = result.data.sd,
                                                 variance = result.data.variance
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -378,6 +379,7 @@ fun Grouped(
                                                 sd = result.data.sd,
                                                 variance = result.data.variance
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -516,6 +518,7 @@ fun Grouped(
                                                 sd = result.data.sd,
                                                 variance = result.data.variance
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }

@@ -313,6 +313,7 @@ fun Poisson(
                                                 less = result.data.less,
                                                 lessequal = result.data.lessequal
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted = true
                                         }
                                     }
@@ -416,6 +417,7 @@ fun Poisson(
                                                 less = result.data.less,
                                                 lessequal = result.data.lessequal
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted = true
                                         }
                                     }
@@ -519,6 +521,7 @@ fun Poisson(
                                                 less = result.data.less,
                                                 lessequal = result.data.lessequal
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted = true
                                         }
                                     }

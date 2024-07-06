@@ -298,6 +298,8 @@ fun UnGrouped(
                                                 stemleaf = convertedStemLeaf,
                                                 sd = result.data.sd
                                             )
+                                            authViewModel.incrementcount(userId)
+                                            isSubmitted.value = true
                                         }
                                     }
                                     null -> {
@@ -488,6 +490,8 @@ fun UnGrouped(
                                                 stemleaf = convertedStemLeaf,
                                                 sd = result.data.sd
                                             )
+                                            authViewModel.incrementcount(userId)
+                                            isSubmitted.value = true
                                         }
                                     }
                                     null -> {
@@ -678,6 +682,8 @@ fun UnGrouped(
                                                 stemleaf = convertedStemLeaf,
                                                 sd = result.data.sd
                                             )
+                                            authViewModel.incrementcount(userId)
+                                            isSubmitted.value = true
                                         }
                                     }
                                     null -> {

@@ -295,6 +295,7 @@ fun SLR(
                                                 t = result.data.t,
                                                 Y = result.data.Y
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -446,6 +447,7 @@ fun SLR(
                                                 t = result.data.t,
                                                 Y = result.data.Y
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -597,6 +599,7 @@ fun SLR(
                                                 t = result.data.t,
                                                 Y = result.data.Y
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }

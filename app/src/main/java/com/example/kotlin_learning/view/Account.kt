@@ -90,6 +90,12 @@ fun Account(
                         }
                     }
                 }
+                Column (modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(values)
+                ){
+
+                }
             }
         }
     }

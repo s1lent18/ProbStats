@@ -29,7 +29,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,7 +43,6 @@ import com.example.kotlin_learning.viewModel.AuthViewModel
 import com.example.kotlin_learning.viewModel.Screen
 import com.example.kotlin_learning.viewModel.WindowInfo
 import com.example.kotlin_learning.viewModel.rWindowInfo
-import com.example.kotlin_learning.data.request.Users
 import com.example.kotlin_learning.ui.theme.darkmodebackground
 import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
@@ -199,8 +197,7 @@ fun Signup(
                                 contentDescription = "Signup",
                                 onClick = {
                                     if (email.isNotEmpty() && password.isNotEmpty()) {
-                                        val user = Users(username)
-                                        authViewModel.signup(email, password, user)
+                                        authViewModel.signup(email, password, username = username)
                                     }
                                 })
                             Spacer(modifier = Modifier.height(15.dp))
@@ -285,8 +282,7 @@ fun Signup(
                                     contentDescription = "Signup",
                                     onClick = {
                                         if (email.isNotEmpty() && password.isNotEmpty()) {
-                                            val user = Users(username)
-                                            authViewModel.signup(email, password, user)
+                                            authViewModel.signup(email, password, username = username)
                                         }
                                     })
                                 Spacer(modifier = Modifier.height(15.dp))
@@ -373,8 +369,7 @@ fun Signup(
                                     contentDescription = "Signup",
                                     onClick = {
                                         if (email.isNotEmpty() && password.isNotEmpty()) {
-                                            val user = Users(username)
-                                            authViewModel.signup(email, password, user)
+                                            authViewModel.signup(email, password, username = username)
                                         }
                                     })
                                 Spacer(modifier = Modifier.height(15.dp))

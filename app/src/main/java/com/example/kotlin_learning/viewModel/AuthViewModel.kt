@@ -17,8 +17,11 @@ import com.example.kotlin_learning.data.request.Users
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -27,12 +30,19 @@ class AuthViewModel : ViewModel() {
 
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
-    private fun adduser(user: Users) {
+    private fun adduser(email: String, username: String) {
         val usersRef = database.child("users")
         val currentUser = FirebaseAuth.getInstance().currentUser
 
         if (currentUser != null) {
             val userId = currentUser.uid
+
+            val user = Users(
+                username = username,
+                email = email,
+                numberofSolutions = 0
+            )
+
             usersRef.child(userId).setValue(user)
                 .addOnSuccessListener {
                     // User successfully added
@@ -41,6 +51,31 @@ class AuthViewModel : ViewModel() {
                     // Handle the error
                 }
         }
+    }
+
+    fun incrementcount(userId: String) {
+        val database = FirebaseDatabase.getInstance().reference
+        val usersRef = database.child("users").child(userId)
+
+        usersRef.child("numberofSolutions").addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val currentCount = snapshot.getValue(Int::class.java) ?: 0
+                val newCount = currentCount + 1
+
+                usersRef.child("numberofSolutions").setValue(newCount)
+                    .addOnSuccessListener {
+                        // Successfully updated number of solutions
+                    }
+                    .addOnFailureListener {
+                        // Handle the error
+                    }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle the error
+            }
+        })
     }
 
     private fun addpoisson(userId: String, poisson: Poissonclass) {
@@ -392,12 +427,12 @@ class AuthViewModel : ViewModel() {
             }
     }
 
-    fun signup(email: String, password: String, username: Users) {
+    fun signup(email: String, password: String, username: String) {
         firebaseauth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _loggedin.value = true
-                    adduser(username)
+                    adduser(email = email, username = username)
                 } else {
                     _errorMessage.value = "SignUp Failed"
                 }

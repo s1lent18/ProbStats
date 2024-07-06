@@ -226,6 +226,7 @@ fun Hypothesis(
                                                 n = n.toInt(),
                                                 hypothesis = result.data.hypothesis
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -350,6 +351,7 @@ fun Hypothesis(
                                                 n = n.toInt(),
                                                 hypothesis = result.data.hypothesis
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -475,6 +477,7 @@ fun Hypothesis(
                                                 n = n.toInt(),
                                                 hypothesis = result.data.hypothesis
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }

@@ -288,6 +288,7 @@ fun Multinomial(
                                                 p = stoff(p),
                                                 ans = result.data.ans
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -404,6 +405,7 @@ fun Multinomial(
                                                 p = stoff(p),
                                                 ans = result.data.ans
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -520,6 +522,7 @@ fun Multinomial(
                                                 p = stoff(p),
                                                 ans = result.data.ans
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }

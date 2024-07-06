@@ -201,6 +201,7 @@ fun Binomial(
                                                 less = result.data.less,
                                                 lessequal = result.data.lessequal
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -306,6 +307,7 @@ fun Binomial(
                                                 less = result.data.less,
                                                 lessequal = result.data.lessequal
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
@@ -411,6 +413,7 @@ fun Binomial(
                                                 less = result.data.less,
                                                 lessequal = result.data.lessequal
                                             )
+                                            authViewModel.incrementcount(userId)
                                             isSubmitted.value = true
                                         }
                                     }
