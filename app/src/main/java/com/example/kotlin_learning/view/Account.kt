@@ -88,7 +88,17 @@ fun Account(
             .background(if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White)
     ) {
         if(isLoading) {
-            CircularProgressIndicator()
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Column (
+                    modifier = Modifier.fillMaxSize().align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
         } else {
             Box(
                 modifier = Modifier

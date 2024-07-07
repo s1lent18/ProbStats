@@ -188,6 +188,9 @@ fun Login(
         val showInternetDialog = remember { mutableStateOf(false) }
         val isInternetAvailable by internetViewModel.isInternetAvailable.observeAsState(initial = true)
         val activity = (LocalContext.current as? Activity)
+        val resetpass by authViewModel.send.observeAsState()
+        val showresetdialog = remember { mutableStateOf(false) }
+        val emailenter = remember { mutableStateOf(false) }
 
         LaunchedEffect(errorMessage) {
             if (errorMessage != null) {
@@ -195,8 +198,23 @@ fun Login(
             }
         }
 
+        LaunchedEffect(resetpass) {
+            if (resetpass != null) {
+                showresetdialog.value = true
+            }
+        }
+
         LaunchedEffect(Unit) {
             internetViewModel.checkInternetConnection()
+        }
+
+        if (emailenter.value) {
+            DialogBox(
+                title = "Error",
+                text = "Please enter an email",
+                setShowDialog = emailenter,
+                onClick = { emailenter.value = false }
+            )
         }
 
         if (showDialog.value) {
@@ -207,6 +225,15 @@ fun Login(
                 onClick = { showDialog.value = false }
             )
             authViewModel.resetErrorMessage()
+        }
+
+        if(showresetdialog.value) {
+            DialogBox(
+                title = "Success",
+                text = resetpass.toString(),
+                setShowDialog = showresetdialog,
+                onClick = { showresetdialog.value = false }
+            )
         }
 
         if (!isInternetAvailable) {
@@ -283,6 +310,8 @@ fun Login(
                                     onClick = {
                                         if (email != "") {
                                             authViewModel.sendPasswordviaemail(email)
+                                        } else {
+                                            emailenter.value = true
                                         }
                                     }
                                 )

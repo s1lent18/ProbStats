@@ -456,6 +456,10 @@ class AuthViewModel : ViewModel() {
         _errorMessage.value = null
     }
 
+    fun resetsend() {
+        _send.value = null
+    }
+
     fun getuserid() : String? {
         return FirebaseAuth.getInstance().currentUser?.uid
     }
