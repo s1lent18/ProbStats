@@ -66,7 +66,7 @@ fun DetailRow(title: String, icon: androidx.compose.ui.graphics.vector.ImageVect
 @Composable
 fun Account(
     authViewModel: AuthViewModel = viewModel(),
-    navController: NavController
+    //navController: NavController
 ) {
     val username by authViewModel.username.collectAsState()
     val isLoading by authViewModel.loading.collectAsState()

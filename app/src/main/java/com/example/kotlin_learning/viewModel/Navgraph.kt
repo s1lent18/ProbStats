@@ -111,6 +111,6 @@ fun SetupNavgraph (
 
         this.composable(
             route = Screen.Account.route
-        ) { Account(navController = navController) }
+        ) { Account(/*navController = navController*/) }
     }
 }
