@@ -455,18 +455,18 @@ class AuthViewModel : ViewModel() {
     fun resetErrorMessage() {
         _errorMessage.value = null
     }
-
-    fun resetsend() {
-        _send.value = null
-    }
+//
+//    fun resetsend() {
+//        _send.value = null
+//    }
 
     fun getuserid() : String? {
         return FirebaseAuth.getInstance().currentUser?.uid
     }
 
-    fun isUserSignedin() : Boolean {
-        return firebaseauth.currentUser != null
-    }
+//    fun isUserSignedin() : Boolean {
+//        return firebaseauth.currentUser != null
+//    }
 
     fun getusername(userId: String) {
         viewModelScope.launch {
