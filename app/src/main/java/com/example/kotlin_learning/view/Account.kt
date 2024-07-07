@@ -41,6 +41,7 @@ import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Screen
 
 @Composable
 fun DetailRow(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, detail: String) {
@@ -66,7 +67,7 @@ fun DetailRow(title: String, icon: androidx.compose.ui.graphics.vector.ImageVect
 @Composable
 fun Account(
     authViewModel: AuthViewModel = viewModel(),
-    //navController: NavController
+    navController: NavController
 ) {
     val username by authViewModel.username.collectAsState()
     val isLoading by authViewModel.loading.collectAsState()
@@ -138,7 +139,9 @@ fun Account(
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                OutlinedButton(onClick = {  }) {
+                OutlinedButton(onClick = {
+                    navController.navigate(route = Screen.PassChange.route)
+                }) {
                     Icon(imageVector = Icons.Default.Settings, contentDescription = null)
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(text = "Change Password")

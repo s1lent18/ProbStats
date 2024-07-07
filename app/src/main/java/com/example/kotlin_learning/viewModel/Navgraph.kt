@@ -18,6 +18,7 @@ import com.example.kotlin_learning.view.Home
 import com.example.kotlin_learning.view.Hypothesis
 import com.example.kotlin_learning.view.Login
 import com.example.kotlin_learning.view.Multinomial
+import com.example.kotlin_learning.view.PassChange
 import com.example.kotlin_learning.view.Poisson
 import com.example.kotlin_learning.view.Printing
 import com.example.kotlin_learning.view.SLR
@@ -111,6 +112,10 @@ fun SetupNavgraph (
 
         this.composable(
             route = Screen.Account.route
-        ) { Account(/*navController = navController*/) }
+        ) { Account(navController = navController) }
+
+        this.composable(
+            route = Screen.PassChange.route
+        ) { PassChange() }
     }
 }

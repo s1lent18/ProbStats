@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import com.google.firebase.auth.EmailAuthProvider
 
 class AuthViewModel : ViewModel() {
 
@@ -411,12 +412,14 @@ class AuthViewModel : ViewModel() {
     val username: StateFlow<String?> = _username
     private val _email = MutableStateFlow<String?>(null)
     val email: StateFlow<String?> = _email
-    private val _nos = MutableStateFlow<Int>(0)
+    private val _nos = MutableStateFlow(0)
     val nos: StateFlow<Int> = _nos
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading
     private val _send = MutableLiveData<String?>(null)
     val send: LiveData<String?> get() = _send
+    private val _done = MutableLiveData(false)
+    val done: LiveData<Boolean> = _done
 
     init {
         _loggedin.value = firebaseauth.currentUser != null
@@ -432,8 +435,6 @@ class AuthViewModel : ViewModel() {
                 }
             }
     }
-
-
 
     fun signup(email: String, password: String, username: String) {
         firebaseauth.createUserWithEmailAndPassword(email, password)
@@ -534,5 +535,30 @@ class AuthViewModel : ViewModel() {
                     _send.value = "Failed to send password reset email."
                 }
             }
+    }
+
+    fun reauthenticateAndChangePassword(email: String, oldPassword: String, newPassword: String) {
+        val user = firebaseauth.currentUser
+        if (user != null) {
+            val credential = EmailAuthProvider.getCredential(email, oldPassword)
+            user.reauthenticate(credential)
+                .addOnCompleteListener { reauthTask ->
+                    if (reauthTask.isSuccessful) {
+                        user.updatePassword(newPassword)
+                            .addOnCompleteListener { updateTask ->
+                                if (updateTask.isSuccessful) {
+                                    _done.value = true
+                                    signout()
+                                } else {
+                                    _errorMessage.value = "Failed to get"
+                                }
+                            }
+                    } else {
+                        _errorMessage.value = "Not Successful"
+                    }
+                }
+        } else {
+            _loggedin.value = false
+        }
     }
 }
