@@ -10,14 +10,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -29,7 +33,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.kotlin_learning.R
@@ -43,7 +49,9 @@ import com.example.kotlin_learning.data.forhistory.Poissonclass
 import com.example.kotlin_learning.data.forhistory.SLRclass
 import com.example.kotlin_learning.data.forhistory.UnGroupedclass
 import com.example.kotlin_learning.ui.theme.darkmodebackground
+import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
+import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
 import com.example.kotlin_learning.viewModel.Screen
 import com.example.kotlin_learning.viewModel.WindowInfo
@@ -176,9 +184,32 @@ fun Printing(
                         .fillMaxSize()
                         .nestedScroll(scrollbehavior.nestedScrollConnection),
                     topBar = {
-                        Appbar("Printing") {
-                            scope.launch {drawerState.open()}
-                        }
+                        TopAppBar(
+                            title = {
+                                Text(text = "Printing", style = TextStyle(color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor, fontSize = 20.sp))
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = {
+                                    scope.launch {drawerState.open()}
+                                }) {
+                                    Icon(painter = painterResource(R.drawable.menu), contentDescription = "menu button", tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                                }
+                            },
+                            actions = {
+                                IconButton(
+                                    onClick = {
+                                        //navController.navigate(route = Screen.Account.route)
+                                    }
+                                ) {
+                                    Icon(Icons.Default.Send, contentDescription = "", tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                                }
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                scrolledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
+                            ),
+                            scrollBehavior = scrollbehavior
+                        )
                     }
                 ) { values ->
                     LazyColumn(

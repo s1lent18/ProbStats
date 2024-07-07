@@ -6,6 +6,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -153,6 +154,7 @@ fun Appbar(title: String, openDrawer: () -> Unit) {
                 Icon(painter = painterResource(R.drawable.menu), contentDescription = "menu button", tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
             }
         },
+
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
             scrolledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
