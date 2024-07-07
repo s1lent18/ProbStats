@@ -25,24 +25,53 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.kotlin_learning.ui.theme.darkmodebackground
 import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Screen
+import com.example.kotlin_learning.viewModel.WindowInfo
+import com.example.kotlin_learning.viewModel.rWindowInfo
 
-@Preview
+@Composable
+fun StringInput(label: String, value: String, onValueChange: (String) -> Unit) {
+    OutlinedTextField(
+        label = { Text(label)},
+        value = value,
+        onValueChange = onValueChange,
+        shape = RoundedCornerShape(20.dp),
+        modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+        colors = TextFieldDefaults.colors(
+            disabledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+            disabledTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+            unfocusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+            focusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+            unfocusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+            focusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+            unfocusedLabelColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+            focusedLabelColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+
+        )
+    )
+}
+
 @Composable
 fun PassChange(
     authViewModel: AuthViewModel = viewModel(),
+    navController: NavController
 ) {
+    val windowInfo = rWindowInfo()
     val ddone by authViewModel.done.observeAsState(initial = false)
     val email by authViewModel.email.collectAsState()
     val (oldpass, setoldpass) = remember {mutableStateOf("")}
     val (newpass, setnewpass) = remember {mutableStateOf("")}
     val (connewpass, setconnewpass) = remember {mutableStateOf("")}
     val showDialog = remember { mutableStateOf(false) }
+    val loggedIn by authViewModel.loggedin.observeAsState(initial = true)
 
     LaunchedEffect (Unit) {
         val userid = authViewModel.getuserid()
@@ -66,85 +95,233 @@ fun PassChange(
         )
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize().background(
-            color = if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White
-        )
-    ) {
-        Text("Change Password", color = Color.White)
-        Column (
-            modifier = Modifier.fillMaxSize().align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            OutlinedTextField(
-                label = { Text("Old Password")},
-                value = oldpass,
-                onValueChange = setoldpass,
-                shape = RoundedCornerShape(20.dp),
-                modifier = Modifier.fillMaxWidth(fraction =0.9f),
-                colors = TextFieldDefaults.colors(
-                    disabledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                    disabledTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                    unfocusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                    focusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                    unfocusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                    focusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                    unfocusedLabelColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                    focusedLabelColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                )
-            )
-            OutlinedTextField(
-                label = { Text("New Password")},
-                value = newpass,
-                onValueChange = setnewpass,
-                shape = RoundedCornerShape(20.dp),
-                modifier = Modifier.fillMaxWidth(fraction =0.9f),
-                colors = TextFieldDefaults.colors(
-                    disabledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                    disabledTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                    unfocusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                    focusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                    unfocusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                    focusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                    unfocusedLabelColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                    focusedLabelColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                )
-            )
-            OutlinedTextField(
-                label = { Text("Confirm New Password")},
-                value = connewpass,
-                onValueChange = setconnewpass,
-                shape = RoundedCornerShape(20.dp),
-                modifier = Modifier.fillMaxWidth(fraction =0.9f),
-                colors = TextFieldDefaults.colors(
-                    disabledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                    disabledTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                    unfocusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                    focusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                    unfocusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                    focusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                    unfocusedLabelColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                    focusedLabelColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                )
-            )
-            ElevatedButton(
-                modifier = Modifier.fillMaxWidth(fraction = 0.9f),
-                onClick = {
-                    if(email != null && oldpass != "" && newpass != "" && connewpass != "" && newpass == connewpass) {
-                        authViewModel.reauthenticateAndChangePassword(email!!, oldpass, newpass)
-                        //authViewModel.signout()
+    when(windowInfo.screenWidthInfo) {
+        WindowInfo.WindowType.Compact -> {
+            if(loggedIn) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            color = if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White
+                        )
+                ) {
+                    Column (
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .align(Alignment.Center),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text("Change Password", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground, fontSize = 30.sp)
+                        Spacer50()
+                        StringInput(label = "Old Password", value = oldpass, onValueChange = setoldpass)
+                        Spacer50()
+                        StringInput(label = "New Password", value = newpass, onValueChange = setnewpass)
+                        Spacer50()
+                        StringInput(label = "Confirm New Password", value = connewpass, onValueChange = setconnewpass)
+                        Spacer50()
+                        ElevatedButton(
+                            modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                            onClick = {
+                                if(email != null && oldpass != "" && newpass != "" && connewpass != "" && newpass == connewpass) {
+                                    authViewModel.reauthenticateAndChangePassword(email!!, oldpass, newpass)
+                                    //authViewModel.signout()
+                                }
+                            },
+                            elevation = ButtonDefaults.elevatedButtonElevation(
+                                10.dp
+                            ),
+                            colors = ButtonDefaults.elevatedButtonColors(
+                                containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                            )
+                        ) {
+                            Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                        }
                     }
-                },
-                elevation = ButtonDefaults.elevatedButtonElevation(
-                    10.dp
-                ),
-                colors = ButtonDefaults.elevatedButtonColors(
-                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
-                )
+                }
+            } else {
+                LaunchedEffect(Unit) {
+                    navController.navigate(route = Screen.Login.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                }
+            }
+        }
+        WindowInfo.WindowType.Expanded -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        color = if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White
+                    )
             ) {
-                Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                Text("Change Password", color = Color.White)
+                Column (
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    OutlinedTextField(
+                        label = { Text("Old Password")},
+                        value = oldpass,
+                        onValueChange = setoldpass,
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier.fillMaxWidth(fraction =0.9f),
+                        colors = TextFieldDefaults.colors(
+                            disabledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            disabledTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            unfocusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            focusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            unfocusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            focusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            unfocusedLabelColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            focusedLabelColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                        )
+                    )
+                    OutlinedTextField(
+                        label = { Text("New Password")},
+                        value = newpass,
+                        onValueChange = setnewpass,
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier.fillMaxWidth(fraction =0.9f),
+                        colors = TextFieldDefaults.colors(
+                            disabledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            disabledTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            unfocusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            focusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            unfocusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            focusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            unfocusedLabelColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            focusedLabelColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                        )
+                    )
+                    OutlinedTextField(
+                        label = { Text("Confirm New Password")},
+                        value = connewpass,
+                        onValueChange = setconnewpass,
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier.fillMaxWidth(fraction =0.9f),
+                        colors = TextFieldDefaults.colors(
+                            disabledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            disabledTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            unfocusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            focusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            unfocusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            focusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            unfocusedLabelColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            focusedLabelColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                        )
+                    )
+                    ElevatedButton(
+                        modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                        onClick = {
+                            if(email != null && oldpass != "" && newpass != "" && connewpass != "" && newpass == connewpass) {
+                                authViewModel.reauthenticateAndChangePassword(email!!, oldpass, newpass)
+                                //authViewModel.signout()
+                            }
+                        },
+                        elevation = ButtonDefaults.elevatedButtonElevation(
+                            10.dp
+                        ),
+                        colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                        )
+                    ) {
+                        Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                    }
+                }
+            }
+        }
+        WindowInfo.WindowType.Medium -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        color = if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White
+                    )
+            ) {
+                Text("Change Password", color = Color.White)
+                Column (
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    OutlinedTextField(
+                        label = { Text("Old Password")},
+                        value = oldpass,
+                        onValueChange = setoldpass,
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier.fillMaxWidth(fraction =0.9f),
+                        colors = TextFieldDefaults.colors(
+                            disabledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            disabledTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            unfocusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            focusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            unfocusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            focusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            unfocusedLabelColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            focusedLabelColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                        )
+                    )
+                    OutlinedTextField(
+                        label = { Text("New Password")},
+                        value = newpass,
+                        onValueChange = setnewpass,
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier.fillMaxWidth(fraction =0.9f),
+                        colors = TextFieldDefaults.colors(
+                            disabledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            disabledTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            unfocusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            focusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            unfocusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            focusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            unfocusedLabelColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            focusedLabelColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                        )
+                    )
+                    OutlinedTextField(
+                        label = { Text("Confirm New Password")},
+                        value = connewpass,
+                        onValueChange = setconnewpass,
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier.fillMaxWidth(fraction =0.9f),
+                        colors = TextFieldDefaults.colors(
+                            disabledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            disabledTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            unfocusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            focusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            unfocusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            focusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            unfocusedLabelColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                            focusedLabelColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                        )
+                    )
+                    ElevatedButton(
+                        modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                        onClick = {
+                            if(email != null && oldpass != "" && newpass != "" && connewpass != "" && newpass == connewpass) {
+                                authViewModel.reauthenticateAndChangePassword(email!!, oldpass, newpass)
+                                //authViewModel.signout()
+                            }
+                        },
+                        elevation = ButtonDefaults.elevatedButtonElevation(
+                            10.dp
+                        ),
+                        colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                        )
+                    ) {
+                        Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                    }
+                }
             }
         }
     }

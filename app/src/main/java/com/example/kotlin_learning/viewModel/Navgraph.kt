@@ -116,6 +116,6 @@ fun SetupNavgraph (
 
         this.composable(
             route = Screen.PassChange.route
-        ) { PassChange() }
+        ) { PassChange(navController = navController) }
     }
 }
