@@ -83,7 +83,7 @@ dependencies {
     implementation(libs.androidx.storage)
     kapt(libs.hilt.android.compiler)
     implementation (libs.kotlinx.coroutines.android)
-    implementation (libs.androidx.core.splashscreen)
+    //implementation (libs.androidx.core.splashscreen)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

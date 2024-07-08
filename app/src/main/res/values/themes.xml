@@ -2,5 +2,8 @@
 <resources>
 
     <style name="Theme.KotlinLearning" parent="android:Theme.Material.Light.NoActionBar" />
-
+    <style name="Theme.SplashScreen" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">#121212</item>
+        <item name="android:windowBackground">@drawable/splashbackground</item>
+    </style>
 </resources>
