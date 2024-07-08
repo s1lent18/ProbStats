@@ -6,7 +6,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +18,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
@@ -36,6 +41,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -138,6 +144,42 @@ fun ScrollableList(navController: NavController, items: List<Pair<String, String
     }
 }
 
+@Composable
+fun SidebarItem(
+    icon: ImageVector,
+    text: String,
+    count: Int? = null,
+    isSelected: Boolean = false,
+    onClick: () -> Unit
+) {
+    val backgroundColor = if (isSelected) darkmodebackground else Color.Transparent
+    val textColor = if (isSelected) darkmodefontcolor else darkmodebackground
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = backgroundColor, shape = RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = textColor,
+                modifier = Modifier.padding(end = 16.dp)
+            )
+            Text(text = text, color = textColor)
+        }
+        count?.let {
+            Text(text = it.toString(), color = textColor)
+        }
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Appbar(title: String, openDrawer: () -> Unit) {
@@ -197,31 +239,47 @@ fun Home(
                         Icon(
                             painter = painterResource(R.drawable.prob_stats),
                             contentDescription = "Icon",
-                            modifier = Modifier.size(200.dp),
+                            modifier = Modifier.size(300.dp),
                             tint = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
                         )
                         Spacer(modifier = Modifier.height(30.dp))
-                        Text(modifier = Modifier.clickable {
-                            navController.navigate(route = Screen.Account.route)
-                        }, text = "Account", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
+                        SidebarItem(
+                            icon = Icons.Default.AccountCircle,
+                            text = "Account",
+                            isSelected = false,
+                            onClick = {
+                                navController.navigate(route = Screen.Account.route)
+                            }
+                        )
                         Spacer(modifier = Modifier.height(15.dp))
-                        Text(modifier = Modifier.clickable {
-                            navController.navigate(route = Screen.Home.route)
-                        }, text = "Calculators", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
+                        SidebarItem(
+                            icon = Icons.Default.Home,
+                            text = "Home",
+                            isSelected = true,
+                            onClick = {
+                                navController.navigate(route = Screen.Home.route)
+                            }
+                        )
                         Spacer(modifier = Modifier.height(15.dp))
-                        Text(modifier = Modifier.clickable {
-                            navController.navigate(route = Screen.History.route)
-                        }, text = "History", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
+                        SidebarItem(
+                            icon = Icons.Default.Info,
+                            text = "History",
+                            isSelected = false,
+                            onClick = {
+                                navController.navigate(route = Screen.History.route)
+                            }
+                        )
                         Spacer(modifier = Modifier.height(15.dp))
-                        Text(
-                            modifier = Modifier.clickable {
+                        SidebarItem(
+                            icon = Icons.AutoMirrored.Filled.ArrowBack,
+                            text = "Logout",
+                            isSelected = false,
+                            onClick = {
                                 authViewModel.signout()
                                 navController.navigate(route = Screen.Login.route) {
                                     popUpTo(Screen.Home.route) { inclusive = true }
                                 }
-                            },
-                            text = "Logout",
-                            color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
+                            }
                         )
                         Spacer(modifier = Modifier.height(15.dp))
                     }

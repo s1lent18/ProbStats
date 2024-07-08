@@ -1,6 +1,5 @@
 package com.example.kotlin_learning.view
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +10,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
@@ -148,29 +152,47 @@ fun Multinomial(
                         Icon(
                             painter = painterResource(R.drawable.prob_stats),
                             contentDescription = "Icon",
-                            modifier = Modifier.size(200.dp),
+                            modifier = Modifier.size(300.dp),
                             tint = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
                         )
                         Spacer(modifier = Modifier.height(30.dp))
-                        Text(text = "Account", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
+                        SidebarItem(
+                            icon = Icons.Default.AccountCircle,
+                            text = "Account",
+                            isSelected = false,
+                            onClick = {
+                                navController.navigate(route = Screen.Account.route)
+                            }
+                        )
                         Spacer(modifier = Modifier.height(15.dp))
-                        Text(modifier = Modifier.clickable {
-                            navController.navigate(route = Screen.Home.route)
-                        }, text = "Calculators", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
+                        SidebarItem(
+                            icon = Icons.Default.Home,
+                            text = "Home",
+                            isSelected = true,
+                            onClick = {
+                                navController.navigate(route = Screen.Home.route)
+                            }
+                        )
                         Spacer(modifier = Modifier.height(15.dp))
-                        Text(modifier = Modifier.clickable {
-                            navController.navigate(route = Screen.History.route)
-                        }, text = "History", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
+                        SidebarItem(
+                            icon = Icons.Default.Info,
+                            text = "History",
+                            isSelected = false,
+                            onClick = {
+                                navController.navigate(route = Screen.History.route)
+                            }
+                        )
                         Spacer(modifier = Modifier.height(15.dp))
-                        Text(
-                            modifier = Modifier.clickable {
+                        SidebarItem(
+                            icon = Icons.AutoMirrored.Filled.ArrowBack,
+                            text = "Logout",
+                            isSelected = false,
+                            onClick = {
                                 authViewModel.signout()
                                 navController.navigate(route = Screen.Login.route) {
                                     popUpTo(Screen.Home.route) { inclusive = true }
                                 }
-                            },
-                            text = "Logout",
-                            color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
+                            }
                         )
                         Spacer(modifier = Modifier.height(15.dp))
                     }

@@ -1,7 +1,6 @@
 package com.example.kotlin_learning.view
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -146,29 +149,47 @@ fun Printing(
                         Icon(
                             painter = painterResource(R.drawable.prob_stats),
                             contentDescription = "Icon",
-                            modifier = Modifier.size(200.dp),
+                            modifier = Modifier.size(300.dp),
                             tint = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
                         )
                         Spacer(modifier = Modifier.height(30.dp))
-                        Text(text = "Account", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
+                        SidebarItem(
+                            icon = Icons.Default.AccountCircle,
+                            text = "Account",
+                            isSelected = false,
+                            onClick = {
+                                navController.navigate(route = Screen.Account.route)
+                            }
+                        )
                         Spacer(modifier = Modifier.height(15.dp))
-                        Text(modifier = Modifier.clickable {
-                            navController.navigate(route = Screen.Home.route)
-                        }, text = "Calculators", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
+                        SidebarItem(
+                            icon = Icons.Default.Home,
+                            text = "Home",
+                            isSelected = false,
+                            onClick = {
+                                navController.navigate(route = Screen.Home.route)
+                            }
+                        )
                         Spacer(modifier = Modifier.height(15.dp))
-                        Text(modifier = Modifier.clickable {
-                            navController.navigate(route = Screen.History.route)
-                        }, text = "History", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
+                        SidebarItem(
+                            icon = Icons.Default.Info,
+                            text = "History",
+                            isSelected = true,
+                            onClick = {
+                                navController.navigate(route = Screen.History.route)
+                            }
+                        )
                         Spacer(modifier = Modifier.height(15.dp))
-                        Text(
-                            modifier = Modifier.clickable {
+                        SidebarItem(
+                            icon = Icons.AutoMirrored.Filled.ArrowBack,
+                            text = "Logout",
+                            isSelected = false,
+                            onClick = {
                                 authViewModel.signout()
                                 navController.navigate(route = Screen.Login.route) {
                                     popUpTo(Screen.Home.route) { inclusive = true }
                                 }
-                            },
-                            text = "Logout",
-                            color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
+                            }
                         )
                         Spacer(modifier = Modifier.height(15.dp))
                     }
@@ -201,7 +222,7 @@ fun Printing(
                                         //navController.navigate(route = Screen.Account.route)
                                     }
                                 ) {
-                                    Icon(Icons.Default.Send, contentDescription = "", tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                                    Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "", tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                                 }
                             },
                             colors = TopAppBarDefaults.topAppBarColors(
