@@ -406,6 +406,8 @@ class AuthViewModel : ViewModel() {
     private val firebaseauth = Firebase.auth
     private val _loggedin = MutableLiveData<Boolean>()
     val loggedin: LiveData<Boolean> = _loggedin
+    private val _signedup = MutableLiveData<Boolean>()
+    val signedup: LiveData<Boolean> = _signedup
     private val _errorMessage = MutableLiveData<String?>(null)
     val errorMessage: LiveData<String?> get() = _errorMessage
     private val _username = MutableStateFlow<String?>(null)
@@ -437,15 +439,68 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signup(email: String, password: String, username: String) {
-        firebaseauth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    _loggedin.value = true
-                    adduser(email = email, username = username)
-                } else {
-                    _errorMessage.value = "SignUp Failed"
-                }
+//        val userData = mapOf(
+//            "email" to email,
+//            "numberofSolutions" to 0
+//        )
+        checkUsernameAvailability(username) { isAvailable ->
+            if (isAvailable) {
+                firebaseauth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            adduser(email = email, username = username)
+                            _signedup.value = true
+//                            saveUsername(username, userData) { success ->
+//                                if (success) {
+//
+//                                } else {
+//                                    _errorMessage.value = "Failed to save username"
+//                                }
+//                            }
+                        } else {
+                            _errorMessage.value = "Email Already in use"
+                        }
+                    }
+            } else {
+                _errorMessage.value = "Username Already in Use"
             }
+        }
+
+    }
+
+    private fun checkAndSaveUsername(username: String, userData: Map<String, Any>, onResult: (Boolean, String) -> Unit) {
+        checkUsernameAvailability(username) { isAvailable ->
+            if (isAvailable) {
+                saveUsername(username, userData) { success ->
+                    if (success) {
+                        onResult(true, "Username saved successfully")
+                    } else {
+                        onResult(false, "Failed to save username")
+                    }
+                }
+            } else {
+                onResult(false, "Username already exists")
+            }
+        }
+    }
+
+    private fun checkUsernameAvailability(username: String, onResult: (Boolean) -> Unit) {
+        database.child("users").orderByChild("username").equalTo(username)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    onResult(!snapshot.exists())
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    onResult(false)
+                }
+            })
+    }
+
+    private fun saveUsername(username: String, userData: Map<String, Any>, onResult: (Boolean) -> Unit) {
+        database.child("users").child(username).setValue(userData).addOnCompleteListener { task ->
+            onResult(task.isSuccessful)
+        }
     }
 
     fun signout() {
@@ -456,18 +511,10 @@ class AuthViewModel : ViewModel() {
     fun resetErrorMessage() {
         _errorMessage.value = null
     }
-//
-//    fun resetsend() {
-//        _send.value = null
-//    }
 
     fun getuserid() : String? {
         return FirebaseAuth.getInstance().currentUser?.uid
     }
-
-//    fun isUserSignedin() : Boolean {
-//        return firebaseauth.currentUser != null
-//    }
 
     fun getusername(userId: String) {
         viewModelScope.launch {

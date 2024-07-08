@@ -91,25 +91,30 @@ fun Signup(
 ) {
     Surface {
         val windowInfo = rWindowInfo()
-        val signedUp by authViewModel.loggedin.observeAsState(initial = false)
-        val errorMessage by authViewModel.errorMessage.observeAsState()
+        val signedUp by authViewModel.signedup.observeAsState(initial = false)
+        val errorMessage1 by authViewModel.errorMessage.observeAsState()
         val showDialog = remember { mutableStateOf(false) }
         val showSuccessDialog = remember { mutableStateOf(false) }
 
-        LaunchedEffect(errorMessage) {
-            if (errorMessage != null) {
+        println(errorMessage1)
+        LaunchedEffect(errorMessage1) {
+            if (errorMessage1 != null) {
                 showDialog.value = true
             }
         }
 
         if (showDialog.value) {
-            DialogBox(
-                title = "Error",
-                text = "Email Already In Use",
-                setShowDialog = showDialog,
-                onClick = { showDialog.value = false }
-            )
-            authViewModel.resetErrorMessage()
+            errorMessage1?.let {
+                DialogBox(
+                    title = "Error",
+                    text = it,
+                    setShowDialog = showDialog,
+                    onClick = {
+                        showDialog.value = false
+                        authViewModel.resetErrorMessage()
+                    }
+                )
+            }
         }
 
         if (signedUp) {
