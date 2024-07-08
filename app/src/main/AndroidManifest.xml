@@ -16,10 +16,9 @@
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.SplashScreen"
-            tools:ignore="DiscouragedApi">
+            tools:ignore="DiscouragedApi,LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
