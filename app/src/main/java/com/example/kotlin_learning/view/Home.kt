@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -231,7 +231,7 @@ fun Home(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet (modifier = Modifier.background(uicolor)) {
+            ModalDrawerSheet (modifier = Modifier.background(uicolor).fillMaxHeight().fillMaxWidth(fraction = 0.8f)) {
                 LazyColumn (
                     modifier = Modifier.padding(16.dp)
                 ){
@@ -239,10 +239,9 @@ fun Home(
                         Icon(
                             painter = painterResource(R.drawable.prob_stats),
                             contentDescription = "Icon",
-                            modifier = Modifier.size(300.dp),
+                            modifier = Modifier.fillMaxWidth().fillMaxHeight(fraction = 0.3f),
                             tint = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
                         )
-                        Spacer(modifier = Modifier.height(30.dp))
                         SidebarItem(
                             icon = Icons.Default.AccountCircle,
                             text = "Account",
