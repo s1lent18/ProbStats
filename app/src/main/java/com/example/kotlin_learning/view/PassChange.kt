@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.kotlin_learning.R
 import com.example.kotlin_learning.ui.theme.Amatic
 import com.example.kotlin_learning.ui.theme.darkmodebackground
 import com.example.kotlin_learning.ui.theme.darkmodefontcolor
