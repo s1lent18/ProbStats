@@ -468,22 +468,6 @@ class AuthViewModel : ViewModel() {
 
     }
 
-    private fun checkAndSaveUsername(username: String, userData: Map<String, Any>, onResult: (Boolean, String) -> Unit) {
-        checkUsernameAvailability(username) { isAvailable ->
-            if (isAvailable) {
-                saveUsername(username, userData) { success ->
-                    if (success) {
-                        onResult(true, "Username saved successfully")
-                    } else {
-                        onResult(false, "Failed to save username")
-                    }
-                }
-            } else {
-                onResult(false, "Username already exists")
-            }
-        }
-    }
-
     private fun checkUsernameAvailability(username: String, onResult: (Boolean) -> Unit) {
         database.child("users").orderByChild("username").equalTo(username)
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -495,12 +479,6 @@ class AuthViewModel : ViewModel() {
                     onResult(false)
                 }
             })
-    }
-
-    private fun saveUsername(username: String, userData: Map<String, Any>, onResult: (Boolean) -> Unit) {
-        database.child("users").child(username).setValue(userData).addOnCompleteListener { task ->
-            onResult(task.isSuccessful)
-        }
     }
 
     fun signout() {
