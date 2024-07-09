@@ -30,10 +30,13 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -128,7 +131,9 @@ fun Multinomial(
     val (x, setx) = remember { mutableStateOf(arrayOf("")) }
     val (n, setn) = remember { mutableStateOf(("")) }
     val probability = viewModel.multinomialresult.observeAsState()
-    val isSubmitted = remember { mutableStateOf(false) }
+    var isSubmitted by remember { mutableStateOf(false) }
+    var isupdated by remember { mutableStateOf(false) }
+    var display by remember { mutableStateOf(false) }
     val userId = authViewModel.getuserid()
     val showDialog = remember { mutableStateOf(false) }
 
@@ -139,6 +144,18 @@ fun Multinomial(
             setShowDialog = showDialog,
             onClick = { showDialog.value = false }
         )
+    }
+
+    LaunchedEffect(isupdated) {
+        if(isupdated) {
+            val multinomialrequest = MultinomialRequest(
+                n = n.toFloat(),
+                x = stof(x),
+                p = stof(p)
+            )
+            viewModel.getMultinomialAnswer(multinomialrequest)
+            isupdated = false
+        }
     }
 
     ModalNavigationDrawer(
@@ -228,31 +245,38 @@ fun Multinomial(
                                         setp(Array(newSize) { if (it < p.size) p[it] else "" })
                                         setx(Array(newSize) { if (it < x.size) x[it] else "" })
                                     }
+                                    display = false
                                 }
                             )
                             Spacer(modifier = Modifier.height(50.dp))
                         }
                         if (n != "") {
-                            items(n.toInt()) {
+                            items(n.toInt()) { a ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(fraction = 0.9f),
-                                    label = "X$it",
+                                    label = "X$a",
                                     values = x,
-                                    index = it,
-                                    onValueChange = setx
+                                    index = a,
+                                    onValueChange = {
+                                        setx(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
                             item {
                                 Spacer(modifier = Modifier.height(50.dp))
                             }
-                            items(n.toInt()) {
+                            items(n.toInt()) { b ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(fraction = 0.9f),
-                                    label = "P$it",
+                                    label = "P$b",
                                     values = p,
-                                    index = it,
-                                    onValueChange = setp
+                                    index = b,
+                                    onValueChange = {
+                                        setp(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -267,12 +291,10 @@ fun Multinomial(
                                         if(stof(p).sum() != 1f || stoi(x).sum() != n.toInt()) {
                                             showDialog.value = true
                                         } else {
-                                            val multinomialrequest = MultinomialRequest(
-                                                n = n.toFloat(),
-                                                x = stof(x),
-                                                p = stof(p)
-                                            )
-                                            viewModel.getMultinomialAnswer(multinomialrequest)
+                                            isSubmitted = false
+                                            isupdated = true
+                                            display = true
+                                            keyboardController?.hide()
                                             showDialog.value = false
                                         }
                                     }
@@ -288,7 +310,7 @@ fun Multinomial(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer(modifier = Modifier.height(50.dp))
-                            if (n.isNotEmpty() && p.isNotEmpty() && x.isNotEmpty()) {
+                            if (n.isNotEmpty() && p.isNotEmpty() && x.isNotEmpty() && !isupdated) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer(modifier = Modifier.height(50.dp))
@@ -299,19 +321,21 @@ fun Multinomial(
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        FloatAnswer(text = "Probability:", value = result.data.ans)
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        if (!isSubmitted.value && userId != null) {
-                                            authViewModel.sendmultinomial(
-                                                userId = userId,
-                                                n = n.toFloat(),
-                                                x = stoff(x),
-                                                p = stoff(p),
-                                                ans = result.data.ans
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            FloatAnswer(text = "Probability:", value = result.data.ans)
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            if (!isSubmitted && userId != null) {
+                                                authViewModel.sendmultinomial(
+                                                    userId = userId,
+                                                    n = n.toFloat(),
+                                                    x = stoff(x),
+                                                    p = stoff(p),
+                                                    ans = result.data.ans
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
@@ -350,31 +374,38 @@ fun Multinomial(
                                         setp(Array(newSize) { if (it < p.size) p[it] else "" })
                                         setx(Array(newSize) { if (it < x.size) x[it] else "" })
                                     }
+                                    display = false
                                 }
                             )
                             Spacer(modifier = Modifier.height(50.dp))
                         }
                         if (n != "") {
-                            items(n.toInt()) {
+                            items(n.toInt()) { a ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(fraction = 0.9f),
-                                    label = "X$it",
+                                    label = "X$a",
                                     values = x,
-                                    index = it,
-                                    onValueChange = setx
+                                    index = a,
+                                    onValueChange = {
+                                        setx(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
                             item {
                                 Spacer(modifier = Modifier.height(50.dp))
                             }
-                            items(n.toInt()) {
+                            items(n.toInt()) { b ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(fraction = 0.9f),
-                                    label = "P$it",
+                                    label = "P$b",
                                     values = p,
-                                    index = it,
-                                    onValueChange = setp
+                                    index = b,
+                                    onValueChange = {
+                                        setp(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -385,13 +416,16 @@ fun Multinomial(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     keyboardController?.hide()
-                                    if (n != "" && p.isNotEmpty() && x.isNotEmpty() && stof(p).sum() == 1f && stoi(x).sum() == n.toInt()) {
-                                        val multinomialrequest = MultinomialRequest(
-                                            n = n.toFloat(),
-                                            x = stof(x),
-                                            p = stof(p)
-                                        )
-                                        viewModel.getMultinomialAnswer(multinomialrequest)
+                                    if (n != "" && p.isNotEmpty() && x.isNotEmpty()) {
+                                        if(stof(p).sum() != 1f || stoi(x).sum() != n.toInt()) {
+                                            showDialog.value = true
+                                        } else {
+                                            isSubmitted = false
+                                            isupdated = true
+                                            display = true
+                                            keyboardController?.hide()
+                                            showDialog.value = false
+                                        }
                                     }
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
@@ -405,7 +439,7 @@ fun Multinomial(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer(modifier = Modifier.height(50.dp))
-                            if (n.isNotEmpty() && p.isNotEmpty() && x.isNotEmpty()) {
+                            if (n.isNotEmpty() && p.isNotEmpty() && x.isNotEmpty() && !isupdated) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer(modifier = Modifier.height(50.dp))
@@ -416,19 +450,21 @@ fun Multinomial(
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        FloatAnswer(text = "Probability:", value = result.data.ans)
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        if (!isSubmitted.value && userId != null) {
-                                            authViewModel.sendmultinomial(
-                                                userId = userId,
-                                                n = n.toFloat(),
-                                                x = stoff(x),
-                                                p = stoff(p),
-                                                ans = result.data.ans
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            FloatAnswer(text = "Probability:", value = result.data.ans)
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            if (!isSubmitted && userId != null) {
+                                                authViewModel.sendmultinomial(
+                                                    userId = userId,
+                                                    n = n.toFloat(),
+                                                    x = stoff(x),
+                                                    p = stoff(p),
+                                                    ans = result.data.ans
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
@@ -467,31 +503,38 @@ fun Multinomial(
                                         setp(Array(newSize) { if (it < p.size) p[it] else "" })
                                         setx(Array(newSize) { if (it < x.size) x[it] else "" })
                                     }
+                                    display = false
                                 }
                             )
                             Spacer(modifier = Modifier.height(50.dp))
                         }
                         if (n != "") {
-                            items(n.toInt()) {
+                            items(n.toInt()) { a ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(fraction = 0.9f),
-                                    label = "X$it",
+                                    label = "X$a",
                                     values = x,
-                                    index = it,
-                                    onValueChange = setx
+                                    index = a,
+                                    onValueChange = {
+                                        setx(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
                             item {
                                 Spacer(modifier = Modifier.height(50.dp))
                             }
-                            items(n.toInt()) {
+                            items(n.toInt()) { b ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(fraction = 0.9f),
-                                    label = "P$it",
+                                    label = "P$b",
                                     values = p,
-                                    index = it,
-                                    onValueChange = setp
+                                    index = b,
+                                    onValueChange = {
+                                        setp(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -502,13 +545,16 @@ fun Multinomial(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     keyboardController?.hide()
-                                    if (n != "" && p.isNotEmpty() && x.isNotEmpty() && stof(p).sum() == 1f && stoi(x).sum() == n.toInt()) {
-                                        val multinomialrequest = MultinomialRequest(
-                                            n = n.toFloat(),
-                                            x = stof(x),
-                                            p = stof(p)
-                                        )
-                                        viewModel.getMultinomialAnswer(multinomialrequest)
+                                    if (n != "" && p.isNotEmpty() && x.isNotEmpty()) {
+                                        if(stof(p).sum() != 1f || stoi(x).sum() != n.toInt()) {
+                                            showDialog.value = true
+                                        } else {
+                                            isSubmitted = false
+                                            isupdated = true
+                                            display = true
+                                            keyboardController?.hide()
+                                            showDialog.value = false
+                                        }
                                     }
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
@@ -522,7 +568,7 @@ fun Multinomial(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer(modifier = Modifier.height(50.dp))
-                            if (n.isNotEmpty() && p.isNotEmpty() && x.isNotEmpty()) {
+                            if (n.isNotEmpty() && p.isNotEmpty() && x.isNotEmpty() && !isupdated) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer(modifier = Modifier.height(50.dp))
@@ -533,19 +579,21 @@ fun Multinomial(
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        FloatAnswer(text = "Probability:", value = result.data.ans)
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        if (!isSubmitted.value && userId != null) {
-                                            authViewModel.sendmultinomial(
-                                                userId = userId,
-                                                n = n.toFloat(),
-                                                x = stoff(x),
-                                                p = stoff(p),
-                                                ans = result.data.ans
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            FloatAnswer(text = "Probability:", value = result.data.ans)
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            if (!isSubmitted && userId != null) {
+                                                authViewModel.sendmultinomial(
+                                                    userId = userId,
+                                                    n = n.toFloat(),
+                                                    x = stoff(x),
+                                                    p = stoff(p),
+                                                    ans = result.data.ans
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {

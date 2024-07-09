@@ -187,6 +187,7 @@ fun Poisson(
     val probability = poissonViewModel.poissonresult.observeAsState()
     var isSubmitted by remember { mutableStateOf(false) }
     var isupdated by remember { mutableStateOf(false) }
+    var display by remember { mutableStateOf(false) }
 
     LaunchedEffect(isupdated) {
         if (isupdated) {
@@ -282,6 +283,7 @@ fun Poisson(
                                 value = x,
                                 onValueChange = {
                                     setx(it)
+                                    display = false
                                 }
                             )
                             Spacer50()
@@ -291,8 +293,8 @@ fun Poisson(
                                 value = lamda,
                                 onValueChange = {
                                     setlamda(it)
+                                    display = false
                                 }
-
                             )
                             Spacer50()
                             ElevatedButton(
@@ -301,6 +303,7 @@ fun Poisson(
                                     if (x != "" && lamda != "") {
                                         isSubmitted = false
                                         isupdated = true
+                                        display = true
                                         keyboardController?.hide()
                                     }
                                 },
@@ -327,30 +330,32 @@ fun Poisson(
                                         isSubmitted = false
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.less)
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.lessequal)
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.greater)
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.greaterequal)
-                                        Spacer50()
-                                        if (!isSubmitted && userId != null) {
-                                            authViewModel.sendpoisson(
-                                                userId = userId,
-                                                x = x.toFloat(),
-                                                lamda = lamda.toFloat(),
-                                                equal = result.data.equal,
-                                                greater = result.data.greater,
-                                                greaterequal = result.data.greaterequal,
-                                                less = result.data.less,
-                                                lessequal = result.data.lessequal
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted = true
+                                        if (display) {
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.equal)
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.less)
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.lessequal)
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.greater)
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.greaterequal)
+                                            Spacer50()
+                                            if (!isSubmitted && userId != null) {
+                                                authViewModel.sendpoisson(
+                                                    userId = userId,
+                                                    x = x.toFloat(),
+                                                    lamda = lamda.toFloat(),
+                                                    equal = result.data.equal,
+                                                    greater = result.data.greater,
+                                                    greaterequal = result.data.greaterequal,
+                                                    less = result.data.less,
+                                                    lessequal = result.data.lessequal
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
@@ -386,25 +391,29 @@ fun Poisson(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "X:",
                                 value = x,
-                                onValueChange = setx
+                                onValueChange = {
+                                    setx(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Lambda(t):",
                                 value = lamda,
-                                onValueChange = setlamda
+                                onValueChange = {
+                                    setlamda(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     if (x != "" && lamda != "") {
-                                        val poissonrequest = PoissonRequest (
-                                            x = x.toFloat(),
-                                            lamda = lamda.toFloat()
-                                        )
-                                        poissonViewModel.getPoissonAnswer(poissonrequest)
+                                        isSubmitted = false
+                                        isupdated = true
+                                        display = true
                                         keyboardController?.hide()
                                     }
                                 },
@@ -418,7 +427,7 @@ fun Poisson(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            if (x != "" && lamda != "") {
+                            if (x != "" && lamda != "" && !isupdated) {
                                 when(val result = probability.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
@@ -431,30 +440,32 @@ fun Poisson(
                                         isSubmitted = false
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.less)
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.lessequal)
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.greater)
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.greaterequal)
-                                        Spacer50()
-                                        if (!isSubmitted && userId != null) {
-                                            authViewModel.sendpoisson(
-                                                userId = userId,
-                                                x = x.toFloat(),
-                                                lamda = lamda.toFloat(),
-                                                equal = result.data.equal,
-                                                greater = result.data.greater,
-                                                greaterequal = result.data.greaterequal,
-                                                less = result.data.less,
-                                                lessequal = result.data.lessequal
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted = true
+                                        if (display) {
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.equal)
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.less)
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.lessequal)
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.greater)
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.greaterequal)
+                                            Spacer50()
+                                            if (!isSubmitted && userId != null) {
+                                                authViewModel.sendpoisson(
+                                                    userId = userId,
+                                                    x = x.toFloat(),
+                                                    lamda = lamda.toFloat(),
+                                                    equal = result.data.equal,
+                                                    greater = result.data.greater,
+                                                    greaterequal = result.data.greaterequal,
+                                                    less = result.data.less,
+                                                    lessequal = result.data.lessequal
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
@@ -490,25 +501,29 @@ fun Poisson(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "X:",
                                 value = x,
-                                onValueChange = setx
+                                onValueChange = {
+                                    setx(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Lambda(t):",
                                 value = lamda,
-                                onValueChange = setlamda
+                                onValueChange = {
+                                    setlamda(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     if (x != "" && lamda != "") {
-                                        val poissonrequest = PoissonRequest (
-                                            x = x.toFloat(),
-                                            lamda = lamda.toFloat()
-                                        )
-                                        poissonViewModel.getPoissonAnswer(poissonrequest)
+                                        isSubmitted = false
+                                        isupdated = true
+                                        display = true
                                         keyboardController?.hide()
                                     }
                                 },
@@ -522,7 +537,7 @@ fun Poisson(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            if (x != "" && lamda != "") {
+                            if (x != "" && lamda != "" && !isupdated) {
                                 when(val result = probability.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
@@ -535,30 +550,32 @@ fun Poisson(
                                         isSubmitted = false
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.less)
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.lessequal)
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.greater)
-                                        Spacer50()
-                                        FloatAnswer(text = "P(X=$x):", value = result.data.greaterequal)
-                                        Spacer50()
-                                        if (!isSubmitted && userId != null) {
-                                            authViewModel.sendpoisson(
-                                                userId = userId,
-                                                x = x.toFloat(),
-                                                lamda = lamda.toFloat(),
-                                                equal = result.data.equal,
-                                                greater = result.data.greater,
-                                                greaterequal = result.data.greaterequal,
-                                                less = result.data.less,
-                                                lessequal = result.data.lessequal
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted = true
+                                        if (display) {
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.equal)
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.less)
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.lessequal)
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.greater)
+                                            Spacer50()
+                                            FloatAnswer(text = "P(X=$x):", value = result.data.greaterequal)
+                                            Spacer50()
+                                            if (!isSubmitted && userId != null) {
+                                                authViewModel.sendpoisson(
+                                                    userId = userId,
+                                                    x = x.toFloat(),
+                                                    lamda = lamda.toFloat(),
+                                                    equal = result.data.equal,
+                                                    greater = result.data.greater,
+                                                    greaterequal = result.data.greaterequal,
+                                                    less = result.data.less,
+                                                    lessequal = result.data.lessequal
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
