@@ -439,10 +439,6 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signup(email: String, password: String, username: String) {
-//        val userData = mapOf(
-//            "email" to email,
-//            "numberofSolutions" to 0
-//        )
         checkUsernameAvailability(username) { isAvailable ->
             if (isAvailable) {
                 firebaseauth.createUserWithEmailAndPassword(email, password)
@@ -450,13 +446,6 @@ class AuthViewModel : ViewModel() {
                         if (task.isSuccessful) {
                             adduser(email = email, username = username)
                             _signedup.value = true
-//                            saveUsername(username, userData) { success ->
-//                                if (success) {
-//
-//                                } else {
-//                                    _errorMessage.value = "Failed to save username"
-//                                }
-//                            }
                         } else {
                             _errorMessage.value = "Email Already in use"
                         }

@@ -3,6 +3,7 @@ package com.example.kotlin_learning.view
 import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -83,6 +84,8 @@ fun Printing(
     val ungroupedState = remember { mutableStateOf<List<UnGroupedclass>>(emptyList()) }
     val groupedState = remember { mutableStateOf<List<Groupedclass>>(emptyList()) }
     val hypothesisState = remember { mutableStateOf<List<Hypothesisclass>>(emptyList()) }
+    val showsearch = remember { mutableStateOf(false) }
+
 
     LaunchedEffect(userId) {
         authViewModel.receiverpoisson(userId) { messages ->
@@ -219,7 +222,7 @@ fun Printing(
                             actions = {
                                 IconButton(
                                     onClick = {
-                                        //navController.navigate(route = Screen.Account.route)
+                                        showsearch.value = true
                                     }
                                 ) {
                                     Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "", tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
@@ -233,66 +236,63 @@ fun Printing(
                         )
                     }
                 ) { values ->
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize().padding(values),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        item {
-                            if(tabindex == 0) {
-                                if (poissonState.value.isNotEmpty() && index < poissonState.value.size) {
-                                    PoissonItem(poissonState.value[index])
-                                } else {
-                                    CircularProgressIndicator()
-                                }
-                            } else if (tabindex == 1) {
-                                if (binomialState.value.isNotEmpty() && index < binomialState.value.size) {
-                                    BinomialItem(binomialState.value[index])
-                                } else {
-                                    CircularProgressIndicator()
-                                }
-                            } else if (tabindex == 2) {
-                                if (multinomialState.value.isNotEmpty() && index < multinomialState.value.size) {
-                                    MultinomialItem(multinomialState.value[index])
-                                } else {
-                                    CircularProgressIndicator()
-                                }
-                            } else if (tabindex == 3) {
-                                if (anovaState.value.isNotEmpty() && index < anovaState.value.size) {
-                                    AnovaItem(anovaState.value[index])
-                                } else {
-                                    CircularProgressIndicator()
-                                }
-                            } else if (tabindex == 4) {
-                                if(bayesruleState.value.isNotEmpty() && index < bayesruleState.value.size) {
-                                    BayesRuleItem(bayesruleState.value[index])
-                                } else {
-                                    CircularProgressIndicator()
-                                }
-                            } else if (tabindex == 5) {
-                                if(slrState.value.isNotEmpty() && index < slrState.value.size) {
-                                    SLRItem(slrState.value[index])
-                                } else {
-                                    CircularProgressIndicator()
-                                }
-                            } else if (tabindex == 6) {
-                                if(ungroupedState.value.isNotEmpty() && index < ungroupedState.value.size) {
-                                    UnGroupedItem(ungroupedState.value[index])
-                                } else {
-                                    CircularProgressIndicator()
-                                }
-                            } else if (tabindex == 7) {
-                                if(groupedState.value.isNotEmpty() && index < groupedState.value.size) {
-                                    GroupedItem(groupedState.value[index])
-                                } else {
-                                    CircularProgressIndicator()
-                                }
-                            } else if (tabindex == 8) {
-                                if(hypothesisState.value.isNotEmpty() && index < hypothesisState.value.size) {
-                                    HypothesisItem(hypothesisState.value[index])
-                                } else {
-                                    CircularProgressIndicator()
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(values),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            item {
+                                if (!showsearch.value) {
+                                    when (tabindex) {
+                                        0 -> if (poissonState.value.isNotEmpty() && index < poissonState.value.size) {
+                                            PoissonItem(poissonState.value[index])
+                                        } else {
+                                            CircularProgressIndicator()
+                                        }
+                                        1 -> if (binomialState.value.isNotEmpty() && index < binomialState.value.size) {
+                                            BinomialItem(binomialState.value[index])
+                                        } else {
+                                            CircularProgressIndicator()
+                                        }
+                                        2 -> if (multinomialState.value.isNotEmpty() && index < multinomialState.value.size) {
+                                            MultinomialItem(multinomialState.value[index])
+                                        } else {
+                                            CircularProgressIndicator()
+                                        }
+                                        3 -> if (anovaState.value.isNotEmpty() && index < anovaState.value.size) {
+                                            AnovaItem(anovaState.value[index])
+                                        } else {
+                                            CircularProgressIndicator()
+                                        }
+                                        4 -> if (bayesruleState.value.isNotEmpty() && index < bayesruleState.value.size) {
+                                            BayesRuleItem(bayesruleState.value[index])
+                                        } else {
+                                            CircularProgressIndicator()
+                                        }
+                                        5 -> if (slrState.value.isNotEmpty() && index < slrState.value.size) {
+                                            SLRItem(slrState.value[index])
+                                        } else {
+                                            CircularProgressIndicator()
+                                        }
+                                        6 -> if (ungroupedState.value.isNotEmpty() && index < ungroupedState.value.size) {
+                                            UnGroupedItem(ungroupedState.value[index])
+                                        } else {
+                                            CircularProgressIndicator()
+                                        }
+                                        7 -> if (groupedState.value.isNotEmpty() && index < groupedState.value.size) {
+                                            GroupedItem(groupedState.value[index])
+                                        } else {
+                                            CircularProgressIndicator()
+                                        }
+                                        8 -> if (hypothesisState.value.isNotEmpty() && index < hypothesisState.value.size) {
+                                            HypothesisItem(hypothesisState.value[index])
+                                        } else {
+                                            CircularProgressIndicator()
+                                        }
+                                    }
                                 }
                             }
                         }
