@@ -27,6 +27,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
@@ -45,6 +46,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -76,67 +78,66 @@ fun ScrollableList(navController: NavController, items: List<Pair<String, String
             contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
         ),
     ) {
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(15.dp))
         Column (
             modifier = Modifier.align(Alignment.CenterHorizontally),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(title)
+            Text(title, fontWeight = FontWeight.Bold)
         }
     }
 
-    Spacer(modifier = Modifier.height(60.dp))
+    Spacer(modifier = Modifier.height(80.dp))
 
     LazyRow (
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(15.dp)
+        contentPadding = PaddingValues(horizontal = 18.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(18.dp)
     ) {
         items(items) { item ->
-            Card(
+            FloatingActionButton(
                 modifier = Modifier.width(width).height(height),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
-                ),
+                onClick = {
+                    when (item.first) {
+                        "Poisson" -> {
+                            navController.navigate(route = Screen.Poisson.route)
+                        }
+                        "Binomial" -> {
+                            navController.navigate(route = Screen.Binomial.route)
+                        }
+                        "Multinomial" -> {
+                            navController.navigate(route = Screen.Multinomial.route)
+                        }
+                        "Anova" -> {
+                            navController.navigate(route = Screen.Anova.route)
+                        }
+                        "Bayes Rule" -> {
+                            navController.navigate(route = Screen.BayesRule.route)
+                        }
+                        "SLR" -> {
+                            navController.navigate(route = Screen.SLR.route)
+                        }
+                        "UnGrouped" -> {
+                            navController.navigate(route = Screen.UnGrouped.route)
+                        }
+                        "Grouped" -> {
+                            navController.navigate(route = Screen.Grouped.route)
+                        }
+                        "Hypothesis" -> {
+                            navController.navigate(route = Screen.Hypothesis.route)
+                        }
+                    }
+                },
+                containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                shape = RoundedCornerShape(20.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(20.dp),
                 ) {
-                    Text(text = item.first, fontSize = titlesize, modifier = Modifier.clickable {
-                        when (item.first) {
-                            "Poisson" -> {
-                                navController.navigate(route = Screen.Poisson.route)
-                            }
-                            "Binomial" -> {
-                                navController.navigate(route = Screen.Binomial.route)
-                            }
-                            "Multinomial" -> {
-                                navController.navigate(route = Screen.Multinomial.route)
-                            }
-                            "Anova" -> {
-                                navController.navigate(route = Screen.Anova.route)
-                            }
-                            "Bayes Rule" -> {
-                                navController.navigate(route = Screen.BayesRule.route)
-                            }
-                            "SLR" -> {
-                                navController.navigate(route = Screen.SLR.route)
-                            }
-                            "UnGrouped" -> {
-                                navController.navigate(route = Screen.UnGrouped.route)
-                            }
-                            "Grouped" -> {
-                                navController.navigate(route = Screen.Grouped.route)
-                            }
-                            "Hypothesis" -> {
-                                navController.navigate(route = Screen.Hypothesis.route)
-                            }
-                        }
-                    })
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(text = item.first, fontSize = titlesize)
+                    Spacer(modifier = Modifier.height(30.dp))
                     Text(text = item.second, fontSize = bodysize)
                 }
             }
@@ -217,15 +218,15 @@ fun Home(
     val scope = rememberCoroutineScope()
 
     val probs = listOf(
-        "Poisson" to "Formula: (μ^x * e^-μ)/x! \n\nHint: If a mean or average probability of an event is given, then the Poisson Distribution is used.",
-        "Binomial" to "Formula: nCx * p^x  * q^(n-x) \n\nHint: If, an exact probability of an event happening is given, then the Binomial Distribution must be used." ,
-        "Multinomial" to "Formula:\n(n! / (x1! * x2! * xn!)) * p1^x1 * p2^x2 * pn^xn ",
-        "Anova" to "It is a tool for analyzing how the mean value of a quantitative response variable is related to one or more categorical explanatory factors.",
-        "Bayes Rule" to "Formula:\nP (A|B) = (P(B|A) * P(A)) / P(B)",
-        "SLR" to "Update timestamp",
+        "Poisson" to "the number of outcomes occurring during a given time interval or in a specified region, are called Poisson experiments.",
+        "Binomial" to "The number X of successes in n Bernoulli trials is called a binomial random variable. The probability distribution of this discrete random variable is called the binomial distribution" ,
+        "Multinomial" to "The binomial experiment becomes a multinomial experiment if we let each trial have more than two possible outcomes. The classification of a manufactured product as being light, heavy, or acceptable and the recording of accidents at a certain intersection according to the day of the week constitute multinomial experiments.",
+        "Anova" to "Often the problem of analyzing the quality of the estimated regression line is handled by an analysis-of-variance (ANOVA) approach: a procedure whereby the total variation in the dependent variable is subdivided into meaningful components that are then observed and treated in a systematic fashion.",
+        "Bayes Rule" to "Bayesian statistics is a collection of tools that is used in a special form of statistical inference which applies in the analysis of experimental data in many practical situations in science and engineering.",
+        "SLR" to "The relationship between two variables X (independent variable) and Y (dependent variable) is modeled by a linear equation. This is called simple linear regression.",
         "UnGrouped" to "Find:\n- Mean\n- Median\n- Mode\n- First Quartile\n- Third Quartile\n- Standard Deviation\n- Variance\n- Stemleaf\n- Shape Distribution\n- Empirical Rule",
-        "Grouped" to "Update timestamp",
-        "Hypothesis" to "Update timestamp"
+        "Grouped" to "Find:\n- Mean\n- Median\n- Mode\n- Standard Deviation\n- variance",
+        "Hypothesis" to "The process of making decisions about population parameters based on sample data is called hypothesis testing. The probability distribution used to determine the likelihood of the sample data under the null hypothesis is called the sampling distribution."
     )
 
     ModalNavigationDrawer(
@@ -292,7 +293,7 @@ fun Home(
                 Scaffold (
                     modifier = Modifier.fillMaxSize().nestedScroll(scrollbehavior.nestedScrollConnection),
                     topBar = {
-                        Appbar("Calculators") {
+                        Appbar("Home") {
                             scope.launch {drawerState.open()}
                         }
                     }
