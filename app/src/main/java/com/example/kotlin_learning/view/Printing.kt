@@ -245,6 +245,7 @@ fun Printing(
                             verticalArrangement = Arrangement.Center
                         ) {
                             item {
+                                Spacer50()
                                 if (!showsearch.value) {
                                     when (tabindex) {
                                         0 -> if (poissonState.value.isNotEmpty() && index < poissonState.value.size) {

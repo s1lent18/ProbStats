@@ -35,10 +35,13 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -182,7 +185,16 @@ fun Poisson(
     val (x, setx) = remember { mutableStateOf("") }
     val (lamda, setlamda) = remember { mutableStateOf("") }
     val probability = poissonViewModel.poissonresult.observeAsState()
-    var isSubmitted = false
+    var isSubmitted by remember { mutableStateOf(false) }
+    var isupdated by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isupdated) {
+        if (isupdated) {
+            val poissonRequest = PoissonRequest(x.toFloat(), lamda.toFloat())
+            poissonViewModel.getPoissonAnswer(poissonRequest)
+            isupdated = false
+        }
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -268,25 +280,27 @@ fun Poisson(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "X:",
                                 value = x,
-                                onValueChange = setx
+                                onValueChange = {
+                                    setx(it)
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Lambda(t):",
                                 value = lamda,
-                                onValueChange = setlamda
+                                onValueChange = {
+                                    setlamda(it)
+                                }
+
                             )
                             Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     if (x != "" && lamda != "") {
-                                        val poissonrequest = PoissonRequest (
-                                            x = x.toFloat(),
-                                            lamda = lamda.toFloat()
-                                        )
-                                        poissonViewModel.getPoissonAnswer(poissonrequest)
+                                        isSubmitted = false
+                                        isupdated = true
                                         keyboardController?.hide()
                                     }
                                 },
@@ -300,7 +314,7 @@ fun Poisson(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            if (x != "" && lamda != "") {
+                            if (x != "" && lamda != "" && !isupdated) {
                                 when(val result = probability.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
