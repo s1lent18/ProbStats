@@ -26,10 +26,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -64,15 +67,33 @@ fun Hypothesis(
     val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     val (smean, setsmean) = remember { mutableStateOf("") }
-    var tail: Boolean
-    var samplem: Boolean
+    var tail = false
+    var samplem = false
     val (sd, setsd) = remember { mutableStateOf("") }
     val (hmean, sethmean) = remember { mutableStateOf("") }
     val (n, setn) = remember { mutableStateOf("") }
     val (sl, setsl) = remember { mutableStateOf("") }
     val Result = viewModel.hypothesisresult.observeAsState()
-    val isSubmitted = remember { mutableStateOf(false) }
+    var isSubmitted by remember { mutableStateOf(false) }
+    var isupdated by remember { mutableStateOf(false) }
+    var display by remember { mutableStateOf(false) }
     val userId = authViewModel.getuserid()
+
+    LaunchedEffect (isupdated) {
+        if(isupdated) {
+            val hypothesisrequest = HypothesisRequest (
+                smean = smean.toFloat(),
+                sl = sl.toFloat(),
+                sd = sd.toFloat(),
+                hmean = hmean.toFloat(),
+                tail = tail,
+                samplem = samplem,
+                n = n.toInt()
+            )
+            viewModel.getHypothesisAnswer(hypothesisrequest)
+            isupdated = false
+        }
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -158,7 +179,10 @@ fun Hypothesis(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Sample Mean:",
                                 value = smean,
-                                onValueChange = setsmean
+                                onValueChange = {
+                                    setsmean(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             tail = tailSwitch (onSwitchChange = {newTail -> tail = newTail }, first = "One Tail", second = "Two Tails")
@@ -167,7 +191,10 @@ fun Hypothesis(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Standard Deviation:",
                                 value = sd,
-                                onValueChange = setsd
+                                onValueChange = {
+                                    setsd(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             samplem = tailSwitch ({ newsamplem -> samplem = newsamplem }, first = "Sample Standard Deviation", second = "Population Standard Deviation")
@@ -176,37 +203,39 @@ fun Hypothesis(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Significance Level:",
                                 value = sl,
-                                onValueChange = setsl
+                                onValueChange = {
+                                    setsl(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Size:",
                                 value = n,
-                                onValueChange = setn
+                                onValueChange = {
+                                    setn(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Hypothesized Mean:",
                                 value = hmean,
-                                onValueChange = sethmean
+                                onValueChange = {
+                                    sethmean(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     if (smean != "" && sd != "" && hmean != "" && n != "" && sl != "") {
-                                        val hypothesisrequest = HypothesisRequest (
-                                           smean = smean.toFloat(),
-                                            sl = sl.toFloat(),
-                                            sd = sd.toFloat(),
-                                            hmean = hmean.toFloat(),
-                                            tail = tail,
-                                            samplem = samplem,
-                                            n = n.toInt()
-                                        )
-                                        viewModel.getHypothesisAnswer(hypothesisrequest)
+                                        isSubmitted = false
+                                        isupdated = true
+                                        display = true
                                         keyboardController?.hide()
                                     }
                                 },
@@ -221,7 +250,7 @@ fun Hypothesis(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer50()
-                            if (smean.isNotEmpty() && sd.isNotEmpty() && hmean.isNotEmpty() && n.isNotEmpty() && sl.isNotEmpty()) {
+                            if (smean.isNotEmpty() && sd.isNotEmpty() && hmean.isNotEmpty() && n.isNotEmpty() && sl.isNotEmpty() && !isupdated) {
                                 when(val result = Result.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
@@ -233,23 +262,25 @@ fun Hypothesis(
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        if(userId != null && !isSubmitted.value) {
-                                            authViewModel.sendhypothesis(
-                                                userId = userId,
-                                                smean = smean.toFloat(),
-                                                sl = sl.toFloat(),
-                                                sd = sd.toFloat(),
-                                                hmean = hmean.toFloat(),
-                                                tail = tail,
-                                                samplem = samplem,
-                                                n = n.toInt(),
-                                                hypothesis = result.data.hypothesis
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer50()
+                                            StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            if(userId != null && !isSubmitted) {
+                                                authViewModel.sendhypothesis(
+                                                    userId = userId,
+                                                    smean = smean.toFloat(),
+                                                    sl = sl.toFloat(),
+                                                    sd = sd.toFloat(),
+                                                    hmean = hmean.toFloat(),
+                                                    tail = tail,
+                                                    samplem = samplem,
+                                                    n = n.toInt(),
+                                                    hypothesis = result.data.hypothesis
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
@@ -284,7 +315,10 @@ fun Hypothesis(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Sample Mean:",
                                 value = smean,
-                                onValueChange = setsmean
+                                onValueChange = {
+                                    setsmean(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             tail = tailSwitch (onSwitchChange = {newTail -> tail = newTail }, first = "One Tail", second = "Two Tails")
@@ -293,7 +327,10 @@ fun Hypothesis(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Standard Deviation:",
                                 value = sd,
-                                onValueChange = setsd
+                                onValueChange = {
+                                    setsd(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             samplem = tailSwitch ({ newsamplem -> samplem = newsamplem }, first = "Sample Standard Deviation", second = "Population Standard Deviation")
@@ -302,37 +339,39 @@ fun Hypothesis(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Significance Level:",
                                 value = sl,
-                                onValueChange = setsl
+                                onValueChange = {
+                                    setsl(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Size:",
                                 value = n,
-                                onValueChange = setn
+                                onValueChange = {
+                                    setn(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Hypothesized Mean:",
                                 value = hmean,
-                                onValueChange = sethmean
+                                onValueChange = {
+                                    sethmean(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     if (smean != "" && sd != "" && hmean != "" && n != "" && sl != "") {
-                                        val hypothesisrequest = HypothesisRequest (
-                                            smean = smean.toFloat(),
-                                            sl = sl.toFloat(),
-                                            sd = sd.toFloat(),
-                                            hmean = hmean.toFloat(),
-                                            tail = tail,
-                                            samplem = samplem,
-                                            n = n.toInt()
-                                        )
-                                        viewModel.getHypothesisAnswer(hypothesisrequest)
+                                        isSubmitted = false
+                                        isupdated = true
+                                        display = true
                                         keyboardController?.hide()
                                     }
                                 },
@@ -346,7 +385,8 @@ fun Hypothesis(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            if (smean.isNotEmpty() && sd.isNotEmpty() && hmean.isNotEmpty() && n.isNotEmpty() && sl.isNotEmpty()) {
+                            Spacer50()
+                            if (smean.isNotEmpty() && sd.isNotEmpty() && hmean.isNotEmpty() && n.isNotEmpty() && sl.isNotEmpty() && !isupdated) {
                                 when(val result = Result.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
@@ -358,23 +398,25 @@ fun Hypothesis(
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        if(userId != null && !isSubmitted.value) {
-                                            authViewModel.sendhypothesis(
-                                                userId = userId,
-                                                smean = smean.toFloat(),
-                                                sl = sl.toFloat(),
-                                                sd = sd.toFloat(),
-                                                hmean = hmean.toFloat(),
-                                                tail = tail,
-                                                samplem = samplem,
-                                                n = n.toInt(),
-                                                hypothesis = result.data.hypothesis
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer50()
+                                            StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            if(userId != null && !isSubmitted) {
+                                                authViewModel.sendhypothesis(
+                                                    userId = userId,
+                                                    smean = smean.toFloat(),
+                                                    sl = sl.toFloat(),
+                                                    sd = sd.toFloat(),
+                                                    hmean = hmean.toFloat(),
+                                                    tail = tail,
+                                                    samplem = samplem,
+                                                    n = n.toInt(),
+                                                    hypothesis = result.data.hypothesis
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
@@ -409,7 +451,10 @@ fun Hypothesis(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Sample Mean:",
                                 value = smean,
-                                onValueChange = setsmean
+                                onValueChange = {
+                                    setsmean(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             tail = tailSwitch (onSwitchChange = {newTail -> tail = newTail }, first = "One Tail", second = "Two Tails")
@@ -418,7 +463,10 @@ fun Hypothesis(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Standard Deviation:",
                                 value = sd,
-                                onValueChange = setsd
+                                onValueChange = {
+                                    setsd(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             samplem = tailSwitch ({ newsamplem -> samplem = newsamplem }, first = "Sample Standard Deviation", second = "Population Standard Deviation")
@@ -427,37 +475,39 @@ fun Hypothesis(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Significance Level:",
                                 value = sl,
-                                onValueChange = setsl
+                                onValueChange = {
+                                    setsl(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Size:",
                                 value = n,
-                                onValueChange = setn
+                                onValueChange = {
+                                    setn(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "Hypothesized Mean:",
                                 value = hmean,
-                                onValueChange = sethmean
+                                onValueChange = {
+                                    sethmean(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     if (smean != "" && sd != "" && hmean != "" && n != "" && sl != "") {
-                                        val hypothesisrequest = HypothesisRequest (
-                                            smean = smean.toFloat(),
-                                            sl = sl.toFloat(),
-                                            sd = sd.toFloat(),
-                                            hmean = hmean.toFloat(),
-                                            tail = tail,
-                                            samplem = samplem,
-                                            n = n.toInt()
-                                        )
-                                        viewModel.getHypothesisAnswer(hypothesisrequest)
+                                        isSubmitted = false
+                                        isupdated = true
+                                        display = true
                                         keyboardController?.hide()
                                     }
                                 },
@@ -472,7 +522,7 @@ fun Hypothesis(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer50()
-                            if (smean.isNotEmpty() && sd.isNotEmpty() && hmean.isNotEmpty() && n.isNotEmpty() && sl.isNotEmpty()) {
+                            if (smean.isNotEmpty() && sd.isNotEmpty() && hmean.isNotEmpty() && n.isNotEmpty() && sl.isNotEmpty() && !isupdated) {
                                 when(val result = Result.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
@@ -484,23 +534,25 @@ fun Hypothesis(
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        if(userId != null && !isSubmitted.value) {
-                                            authViewModel.sendhypothesis(
-                                                userId = userId,
-                                                smean = smean.toFloat(),
-                                                sl = sl.toFloat(),
-                                                sd = sd.toFloat(),
-                                                hmean = hmean.toFloat(),
-                                                tail = tail,
-                                                samplem = samplem,
-                                                n = n.toInt(),
-                                                hypothesis = result.data.hypothesis
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer50()
+                                            StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            if(userId != null && !isSubmitted) {
+                                                authViewModel.sendhypothesis(
+                                                    userId = userId,
+                                                    smean = smean.toFloat(),
+                                                    sl = sl.toFloat(),
+                                                    sd = sd.toFloat(),
+                                                    hmean = hmean.toFloat(),
+                                                    tail = tail,
+                                                    samplem = samplem,
+                                                    n = n.toInt(),
+                                                    hypothesis = result.data.hypothesis
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {

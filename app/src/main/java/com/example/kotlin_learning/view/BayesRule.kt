@@ -28,10 +28,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -70,7 +73,21 @@ fun BayesRule(
     val (pAB, setpAB) = remember { mutableStateOf("") }
     val probability = viewModel.bayesruleresult.observeAsState()
     val userId = authViewModel.getuserid()
-    val isSubmitted = remember { mutableStateOf(false) }
+    var isSubmitted by remember { mutableStateOf(false) }
+    var isupdated by remember { mutableStateOf(false) }
+    var display by remember { mutableStateOf(false) }
+
+    LaunchedEffect (isupdated) {
+        if(isupdated) {
+            val bayesrulerequest = BayesRuleRequest (
+                pa = pA.toFloat(),
+                pb = pB.toFloat(),
+                pab = pAB.toFloat()
+            )
+            viewModel.getBayesRuleAnswer(bayesrulerequest)
+            isupdated = false
+        }
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -156,33 +173,39 @@ fun BayesRule(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(A):",
                                 value = pA,
-                                onValueChange = setpA
+                                onValueChange = {
+                                    setpA(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(B):",
                                 value = pB,
-                                onValueChange = setpB
+                                onValueChange = {
+                                    setpB(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(A|B):",
                                 value = pAB,
-                                onValueChange = setpAB
+                                onValueChange = {
+                                    setpAB(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     if (pA != "" && pB != "" && pAB != "") {
-                                        val bayesrulerequest = BayesRuleRequest (
-                                            pa = pA.toFloat(),
-                                            pb = pB.toFloat(),
-                                            pab = pAB.toFloat()
-                                        )
-                                        viewModel.getBayesRuleAnswer(bayesrulerequest)
+                                        isSubmitted = false
+                                        isupdated = true
+                                        display = true
                                         keyboardController?.hide()
                                     }
                                 },
@@ -196,11 +219,14 @@ fun BayesRule(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            if (pA.isNotEmpty() && pB.isNotEmpty() && pAB.isNotEmpty()) {
+                            if (pA.isNotEmpty() && pB.isNotEmpty() && pAB.isNotEmpty() &&!isupdated) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
-                                        StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                        StringAnswer("Failed To Load",
+                                            Modifier
+                                                .fillMaxWidth(fraction = 0.9f)
+                                                .height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
                                         Spacer50()
@@ -208,19 +234,21 @@ fun BayesRule(
                                         Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        FloatAnswer(value = result.data.ans, text = "Probability: ")
-                                        Spacer50()
-                                        if(userId != null && !isSubmitted.value) {
-                                            authViewModel.sendbayesrule(
-                                                userId = userId,
-                                                pa = pA.toFloat(),
-                                                pb = pB.toFloat(),
-                                                pab = pAB.toFloat(),
-                                                ans = result.data.ans
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer50()
+                                            FloatAnswer(value = result.data.ans, text = "Probability: ")
+                                            Spacer50()
+                                            if(userId != null && !isSubmitted) {
+                                                authViewModel.sendbayesrule(
+                                                    userId = userId,
+                                                    pa = pA.toFloat(),
+                                                    pb = pB.toFloat(),
+                                                    pab = pAB.toFloat(),
+                                                    ans = result.data.ans
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
@@ -256,33 +284,39 @@ fun BayesRule(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(A):",
                                 value = pA,
-                                onValueChange = setpA
+                                onValueChange = {
+                                    setpA(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(B):",
                                 value = pB,
-                                onValueChange = setpB
+                                onValueChange = {
+                                    setpB(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(A|B):",
                                 value = pAB,
-                                onValueChange = setpAB
+                                onValueChange = {
+                                    setpAB(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     if (pA != "" && pB != "" && pAB != "") {
-                                        val bayesrulerequest = BayesRuleRequest (
-                                            pa = pA.toFloat(),
-                                            pb = pB.toFloat(),
-                                            pab = pAB.toFloat()
-                                        )
-                                        viewModel.getBayesRuleAnswer(bayesrulerequest)
+                                        isSubmitted = false
+                                        isupdated = true
+                                        display = true
                                         keyboardController?.hide()
                                     }
                                 },
@@ -296,11 +330,14 @@ fun BayesRule(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            if (pA.isNotEmpty() && pB.isNotEmpty() && pAB.isNotEmpty()) {
+                            if (pA.isNotEmpty() && pB.isNotEmpty() && pAB.isNotEmpty() &&!isupdated) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
-                                        StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                        StringAnswer("Failed To Load",
+                                            Modifier
+                                                .fillMaxWidth(fraction = 0.9f)
+                                                .height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
                                         Spacer50()
@@ -308,19 +345,21 @@ fun BayesRule(
                                         Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        FloatAnswer(value = result.data.ans, text = "Probability: ")
-                                        Spacer50()
-                                        if(userId != null && !isSubmitted.value) {
-                                            authViewModel.sendbayesrule(
-                                                userId = userId,
-                                                pa = pA.toFloat(),
-                                                pb = pB.toFloat(),
-                                                pab = pAB.toFloat(),
-                                                ans = result.data.ans
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer50()
+                                            FloatAnswer(value = result.data.ans, text = "Probability: ")
+                                            Spacer50()
+                                            if(userId != null && !isSubmitted) {
+                                                authViewModel.sendbayesrule(
+                                                    userId = userId,
+                                                    pa = pA.toFloat(),
+                                                    pb = pB.toFloat(),
+                                                    pab = pAB.toFloat(),
+                                                    ans = result.data.ans
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
@@ -356,33 +395,39 @@ fun BayesRule(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(A):",
                                 value = pA,
-                                onValueChange = setpA
+                                onValueChange = {
+                                    setpA(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(B):",
                                 value = pB,
-                                onValueChange = setpB
+                                onValueChange = {
+                                    setpB(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
                                 label = "P(A|B):",
                                 value = pAB,
-                                onValueChange = setpAB
+                                onValueChange = {
+                                    setpAB(it)
+                                    display = false
+                                }
                             )
                             Spacer50()
                             ElevatedButton(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     if (pA != "" && pB != "" && pAB != "") {
-                                        val bayesrulerequest = BayesRuleRequest (
-                                            pa = pA.toFloat(),
-                                            pb = pB.toFloat(),
-                                            pab = pAB.toFloat()
-                                        )
-                                        viewModel.getBayesRuleAnswer(bayesrulerequest)
+                                        isSubmitted = false
+                                        isupdated = true
+                                        display = true
                                         keyboardController?.hide()
                                     }
                                 },
@@ -396,11 +441,14 @@ fun BayesRule(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            if (pA.isNotEmpty() && pB.isNotEmpty() && pAB.isNotEmpty()) {
+                            if (pA.isNotEmpty() && pB.isNotEmpty() && pAB.isNotEmpty() &&!isupdated) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
-                                        StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                        StringAnswer("Failed To Load",
+                                            Modifier
+                                                .fillMaxWidth(fraction = 0.9f)
+                                                .height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
                                         Spacer50()
@@ -408,19 +456,21 @@ fun BayesRule(
                                         Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        FloatAnswer(value = result.data.ans, text = "Probability: ")
-                                        Spacer50()
-                                        if(userId != null && !isSubmitted.value) {
-                                            authViewModel.sendbayesrule(
-                                                userId = userId,
-                                                pa = pA.toFloat(),
-                                                pb = pB.toFloat(),
-                                                pab = pAB.toFloat(),
-                                                ans = result.data.ans
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer50()
+                                            FloatAnswer(value = result.data.ans, text = "Probability: ")
+                                            Spacer50()
+                                            if(userId != null && !isSubmitted) {
+                                                authViewModel.sendbayesrule(
+                                                    userId = userId,
+                                                    pa = pA.toFloat(),
+                                                    pb = pB.toFloat(),
+                                                    pab = pAB.toFloat(),
+                                                    ans = result.data.ans
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {

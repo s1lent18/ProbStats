@@ -36,10 +36,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -78,7 +81,19 @@ fun UnGrouped(
     val keyboardController = LocalSoftwareKeyboardController.current
     val basic = viewModel.ungroupedresult.observeAsState()
     val userId = authViewModel.getuserid()
-    val isSubmitted = remember { mutableStateOf(false) }
+    var isSubmitted by remember { mutableStateOf(false) }
+    var isupdated by remember { mutableStateOf(false) }
+    var display by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isupdated) {
+        if(isupdated) {
+            val ungroupedrequest = UnGroupedRequest(
+                n = stof(n)
+            )
+            viewModel.getUnGroupedAnswer(ungroupedrequest)
+            isupdated = false
+        }
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerstate,
@@ -167,18 +182,22 @@ fun UnGrouped(
                                 onValueChange = { newValue ->
                                     setsize(newValue)
                                     setn(Array(newValue.toIntOrNull() ?: 0) { if (it < n.size) n[it] else "" })
+                                    display = false
                                 }
                             )
                             Spacer50()
                         }
                         if (size.isNotEmpty()) {
-                            items(size.toInt()) {
+                            items(size.toInt()) { p ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(0.9f),
-                                    label = "$it:",
-                                    index = it,
+                                    label = "$p:",
+                                    index = p,
                                     values = n,
-                                    onValueChange = setn
+                                    onValueChange = {
+                                        setn(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -189,10 +208,9 @@ fun UnGrouped(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     keyboardController?.hide()
-                                    val ungroupedrequest = UnGroupedRequest(
-                                        n = stof(n)
-                                    )
-                                    viewModel.getUnGroupedAnswer(ungroupedrequest)
+                                    isSubmitted = false
+                                    isupdated = true
+                                    display = true
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
                                     containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
@@ -205,7 +223,7 @@ fun UnGrouped(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer50()
-                            if (size.isNotEmpty() && n.isNotEmpty()) {
+                            if (size.isNotEmpty() && n.isNotEmpty() && !isupdated) {
                                 when (val result = basic.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
@@ -218,110 +236,112 @@ fun UnGrouped(
                                         Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        FloatAnswer(text = "Mean:", value = result.data.mean)
-                                        Spacer50()
-                                        FloatAnswer(text = "Median:", value = result.data.median)
-                                        Spacer50()
-                                        StringAnswer(text = "Mode: ${result.data.mode}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
-                                        Spacer50()
-                                        FloatAnswer(text = "Variance:", value = result.data.variance)
-                                        Spacer50()
-                                        FloatAnswer(text = "µ±1σ:", value = result.data.one)
-                                        Spacer50()
-                                        FloatAnswer(text = "µ±2σ:", value = result.data.two)
-                                        Spacer50()
-                                        FloatAnswer(text = "µ±3σ:", value = result.data.three)
-                                        Spacer50()
-                                        FloatAnswer(text = "First Quartile:", value = result.data.q1)
-                                        Spacer50()
-                                        FloatAnswer(text = "Third Quartile:", value = result.data.q3)
-                                        Spacer50()
-                                        StringAnswer(text = "Shape of The Distribution: ${result.data.Shape_of_the_Distribution}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        StringAnswer(text = "Stem Leaf", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer(modifier = Modifier.height(10.dp))
-                                        Card (
-                                            modifier = Modifier.fillMaxWidth(fraction = 0.9f),
-                                            shape = RoundedCornerShape(20.dp),
-                                            elevation = CardDefaults.cardElevation(10.dp),
-                                            colors = CardDefaults.cardColors(
-                                                containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                                                contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
-                                            ),
-                                            border = BorderStroke(1.dp, color = Color.Blue)
-                                        ) {
-                                            Row(
-                                                modifier = Modifier.fillMaxHeight(),
-                                                verticalAlignment = Alignment.CenterVertically
+                                        if (display) {
+                                            Spacer50()
+                                            FloatAnswer(text = "Mean:", value = result.data.mean)
+                                            Spacer50()
+                                            FloatAnswer(text = "Median:", value = result.data.median)
+                                            Spacer50()
+                                            StringAnswer(text = "Mode: ${result.data.mode}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
+                                            Spacer50()
+                                            FloatAnswer(text = "Variance:", value = result.data.variance)
+                                            Spacer50()
+                                            FloatAnswer(text = "µ±1σ:", value = result.data.one)
+                                            Spacer50()
+                                            FloatAnswer(text = "µ±2σ:", value = result.data.two)
+                                            Spacer50()
+                                            FloatAnswer(text = "µ±3σ:", value = result.data.three)
+                                            Spacer50()
+                                            FloatAnswer(text = "First Quartile:", value = result.data.q1)
+                                            Spacer50()
+                                            FloatAnswer(text = "Third Quartile:", value = result.data.q3)
+                                            Spacer50()
+                                            StringAnswer(text = "Shape of The Distribution: ${result.data.Shape_of_the_Distribution}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            StringAnswer(text = "Stem Leaf", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer(modifier = Modifier.height(10.dp))
+                                            Card (
+                                                modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                                                shape = RoundedCornerShape(20.dp),
+                                                elevation = CardDefaults.cardElevation(10.dp),
+                                                colors = CardDefaults.cardColors(
+                                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                                ),
+                                                border = BorderStroke(1.dp, color = Color.Blue)
                                             ) {
-                                                Column(
-                                                    modifier = Modifier
-                                                        .fillMaxHeight()
-                                                        .weight(1f),
-                                                    verticalArrangement = Arrangement.Center,
-                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                Row(
+                                                    modifier = Modifier.fillMaxHeight(),
+                                                    verticalAlignment = Alignment.CenterVertically
                                                 ) {
-                                                    for (i in result.data.stemleaf) {
-                                                        Spacer(modifier = Modifier.height(20.dp))
-                                                        Text(text = i.key)
-                                                    }
-                                                    Spacer(modifier = Modifier.height(20.dp))
-                                                }
-                                                HorizontalDivider(
-                                                    color = Color.Black,
-                                                    modifier = Modifier
-                                                        .fillMaxHeight(fraction = 0.8f)
-                                                        .width(1.dp)
-                                                )
-                                                Column(
-                                                    modifier = Modifier
-                                                        .fillMaxHeight()
-                                                        .weight(1f),
-                                                    verticalArrangement = Arrangement.Center,
-                                                    horizontalAlignment = Alignment.Start
-                                                ) {
-                                                    for (i in result.data.stemleaf) {
-                                                        Spacer(modifier = Modifier.height(20.dp))
-                                                        Row (
-                                                            horizontalArrangement = Arrangement.SpaceAround
-                                                        ){
-                                                            for(j in i.value) {
-                                                                Text(text = "$j ")
-                                                            }
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .fillMaxHeight()
+                                                            .weight(1f),
+                                                        verticalArrangement = Arrangement.Center,
+                                                        horizontalAlignment = Alignment.CenterHorizontally
+                                                    ) {
+                                                        for (i in result.data.stemleaf) {
+                                                            Spacer(modifier = Modifier.height(20.dp))
+                                                            Text(text = i.key)
                                                         }
-
+                                                        Spacer(modifier = Modifier.height(20.dp))
                                                     }
-                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    HorizontalDivider(
+                                                        color = Color.Black,
+                                                        modifier = Modifier
+                                                            .fillMaxHeight(fraction = 0.8f)
+                                                            .width(1.dp)
+                                                    )
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .fillMaxHeight()
+                                                            .weight(1f),
+                                                        verticalArrangement = Arrangement.Center,
+                                                        horizontalAlignment = Alignment.Start
+                                                    ) {
+                                                        for (i in result.data.stemleaf) {
+                                                            Spacer(modifier = Modifier.height(20.dp))
+                                                            Row (
+                                                                horizontalArrangement = Arrangement.SpaceAround
+                                                            ){
+                                                                for(j in i.value) {
+                                                                    Text(text = "$j ")
+                                                                }
+                                                            }
+
+                                                        }
+                                                        Spacer(modifier = Modifier.height(20.dp))
+                                                    }
                                                 }
                                             }
-                                        }
-                                        Spacer50()
-                                        if(userId != null && !isSubmitted.value) {
-                                            val resultDataStemLeaf: Map<String, FloatArray> = result.data.stemleaf
-                                            val convertedStemLeaf: Map<String, List<Float>> = resultDataStemLeaf.mapValues { entry ->
-                                                entry.value.toList()
+                                            Spacer50()
+                                            if(userId != null && !isSubmitted) {
+                                                val resultDataStemLeaf: Map<String, FloatArray> = result.data.stemleaf
+                                                val convertedStemLeaf: Map<String, List<Float>> = resultDataStemLeaf.mapValues { entry ->
+                                                    entry.value.toList()
+                                                }
+                                                authViewModel.sendungrouped(
+                                                    userId,
+                                                    n = stoff(n),
+                                                    shape = result.data.Shape_of_the_Distribution,
+                                                    mean = result.data.mean,
+                                                    median = result.data.median,
+                                                    mode = result.data.mode,
+                                                    one = result.data.one,
+                                                    two = result.data.two,
+                                                    three = result.data.three,
+                                                    q1 = result.data.q1,
+                                                    q3 = result.data.q3,
+                                                    variance = result.data.variance,
+                                                    stemleaf = convertedStemLeaf,
+                                                    sd = result.data.sd
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
                                             }
-                                            authViewModel.sendungrouped(
-                                                userId,
-                                                n = stoff(n),
-                                                shape = result.data.Shape_of_the_Distribution,
-                                                mean = result.data.mean,
-                                                median = result.data.median,
-                                                mode = result.data.mode,
-                                                one = result.data.one,
-                                                two = result.data.two,
-                                                three = result.data.three,
-                                                q1 = result.data.q1,
-                                                q3 = result.data.q3,
-                                                variance = result.data.variance,
-                                                stemleaf = convertedStemLeaf,
-                                                sd = result.data.sd
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
                                         }
                                     }
                                     null -> {
@@ -359,18 +379,22 @@ fun UnGrouped(
                                 onValueChange = { newValue ->
                                     setsize(newValue)
                                     setn(Array(newValue.toIntOrNull() ?: 0) { if (it < n.size) n[it] else "" })
+                                    display = false
                                 }
                             )
                             Spacer50()
                         }
                         if (size.isNotEmpty()) {
-                            items(size.toInt()) {
+                            items(size.toInt()) { p ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(0.9f),
-                                    label = "$it:",
-                                    index = it,
+                                    label = "$p:",
+                                    index = p,
                                     values = n,
-                                    onValueChange = setn
+                                    onValueChange = {
+                                        setn(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -381,10 +405,9 @@ fun UnGrouped(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     keyboardController?.hide()
-                                    val ungroupedrequest = UnGroupedRequest(
-                                        n = stof(n)
-                                    )
-                                    viewModel.getUnGroupedAnswer(ungroupedrequest)
+                                    isSubmitted = false
+                                    isupdated = true
+                                    display = true
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
                                     containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
@@ -397,7 +420,7 @@ fun UnGrouped(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer50()
-                            if (size.isNotEmpty() && n.isNotEmpty()) {
+                            if (size.isNotEmpty() && n.isNotEmpty() && !isupdated) {
                                 when (val result = basic.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
@@ -410,110 +433,112 @@ fun UnGrouped(
                                         Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        FloatAnswer(text = "Mean:", value = result.data.mean)
-                                        Spacer50()
-                                        FloatAnswer(text = "Median:", value = result.data.median)
-                                        Spacer50()
-                                        StringAnswer(text = "Mode: ${result.data.mode}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
-                                        Spacer50()
-                                        FloatAnswer(text = "Variance:", value = result.data.variance)
-                                        Spacer50()
-                                        FloatAnswer(text = "µ±1σ:", value = result.data.one)
-                                        Spacer50()
-                                        FloatAnswer(text = "µ±2σ:", value = result.data.two)
-                                        Spacer50()
-                                        FloatAnswer(text = "µ±3σ:", value = result.data.three)
-                                        Spacer50()
-                                        FloatAnswer(text = "First Quartile:", value = result.data.q1)
-                                        Spacer50()
-                                        FloatAnswer(text = "Third Quartile:", value = result.data.q3)
-                                        Spacer50()
-                                        StringAnswer(text = "Shape of The Distribution: ${result.data.Shape_of_the_Distribution}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        StringAnswer(text = "Stem Leaf", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer(modifier = Modifier.height(10.dp))
-                                        Card (
-                                            modifier = Modifier.fillMaxWidth(fraction = 0.9f),
-                                            shape = RoundedCornerShape(20.dp),
-                                            elevation = CardDefaults.cardElevation(10.dp),
-                                            colors = CardDefaults.cardColors(
-                                                containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                                                contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
-                                            ),
-                                            border = BorderStroke(1.dp, color = Color.Blue)
-                                        ) {
-                                            Row(
-                                                modifier = Modifier.fillMaxHeight(),
-                                                verticalAlignment = Alignment.CenterVertically
+                                        if (display) {
+                                            Spacer50()
+                                            FloatAnswer(text = "Mean:", value = result.data.mean)
+                                            Spacer50()
+                                            FloatAnswer(text = "Median:", value = result.data.median)
+                                            Spacer50()
+                                            StringAnswer(text = "Mode: ${result.data.mode}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
+                                            Spacer50()
+                                            FloatAnswer(text = "Variance:", value = result.data.variance)
+                                            Spacer50()
+                                            FloatAnswer(text = "µ±1σ:", value = result.data.one)
+                                            Spacer50()
+                                            FloatAnswer(text = "µ±2σ:", value = result.data.two)
+                                            Spacer50()
+                                            FloatAnswer(text = "µ±3σ:", value = result.data.three)
+                                            Spacer50()
+                                            FloatAnswer(text = "First Quartile:", value = result.data.q1)
+                                            Spacer50()
+                                            FloatAnswer(text = "Third Quartile:", value = result.data.q3)
+                                            Spacer50()
+                                            StringAnswer(text = "Shape of The Distribution: ${result.data.Shape_of_the_Distribution}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            StringAnswer(text = "Stem Leaf", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer(modifier = Modifier.height(10.dp))
+                                            Card (
+                                                modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                                                shape = RoundedCornerShape(20.dp),
+                                                elevation = CardDefaults.cardElevation(10.dp),
+                                                colors = CardDefaults.cardColors(
+                                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                                ),
+                                                border = BorderStroke(1.dp, color = Color.Blue)
                                             ) {
-                                                Column(
-                                                    modifier = Modifier
-                                                        .fillMaxHeight()
-                                                        .weight(1f),
-                                                    verticalArrangement = Arrangement.Center,
-                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                Row(
+                                                    modifier = Modifier.fillMaxHeight(),
+                                                    verticalAlignment = Alignment.CenterVertically
                                                 ) {
-                                                    for (i in result.data.stemleaf) {
-                                                        Spacer(modifier = Modifier.height(20.dp))
-                                                        Text(text = i.key)
-                                                    }
-                                                    Spacer(modifier = Modifier.height(20.dp))
-                                                }
-                                                HorizontalDivider(
-                                                    color = Color.Black,
-                                                    modifier = Modifier
-                                                        .fillMaxHeight(fraction = 0.8f)
-                                                        .width(1.dp)
-                                                )
-                                                Column(
-                                                    modifier = Modifier
-                                                        .fillMaxHeight()
-                                                        .weight(1f),
-                                                    verticalArrangement = Arrangement.Center,
-                                                    horizontalAlignment = Alignment.Start
-                                                ) {
-                                                    for (i in result.data.stemleaf) {
-                                                        Spacer(modifier = Modifier.height(20.dp))
-                                                        Row (
-                                                            horizontalArrangement = Arrangement.SpaceAround
-                                                        ){
-                                                            for(j in i.value) {
-                                                                Text(text = "$j ")
-                                                            }
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .fillMaxHeight()
+                                                            .weight(1f),
+                                                        verticalArrangement = Arrangement.Center,
+                                                        horizontalAlignment = Alignment.CenterHorizontally
+                                                    ) {
+                                                        for (i in result.data.stemleaf) {
+                                                            Spacer(modifier = Modifier.height(20.dp))
+                                                            Text(text = i.key)
                                                         }
-
+                                                        Spacer(modifier = Modifier.height(20.dp))
                                                     }
-                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    HorizontalDivider(
+                                                        color = Color.Black,
+                                                        modifier = Modifier
+                                                            .fillMaxHeight(fraction = 0.8f)
+                                                            .width(1.dp)
+                                                    )
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .fillMaxHeight()
+                                                            .weight(1f),
+                                                        verticalArrangement = Arrangement.Center,
+                                                        horizontalAlignment = Alignment.Start
+                                                    ) {
+                                                        for (i in result.data.stemleaf) {
+                                                            Spacer(modifier = Modifier.height(20.dp))
+                                                            Row (
+                                                                horizontalArrangement = Arrangement.SpaceAround
+                                                            ){
+                                                                for(j in i.value) {
+                                                                    Text(text = "$j ")
+                                                                }
+                                                            }
+
+                                                        }
+                                                        Spacer(modifier = Modifier.height(20.dp))
+                                                    }
                                                 }
                                             }
-                                        }
-                                        Spacer50()
-                                        if(userId != null && !isSubmitted.value) {
-                                            val resultDataStemLeaf: Map<String, FloatArray> = result.data.stemleaf
-                                            val convertedStemLeaf: Map<String, List<Float>> = resultDataStemLeaf.mapValues { entry ->
-                                                entry.value.toList()
+                                            Spacer50()
+                                            if(userId != null && !isSubmitted) {
+                                                val resultDataStemLeaf: Map<String, FloatArray> = result.data.stemleaf
+                                                val convertedStemLeaf: Map<String, List<Float>> = resultDataStemLeaf.mapValues { entry ->
+                                                    entry.value.toList()
+                                                }
+                                                authViewModel.sendungrouped(
+                                                    userId,
+                                                    n = stoff(n),
+                                                    shape = result.data.Shape_of_the_Distribution,
+                                                    mean = result.data.mean,
+                                                    median = result.data.median,
+                                                    mode = result.data.mode,
+                                                    one = result.data.one,
+                                                    two = result.data.two,
+                                                    three = result.data.three,
+                                                    q1 = result.data.q1,
+                                                    q3 = result.data.q3,
+                                                    variance = result.data.variance,
+                                                    stemleaf = convertedStemLeaf,
+                                                    sd = result.data.sd
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
                                             }
-                                            authViewModel.sendungrouped(
-                                                userId,
-                                                n = stoff(n),
-                                                shape = result.data.Shape_of_the_Distribution,
-                                                mean = result.data.mean,
-                                                median = result.data.median,
-                                                mode = result.data.mode,
-                                                one = result.data.one,
-                                                two = result.data.two,
-                                                three = result.data.three,
-                                                q1 = result.data.q1,
-                                                q3 = result.data.q3,
-                                                variance = result.data.variance,
-                                                stemleaf = convertedStemLeaf,
-                                                sd = result.data.sd
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
                                         }
                                     }
                                     null -> {
@@ -551,18 +576,22 @@ fun UnGrouped(
                                 onValueChange = { newValue ->
                                     setsize(newValue)
                                     setn(Array(newValue.toIntOrNull() ?: 0) { if (it < n.size) n[it] else "" })
+                                    display = false
                                 }
                             )
                             Spacer50()
                         }
                         if (size.isNotEmpty()) {
-                            items(size.toInt()) {
+                            items(size.toInt()) { p ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(0.9f),
-                                    label = "$it:",
-                                    index = it,
+                                    label = "$p:",
+                                    index = p,
                                     values = n,
-                                    onValueChange = setn
+                                    onValueChange = {
+                                        setn(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -573,10 +602,9 @@ fun UnGrouped(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     keyboardController?.hide()
-                                    val ungroupedrequest = UnGroupedRequest(
-                                        n = stof(n)
-                                    )
-                                    viewModel.getUnGroupedAnswer(ungroupedrequest)
+                                    isSubmitted = false
+                                    isupdated = true
+                                    display = true
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
                                     containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
@@ -589,7 +617,7 @@ fun UnGrouped(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer50()
-                            if (size.isNotEmpty() && n.isNotEmpty()) {
+                            if (size.isNotEmpty() && n.isNotEmpty() && !isupdated) {
                                 when (val result = basic.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
@@ -602,110 +630,112 @@ fun UnGrouped(
                                         Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        FloatAnswer(text = "Mean:", value = result.data.mean)
-                                        Spacer50()
-                                        FloatAnswer(text = "Median:", value = result.data.median)
-                                        Spacer50()
-                                        StringAnswer(text = "Mode: ${result.data.mode}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
-                                        Spacer50()
-                                        FloatAnswer(text = "Variance:", value = result.data.variance)
-                                        Spacer50()
-                                        FloatAnswer(text = "µ±1σ:", value = result.data.one)
-                                        Spacer50()
-                                        FloatAnswer(text = "µ±2σ:", value = result.data.two)
-                                        Spacer50()
-                                        FloatAnswer(text = "µ±3σ:", value = result.data.three)
-                                        Spacer50()
-                                        FloatAnswer(text = "First Quartile:", value = result.data.q1)
-                                        Spacer50()
-                                        FloatAnswer(text = "Third Quartile:", value = result.data.q3)
-                                        Spacer50()
-                                        StringAnswer(text = "Shape of The Distribution: ${result.data.Shape_of_the_Distribution}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        StringAnswer(text = "Stem Leaf", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer(modifier = Modifier.height(10.dp))
-                                        Card (
-                                            modifier = Modifier.fillMaxWidth(fraction = 0.9f),
-                                            shape = RoundedCornerShape(20.dp),
-                                            elevation = CardDefaults.cardElevation(10.dp),
-                                            colors = CardDefaults.cardColors(
-                                                containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                                                contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
-                                            ),
-                                            border = BorderStroke(1.dp, color = Color.Blue)
-                                        ) {
-                                            Row(
-                                                modifier = Modifier.fillMaxHeight(),
-                                                verticalAlignment = Alignment.CenterVertically
+                                        if (display) {
+                                            Spacer50()
+                                            FloatAnswer(text = "Mean:", value = result.data.mean)
+                                            Spacer50()
+                                            FloatAnswer(text = "Median:", value = result.data.median)
+                                            Spacer50()
+                                            StringAnswer(text = "Mode: ${result.data.mode}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
+                                            Spacer50()
+                                            FloatAnswer(text = "Variance:", value = result.data.variance)
+                                            Spacer50()
+                                            FloatAnswer(text = "µ±1σ:", value = result.data.one)
+                                            Spacer50()
+                                            FloatAnswer(text = "µ±2σ:", value = result.data.two)
+                                            Spacer50()
+                                            FloatAnswer(text = "µ±3σ:", value = result.data.three)
+                                            Spacer50()
+                                            FloatAnswer(text = "First Quartile:", value = result.data.q1)
+                                            Spacer50()
+                                            FloatAnswer(text = "Third Quartile:", value = result.data.q3)
+                                            Spacer50()
+                                            StringAnswer(text = "Shape of The Distribution: ${result.data.Shape_of_the_Distribution}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            StringAnswer(text = "Stem Leaf", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer(modifier = Modifier.height(10.dp))
+                                            Card (
+                                                modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                                                shape = RoundedCornerShape(20.dp),
+                                                elevation = CardDefaults.cardElevation(10.dp),
+                                                colors = CardDefaults.cardColors(
+                                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                                ),
+                                                border = BorderStroke(1.dp, color = Color.Blue)
                                             ) {
-                                                Column(
-                                                    modifier = Modifier
-                                                        .fillMaxHeight()
-                                                        .weight(1f),
-                                                    verticalArrangement = Arrangement.Center,
-                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                Row(
+                                                    modifier = Modifier.fillMaxHeight(),
+                                                    verticalAlignment = Alignment.CenterVertically
                                                 ) {
-                                                    for (i in result.data.stemleaf) {
-                                                        Spacer(modifier = Modifier.height(20.dp))
-                                                        Text(text = i.key)
-                                                    }
-                                                    Spacer(modifier = Modifier.height(20.dp))
-                                                }
-                                                HorizontalDivider(
-                                                    color = Color.Black,
-                                                    modifier = Modifier
-                                                        .fillMaxHeight(fraction = 0.8f)
-                                                        .width(1.dp)
-                                                )
-                                                Column(
-                                                    modifier = Modifier
-                                                        .fillMaxHeight()
-                                                        .weight(1f),
-                                                    verticalArrangement = Arrangement.Center,
-                                                    horizontalAlignment = Alignment.Start
-                                                ) {
-                                                    for (i in result.data.stemleaf) {
-                                                        Spacer(modifier = Modifier.height(20.dp))
-                                                        Row (
-                                                            horizontalArrangement = Arrangement.SpaceAround
-                                                        ){
-                                                            for(j in i.value) {
-                                                                Text(text = "$j ")
-                                                            }
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .fillMaxHeight()
+                                                            .weight(1f),
+                                                        verticalArrangement = Arrangement.Center,
+                                                        horizontalAlignment = Alignment.CenterHorizontally
+                                                    ) {
+                                                        for (i in result.data.stemleaf) {
+                                                            Spacer(modifier = Modifier.height(20.dp))
+                                                            Text(text = i.key)
                                                         }
-
+                                                        Spacer(modifier = Modifier.height(20.dp))
                                                     }
-                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    HorizontalDivider(
+                                                        color = Color.Black,
+                                                        modifier = Modifier
+                                                            .fillMaxHeight(fraction = 0.8f)
+                                                            .width(1.dp)
+                                                    )
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .fillMaxHeight()
+                                                            .weight(1f),
+                                                        verticalArrangement = Arrangement.Center,
+                                                        horizontalAlignment = Alignment.Start
+                                                    ) {
+                                                        for (i in result.data.stemleaf) {
+                                                            Spacer(modifier = Modifier.height(20.dp))
+                                                            Row (
+                                                                horizontalArrangement = Arrangement.SpaceAround
+                                                            ){
+                                                                for(j in i.value) {
+                                                                    Text(text = "$j ")
+                                                                }
+                                                            }
+
+                                                        }
+                                                        Spacer(modifier = Modifier.height(20.dp))
+                                                    }
                                                 }
                                             }
-                                        }
-                                        Spacer50()
-                                        if(userId != null && !isSubmitted.value) {
-                                            val resultDataStemLeaf: Map<String, FloatArray> = result.data.stemleaf
-                                            val convertedStemLeaf: Map<String, List<Float>> = resultDataStemLeaf.mapValues { entry ->
-                                                entry.value.toList()
+                                            Spacer50()
+                                            if(userId != null && !isSubmitted) {
+                                                val resultDataStemLeaf: Map<String, FloatArray> = result.data.stemleaf
+                                                val convertedStemLeaf: Map<String, List<Float>> = resultDataStemLeaf.mapValues { entry ->
+                                                    entry.value.toList()
+                                                }
+                                                authViewModel.sendungrouped(
+                                                    userId,
+                                                    n = stoff(n),
+                                                    shape = result.data.Shape_of_the_Distribution,
+                                                    mean = result.data.mean,
+                                                    median = result.data.median,
+                                                    mode = result.data.mode,
+                                                    one = result.data.one,
+                                                    two = result.data.two,
+                                                    three = result.data.three,
+                                                    q1 = result.data.q1,
+                                                    q3 = result.data.q3,
+                                                    variance = result.data.variance,
+                                                    stemleaf = convertedStemLeaf,
+                                                    sd = result.data.sd
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
                                             }
-                                            authViewModel.sendungrouped(
-                                                userId,
-                                                n = stoff(n),
-                                                shape = result.data.Shape_of_the_Distribution,
-                                                mean = result.data.mean,
-                                                median = result.data.median,
-                                                mode = result.data.mode,
-                                                one = result.data.one,
-                                                two = result.data.two,
-                                                three = result.data.three,
-                                                q1 = result.data.q1,
-                                                q3 = result.data.q3,
-                                                variance = result.data.variance,
-                                                stemleaf = convertedStemLeaf,
-                                                sd = result.data.sd
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
                                         }
                                     }
                                     null -> {

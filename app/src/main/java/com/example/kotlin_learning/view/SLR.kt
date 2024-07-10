@@ -1,6 +1,5 @@
 package com.example.kotlin_learning.view
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -116,7 +116,23 @@ fun SLR(
     var tail = false
     val rresult = viewModel.SLRresult.observeAsState()
     val userId = authViewModel.getuserid()
-    val isSubmitted = remember { mutableStateOf(false) }
+    var isSubmitted by remember { mutableStateOf(false) }
+    var isupdated by remember { mutableStateOf(false) }
+    var display by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isupdated) {
+        if(isupdated) {
+            val slrrequest = SLRRequest(
+                n = n.toInt(),
+                x = stof(x),
+                y = stof(y),
+                alpha = alpha.toFloat(),
+                tail = tail
+            )
+            viewModel.getSLRAnswer(slrrequest)
+            isupdated = false
+        }
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerstate,
@@ -208,6 +224,7 @@ fun SLR(
                                         val newSize = newValue.toIntOrNull() ?: 0
                                         sety(Array(newSize) { if (it < y.size) y[it] else "" })
                                         setx(Array(newSize) { if (it < x.size) x[it] else "" })
+                                        display = false
                                     }
                                 }
                             )
@@ -218,6 +235,7 @@ fun SLR(
                                 value = alpha,
                                 onValueChange = { newValue ->
                                     setalpha(newValue)
+                                    display = false
                                 }
                             )
                             Spacer(modifier = Modifier.height(50.dp))
@@ -227,31 +245,43 @@ fun SLR(
                         }
                         if (n.isNotEmpty() && alpha.isNotEmpty()) {
                             item{
-                                StringAnswer(text = "X:", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                StringAnswer(text = "X:",
+                                    Modifier
+                                        .fillMaxWidth(fraction = 0.9f)
+                                        .height(50.dp))
                                 Spacer(modifier = Modifier.height(50.dp))
                             }
-                            items(n.toInt()) {
+                            items(n.toInt()) { p ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(0.9f),
-                                    label = "$it:",
-                                    index = it,
+                                    label = "$p:",
+                                    index = p,
                                     values = x,
-                                    onValueChange = setx
+                                    onValueChange = {
+                                        setx(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
                             item {
                                 Spacer(modifier = Modifier.height(50.dp))
-                                StringAnswer(text = "Y:", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                StringAnswer(text = "Y:",
+                                    Modifier
+                                        .fillMaxWidth(fraction = 0.9f)
+                                        .height(50.dp))
                                 Spacer(modifier = Modifier.height(50.dp))
                             }
-                            items(n.toInt()) {
+                            items(n.toInt()) { p ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(0.9f),
-                                    label = "$it:",
-                                    index = it,
+                                    label = "$p:",
+                                    index = p,
                                     values = y,
-                                    onValueChange = sety
+                                    onValueChange = {
+                                        sety(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -263,14 +293,10 @@ fun SLR(
                                 onClick = {
                                     keyboardController?.hide()
                                     if(n != "" && alpha != "" && x.isNotEmpty() && y.isNotEmpty()) {
-                                        val slrrequest = SLRRequest(
-                                            n = n.toInt(),
-                                            x = stof(x),
-                                            y = stof(y),
-                                            alpha = alpha.toFloat(),
-                                            tail = tail
-                                        )
-                                        viewModel.getSLRAnswer(slrrequest)
+                                        isSubmitted = false
+                                        isupdated = true
+                                        display = true
+                                        keyboardController?.hide()
                                     }
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
@@ -284,11 +310,14 @@ fun SLR(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer(modifier = Modifier.height(50.dp))
-                            if (n.isNotEmpty() && alpha.isNotEmpty() && x.isNotEmpty() && y.isNotEmpty()) {
+                            if (n.isNotEmpty() && alpha.isNotEmpty() && x.isNotEmpty() && y.isNotEmpty() && !isupdated) {
                                 when (val result = rresult.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer(modifier = Modifier.height(50.dp))
-                                        StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                        StringAnswer("Failed To Load",
+                                            Modifier
+                                                .fillMaxWidth(fraction = 0.9f)
+                                                .height(50.dp))
                                         Spacer(modifier = Modifier.height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
@@ -296,30 +325,38 @@ fun SLR(
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        FloatAnswer(text = "r:", value = result.data.r)
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        FloatAnswer(text = "t:", value = result.data.t)
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        StringAnswer(text = "y': ${result.data.Y}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        if (userId != null && !isSubmitted.value) {
-                                            authViewModel.sendslr(
-                                                userId = userId,
-                                                n = n.toInt(),
-                                                x = stoff(x),
-                                                y = stoff(y),
-                                                alpha = alpha.toFloat(),
-                                                tail = tail,
-                                                hypothesis = result.data.hypothesis,
-                                                r = result.data.r,
-                                                t = result.data.t,
-                                                Y = result.data.Y
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            FloatAnswer(text = "r:", value = result.data.r)
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            FloatAnswer(text = "t:", value = result.data.t)
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            StringAnswer(text = "Hypothesis: ${result.data.hypothesis}",
+                                                Modifier
+                                                    .fillMaxWidth(fraction = 0.9f)
+                                                    .height(50.dp))
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            StringAnswer(text = "y': ${result.data.Y}",
+                                                Modifier
+                                                    .fillMaxWidth(fraction = 0.9f)
+                                                    .height(50.dp))
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            if (userId != null && !isSubmitted) {
+                                                authViewModel.sendslr(
+                                                    userId = userId,
+                                                    n = n.toInt(),
+                                                    x = stoff(x),
+                                                    y = stoff(y),
+                                                    alpha = alpha.toFloat(),
+                                                    tail = tail,
+                                                    hypothesis = result.data.hypothesis,
+                                                    r = result.data.r,
+                                                    t = result.data.t,
+                                                    Y = result.data.Y
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
@@ -360,6 +397,7 @@ fun SLR(
                                         val newSize = newValue.toIntOrNull() ?: 0
                                         sety(Array(newSize) { if (it < y.size) y[it] else "" })
                                         setx(Array(newSize) { if (it < x.size) x[it] else "" })
+                                        display = false
                                     }
                                 }
                             )
@@ -370,6 +408,7 @@ fun SLR(
                                 value = alpha,
                                 onValueChange = { newValue ->
                                     setalpha(newValue)
+                                    display = false
                                 }
                             )
                             Spacer(modifier = Modifier.height(50.dp))
@@ -379,31 +418,43 @@ fun SLR(
                         }
                         if (n.isNotEmpty() && alpha.isNotEmpty()) {
                             item{
-                                StringAnswer(text = "X:", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                StringAnswer(text = "X:",
+                                    Modifier
+                                        .fillMaxWidth(fraction = 0.9f)
+                                        .height(50.dp))
                                 Spacer(modifier = Modifier.height(50.dp))
                             }
-                            items(n.toInt()) {
+                            items(n.toInt()) { p ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(0.9f),
-                                    label = "$it:",
-                                    index = it,
+                                    label = "$p:",
+                                    index = p,
                                     values = x,
-                                    onValueChange = setx
+                                    onValueChange = {
+                                        setx(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
                             item {
                                 Spacer(modifier = Modifier.height(50.dp))
-                                StringAnswer(text = "Y:", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                StringAnswer(text = "Y:",
+                                    Modifier
+                                        .fillMaxWidth(fraction = 0.9f)
+                                        .height(50.dp))
                                 Spacer(modifier = Modifier.height(50.dp))
                             }
-                            items(n.toInt()) {
+                            items(n.toInt()) { p ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(0.9f),
-                                    label = "$it:",
-                                    index = it,
+                                    label = "$p:",
+                                    index = p,
                                     values = y,
-                                    onValueChange = sety
+                                    onValueChange = {
+                                        sety(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -415,14 +466,10 @@ fun SLR(
                                 onClick = {
                                     keyboardController?.hide()
                                     if(n != "" && alpha != "" && x.isNotEmpty() && y.isNotEmpty()) {
-                                        val slrrequest = SLRRequest(
-                                            n = n.toInt(),
-                                            x = stof(x),
-                                            y = stof(y),
-                                            alpha = alpha.toFloat(),
-                                            tail = tail
-                                        )
-                                        viewModel.getSLRAnswer(slrrequest)
+                                        isSubmitted = false
+                                        isupdated = true
+                                        display = true
+                                        keyboardController?.hide()
                                     }
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
@@ -436,11 +483,14 @@ fun SLR(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer(modifier = Modifier.height(50.dp))
-                            if (n.isNotEmpty() && alpha.isNotEmpty() && x.isNotEmpty() && y.isNotEmpty()) {
+                            if (n.isNotEmpty() && alpha.isNotEmpty() && x.isNotEmpty() && y.isNotEmpty() && !isupdated) {
                                 when (val result = rresult.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer(modifier = Modifier.height(50.dp))
-                                        StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                        StringAnswer("Failed To Load",
+                                            Modifier
+                                                .fillMaxWidth(fraction = 0.9f)
+                                                .height(50.dp))
                                         Spacer(modifier = Modifier.height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
@@ -448,30 +498,38 @@ fun SLR(
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        FloatAnswer(text = "r:", value = result.data.r)
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        FloatAnswer(text = "t:", value = result.data.t)
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        StringAnswer(text = "y': ${result.data.Y}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        if (userId != null && !isSubmitted.value) {
-                                            authViewModel.sendslr(
-                                                userId = userId,
-                                                n = n.toInt(),
-                                                x = stoff(x),
-                                                y = stoff(y),
-                                                alpha = alpha.toFloat(),
-                                                tail = tail,
-                                                hypothesis = result.data.hypothesis,
-                                                r = result.data.r,
-                                                t = result.data.t,
-                                                Y = result.data.Y
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            FloatAnswer(text = "r:", value = result.data.r)
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            FloatAnswer(text = "t:", value = result.data.t)
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            StringAnswer(text = "Hypothesis: ${result.data.hypothesis}",
+                                                Modifier
+                                                    .fillMaxWidth(fraction = 0.9f)
+                                                    .height(50.dp))
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            StringAnswer(text = "y': ${result.data.Y}",
+                                                Modifier
+                                                    .fillMaxWidth(fraction = 0.9f)
+                                                    .height(50.dp))
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            if (userId != null && !isSubmitted) {
+                                                authViewModel.sendslr(
+                                                    userId = userId,
+                                                    n = n.toInt(),
+                                                    x = stoff(x),
+                                                    y = stoff(y),
+                                                    alpha = alpha.toFloat(),
+                                                    tail = tail,
+                                                    hypothesis = result.data.hypothesis,
+                                                    r = result.data.r,
+                                                    t = result.data.t,
+                                                    Y = result.data.Y
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
@@ -512,6 +570,7 @@ fun SLR(
                                         val newSize = newValue.toIntOrNull() ?: 0
                                         sety(Array(newSize) { if (it < y.size) y[it] else "" })
                                         setx(Array(newSize) { if (it < x.size) x[it] else "" })
+                                        display = false
                                     }
                                 }
                             )
@@ -522,6 +581,7 @@ fun SLR(
                                 value = alpha,
                                 onValueChange = { newValue ->
                                     setalpha(newValue)
+                                    display = false
                                 }
                             )
                             Spacer(modifier = Modifier.height(50.dp))
@@ -531,31 +591,43 @@ fun SLR(
                         }
                         if (n.isNotEmpty() && alpha.isNotEmpty()) {
                             item{
-                                StringAnswer(text = "X:", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                StringAnswer(text = "X:",
+                                    Modifier
+                                        .fillMaxWidth(fraction = 0.9f)
+                                        .height(50.dp))
                                 Spacer(modifier = Modifier.height(50.dp))
                             }
-                            items(n.toInt()) {
+                            items(n.toInt()) { p ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(0.9f),
-                                    label = "$it:",
-                                    index = it,
+                                    label = "$p:",
+                                    index = p,
                                     values = x,
-                                    onValueChange = setx
+                                    onValueChange = {
+                                        setx(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
                             item {
                                 Spacer(modifier = Modifier.height(50.dp))
-                                StringAnswer(text = "Y:", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                StringAnswer(text = "Y:",
+                                    Modifier
+                                        .fillMaxWidth(fraction = 0.9f)
+                                        .height(50.dp))
                                 Spacer(modifier = Modifier.height(50.dp))
                             }
-                            items(n.toInt()) {
+                            items(n.toInt()) { p ->
                                 ArrayInput(
                                     modifier = Modifier.fillMaxWidth(0.9f),
-                                    label = "$it:",
-                                    index = it,
+                                    label = "$p:",
+                                    index = p,
                                     values = y,
-                                    onValueChange = sety
+                                    onValueChange = {
+                                        sety(it)
+                                        display = false
+                                    }
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -567,14 +639,10 @@ fun SLR(
                                 onClick = {
                                     keyboardController?.hide()
                                     if(n != "" && alpha != "" && x.isNotEmpty() && y.isNotEmpty()) {
-                                        val slrrequest = SLRRequest(
-                                            n = n.toInt(),
-                                            x = stof(x),
-                                            y = stof(y),
-                                            alpha = alpha.toFloat(),
-                                            tail = tail
-                                        )
-                                        viewModel.getSLRAnswer(slrrequest)
+                                        isSubmitted = false
+                                        isupdated = true
+                                        display = true
+                                        keyboardController?.hide()
                                     }
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
@@ -588,11 +656,14 @@ fun SLR(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer(modifier = Modifier.height(50.dp))
-                            if (n.isNotEmpty() && alpha.isNotEmpty() && x.isNotEmpty() && y.isNotEmpty()) {
+                            if (n.isNotEmpty() && alpha.isNotEmpty() && x.isNotEmpty() && y.isNotEmpty() && !isupdated) {
                                 when (val result = rresult.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer(modifier = Modifier.height(50.dp))
-                                        StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                        StringAnswer("Failed To Load",
+                                            Modifier
+                                                .fillMaxWidth(fraction = 0.9f)
+                                                .height(50.dp))
                                         Spacer(modifier = Modifier.height(50.dp))
                                     }
                                     NetworkResponse.Loading -> {
@@ -600,30 +671,38 @@ fun SLR(
                                         CircularProgressIndicator()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        FloatAnswer(text = "r:", value = result.data.r)
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        FloatAnswer(text = "t:", value = result.data.t)
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        StringAnswer(text = "y': ${result.data.Y}", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer(modifier = Modifier.height(50.dp))
-                                        if (userId != null && !isSubmitted.value) {
-                                            authViewModel.sendslr(
-                                                userId = userId,
-                                                n = n.toInt(),
-                                                x = stoff(x),
-                                                y = stoff(y),
-                                                alpha = alpha.toFloat(),
-                                                tail = tail,
-                                                hypothesis = result.data.hypothesis,
-                                                r = result.data.r,
-                                                t = result.data.t,
-                                                Y = result.data.Y
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            FloatAnswer(text = "r:", value = result.data.r)
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            FloatAnswer(text = "t:", value = result.data.t)
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            StringAnswer(text = "Hypothesis: ${result.data.hypothesis}",
+                                                Modifier
+                                                    .fillMaxWidth(fraction = 0.9f)
+                                                    .height(50.dp))
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            StringAnswer(text = "y': ${result.data.Y}",
+                                                Modifier
+                                                    .fillMaxWidth(fraction = 0.9f)
+                                                    .height(50.dp))
+                                            Spacer(modifier = Modifier.height(50.dp))
+                                            if (userId != null && !isSubmitted) {
+                                                authViewModel.sendslr(
+                                                    userId = userId,
+                                                    n = n.toInt(),
+                                                    x = stoff(x),
+                                                    y = stoff(y),
+                                                    alpha = alpha.toFloat(),
+                                                    tail = tail,
+                                                    hypothesis = result.data.hypothesis,
+                                                    r = result.data.r,
+                                                    t = result.data.t,
+                                                    Y = result.data.Y
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {

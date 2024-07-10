@@ -29,10 +29,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -72,8 +75,22 @@ fun Grouped(
     val (n, setn) = remember { mutableStateOf("") }
     val (freq, setfreq) = remember { mutableStateOf(arrayOf("")) }
     val basic = viewModel.groupedresult.observeAsState()
-    val isSubmitted = remember { mutableStateOf(false) }
+    var isSubmitted by remember { mutableStateOf(false) }
+    var isupdated by remember { mutableStateOf(false) }
+    var display by remember { mutableStateOf(false) }
     val userId = authViewModel.getuserid()
+
+    LaunchedEffect(isupdated) {
+        if(isupdated) {
+            val groupedrequest = GroupedRequest(
+                first = stof(first),
+                second = stof(second),
+                freq = stof(freq)
+            )
+            viewModel.getGroupedAnswer(groupedrequest)
+            isupdated = false
+        }
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerstate,
@@ -164,6 +181,7 @@ fun Grouped(
                                     setfirst(Array(newValue.toIntOrNull() ?: 0) { if (it < first.size) first[it] else "" })
                                     setsecond(Array(newValue.toIntOrNull() ?: 0) { if (it < second.size) second[it] else "" })
                                     setfreq(Array(newValue.toIntOrNull() ?: 0) { if ( it < freq.size) freq[it] else ""})
+                                    display = false
                                 }
                             )
                             Spacer50()
@@ -180,7 +198,10 @@ fun Grouped(
                                         label = "Starting",
                                         values = first,
                                         index = it,
-                                        onValueChange = setfirst
+                                        onValueChange = {
+                                            setfirst(it)
+                                            display = false
+                                        }
                                     )
                                     Spacer(modifier = Modifier.width(10.dp))
                                     ArrayInput(
@@ -188,7 +209,10 @@ fun Grouped(
                                         label = "Ending",
                                         values = second,
                                         index = it,
-                                        onValueChange = setsecond
+                                        onValueChange = {
+                                            setsecond(it)
+                                            display = false
+                                        }
                                     )
                                     Spacer(modifier = Modifier.width(10.dp))
                                     ArrayInput(
@@ -196,7 +220,10 @@ fun Grouped(
                                         label = "Frequency",
                                         values = freq,
                                         index = it,
-                                        onValueChange = setfreq
+                                        onValueChange = {
+                                            setfreq(it)
+                                            display = false
+                                        }
                                     )
                                 }
                                 Spacer(modifier = Modifier.height(20.dp))
@@ -208,12 +235,9 @@ fun Grouped(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     keyboardController?.hide()
-                                    val groupedrequest = GroupedRequest(
-                                        first = stof(first),
-                                        second = stof(second),
-                                        freq = stof(freq)
-                                    )
-                                    viewModel.getGroupedAnswer(groupedrequest)
+                                    isSubmitted = false
+                                    isupdated = true
+                                    display = true
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
                                     containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
@@ -226,7 +250,7 @@ fun Grouped(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer50()
-                            if (first.isNotEmpty() && second.isNotEmpty() && freq.isNotEmpty()) {
+                            if (first.isNotEmpty() && second.isNotEmpty() && freq.isNotEmpty() && !isupdated) {
                                 when (val result = basic.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
@@ -239,31 +263,33 @@ fun Grouped(
                                         Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        FloatAnswer(text = "Mean:", value = result.data.mean)
-                                        Spacer50()
-                                        StringAnswer(text = "Median: ${result.data.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        StringAnswer(text = "Mode: ${result.data.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
-                                        Spacer50()
-                                        FloatAnswer(text = "Variance:", value = result.data.variance)
-                                        Spacer50()
-                                        if(!isSubmitted.value && userId != null) {
-                                            authViewModel.sendgrouped(
-                                                userId = userId,
-                                                n = stoff(first),
-                                                second = stoff(second),
-                                                freq = stoff(freq),
-                                                mean = result.data.mean,
-                                                median = result.data.median,
-                                                mode = result.data.mode,
-                                                sd = result.data.sd,
-                                                variance = result.data.variance
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer50()
+                                            FloatAnswer(text = "Mean:", value = result.data.mean)
+                                            Spacer50()
+                                            StringAnswer(text = "Median: ${result.data.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            StringAnswer(text = "Mode: ${result.data.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
+                                            Spacer50()
+                                            FloatAnswer(text = "Variance:", value = result.data.variance)
+                                            Spacer50()
+                                            if(!isSubmitted && userId != null) {
+                                                authViewModel.sendgrouped(
+                                                    userId = userId,
+                                                    n = stoff(first),
+                                                    second = stoff(second),
+                                                    freq = stoff(freq),
+                                                    mean = result.data.mean,
+                                                    median = result.data.median,
+                                                    mode = result.data.mode,
+                                                    sd = result.data.sd,
+                                                    variance = result.data.variance
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
@@ -303,6 +329,7 @@ fun Grouped(
                                     setfirst(Array(newValue.toIntOrNull() ?: 0) { if (it < first.size) first[it] else "" })
                                     setsecond(Array(newValue.toIntOrNull() ?: 0) { if (it < second.size) second[it] else "" })
                                     setfreq(Array(newValue.toIntOrNull() ?: 0) { if ( it < freq.size) freq[it] else ""})
+                                    display = false
                                 }
                             )
                             Spacer50()
@@ -319,7 +346,10 @@ fun Grouped(
                                         label = "Starting",
                                         values = first,
                                         index = it,
-                                        onValueChange = setfirst
+                                        onValueChange = {
+                                            setfirst(it)
+                                            display = false
+                                        }
                                     )
                                     Spacer(modifier = Modifier.width(10.dp))
                                     ArrayInput(
@@ -327,7 +357,10 @@ fun Grouped(
                                         label = "Ending",
                                         values = second,
                                         index = it,
-                                        onValueChange = setsecond
+                                        onValueChange = {
+                                            setsecond(it)
+                                            display = false
+                                        }
                                     )
                                     Spacer(modifier = Modifier.width(10.dp))
                                     ArrayInput(
@@ -335,7 +368,10 @@ fun Grouped(
                                         label = "Frequency",
                                         values = freq,
                                         index = it,
-                                        onValueChange = setfreq
+                                        onValueChange = {
+                                            setfreq(it)
+                                            display = false
+                                        }
                                     )
                                 }
                                 Spacer(modifier = Modifier.height(20.dp))
@@ -347,12 +383,9 @@ fun Grouped(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     keyboardController?.hide()
-                                    val groupedrequest = GroupedRequest(
-                                        first = stof(first),
-                                        second = stof(second),
-                                        freq = stof(freq)
-                                    )
-                                    viewModel.getGroupedAnswer(groupedrequest)
+                                    isSubmitted = false
+                                    isupdated = true
+                                    display = true
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
                                     containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
@@ -365,7 +398,7 @@ fun Grouped(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer50()
-                            if (first.isNotEmpty() && second.isNotEmpty() && freq.isNotEmpty()) {
+                            if (first.isNotEmpty() && second.isNotEmpty() && freq.isNotEmpty() && !isupdated) {
                                 when (val result = basic.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
@@ -378,31 +411,33 @@ fun Grouped(
                                         Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        FloatAnswer(text = "Mean:", value = result.data.mean)
-                                        Spacer50()
-                                        StringAnswer(text = "Median: ${result.data.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        StringAnswer(text = "Mode: ${result.data.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
-                                        Spacer50()
-                                        FloatAnswer(text = "Variance:", value = result.data.variance)
-                                        Spacer50()
-                                        if(!isSubmitted.value && userId != null) {
-                                            authViewModel.sendgrouped(
-                                                userId = userId,
-                                                n = stoff(first),
-                                                second = stoff(second),
-                                                freq = stoff(freq),
-                                                mean = result.data.mean,
-                                                median = result.data.median,
-                                                mode = result.data.mode,
-                                                sd = result.data.sd,
-                                                variance = result.data.variance
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer50()
+                                            FloatAnswer(text = "Mean:", value = result.data.mean)
+                                            Spacer50()
+                                            StringAnswer(text = "Median: ${result.data.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            StringAnswer(text = "Mode: ${result.data.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
+                                            Spacer50()
+                                            FloatAnswer(text = "Variance:", value = result.data.variance)
+                                            Spacer50()
+                                            if(!isSubmitted && userId != null) {
+                                                authViewModel.sendgrouped(
+                                                    userId = userId,
+                                                    n = stoff(first),
+                                                    second = stoff(second),
+                                                    freq = stoff(freq),
+                                                    mean = result.data.mean,
+                                                    median = result.data.median,
+                                                    mode = result.data.mode,
+                                                    sd = result.data.sd,
+                                                    variance = result.data.variance
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
@@ -442,6 +477,7 @@ fun Grouped(
                                     setfirst(Array(newValue.toIntOrNull() ?: 0) { if (it < first.size) first[it] else "" })
                                     setsecond(Array(newValue.toIntOrNull() ?: 0) { if (it < second.size) second[it] else "" })
                                     setfreq(Array(newValue.toIntOrNull() ?: 0) { if ( it < freq.size) freq[it] else ""})
+                                    display = false
                                 }
                             )
                             Spacer50()
@@ -458,7 +494,10 @@ fun Grouped(
                                         label = "Starting",
                                         values = first,
                                         index = it,
-                                        onValueChange = setfirst
+                                        onValueChange = {
+                                            setfirst(it)
+                                            display = false
+                                        }
                                     )
                                     Spacer(modifier = Modifier.width(10.dp))
                                     ArrayInput(
@@ -466,7 +505,10 @@ fun Grouped(
                                         label = "Ending",
                                         values = second,
                                         index = it,
-                                        onValueChange = setsecond
+                                        onValueChange = {
+                                            setsecond(it)
+                                            display = false
+                                        }
                                     )
                                     Spacer(modifier = Modifier.width(10.dp))
                                     ArrayInput(
@@ -474,7 +516,10 @@ fun Grouped(
                                         label = "Frequency",
                                         values = freq,
                                         index = it,
-                                        onValueChange = setfreq
+                                        onValueChange = {
+                                            setfreq(it)
+                                            display = false
+                                        }
                                     )
                                 }
                                 Spacer(modifier = Modifier.height(20.dp))
@@ -486,12 +531,9 @@ fun Grouped(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     keyboardController?.hide()
-                                    val groupedrequest = GroupedRequest(
-                                        first = stof(first),
-                                        second = stof(second),
-                                        freq = stof(freq)
-                                    )
-                                    viewModel.getGroupedAnswer(groupedrequest)
+                                    isSubmitted = false
+                                    isupdated = true
+                                    display = true
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
                                     containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
@@ -504,7 +546,7 @@ fun Grouped(
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                             Spacer50()
-                            if (first.isNotEmpty() && second.isNotEmpty() && freq.isNotEmpty()) {
+                            if (first.isNotEmpty() && second.isNotEmpty() && freq.isNotEmpty() && !isupdated) {
                                 when (val result = basic.value) {
                                     is NetworkResponse.Failure -> {
                                         Spacer50()
@@ -517,31 +559,33 @@ fun Grouped(
                                         Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
-                                        Spacer50()
-                                        FloatAnswer(text = "Mean:", value = result.data.mean)
-                                        Spacer50()
-                                        StringAnswer(text = "Median: ${result.data.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        StringAnswer(text = "Mode: ${result.data.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
-                                        Spacer50()
-                                        FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
-                                        Spacer50()
-                                        FloatAnswer(text = "Variance:", value = result.data.variance)
-                                        Spacer50()
-                                        if(!isSubmitted.value && userId != null) {
-                                            authViewModel.sendgrouped(
-                                                userId = userId,
-                                                n = stoff(first),
-                                                second = stoff(second),
-                                                freq = stoff(freq),
-                                                mean = result.data.mean,
-                                                median = result.data.median,
-                                                mode = result.data.mode,
-                                                sd = result.data.sd,
-                                                variance = result.data.variance
-                                            )
-                                            authViewModel.incrementcount(userId)
-                                            isSubmitted.value = true
+                                        if (display) {
+                                            Spacer50()
+                                            FloatAnswer(text = "Mean:", value = result.data.mean)
+                                            Spacer50()
+                                            StringAnswer(text = "Median: ${result.data.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            StringAnswer(text = "Mode: ${result.data.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                            Spacer50()
+                                            FloatAnswer(text = "Standard Deviation:", value = result.data.sd)
+                                            Spacer50()
+                                            FloatAnswer(text = "Variance:", value = result.data.variance)
+                                            Spacer50()
+                                            if(!isSubmitted && userId != null) {
+                                                authViewModel.sendgrouped(
+                                                    userId = userId,
+                                                    n = stoff(first),
+                                                    second = stoff(second),
+                                                    freq = stoff(freq),
+                                                    mean = result.data.mean,
+                                                    median = result.data.median,
+                                                    mode = result.data.mode,
+                                                    sd = result.data.sd,
+                                                    variance = result.data.variance
+                                                )
+                                                authViewModel.incrementcount(userId)
+                                                isSubmitted = true
+                                            }
                                         }
                                     }
                                     null -> {
