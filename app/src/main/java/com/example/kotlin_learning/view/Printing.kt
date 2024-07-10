@@ -208,32 +208,9 @@ fun Printing(
                         .fillMaxSize()
                         .nestedScroll(scrollbehavior.nestedScrollConnection),
                     topBar = {
-                        TopAppBar(
-                            title = {
-                                Text(text = "Printing", style = TextStyle(color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor, fontSize = 20.sp))
-                            },
-                            navigationIcon = {
-                                IconButton(onClick = {
-                                    scope.launch {drawerState.open()}
-                                }) {
-                                    Icon(painter = painterResource(R.drawable.menu), contentDescription = "menu button", tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
-                                }
-                            },
-                            actions = {
-                                IconButton(
-                                    onClick = {
-                                        showsearch.value = true
-                                    }
-                                ) {
-                                    Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "", tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
-                                }
-                            },
-                            colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                                scrolledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
-                            ),
-                            scrollBehavior = scrollbehavior
-                        )
+                        Appbar(title = "Printing") {
+                            scope.launch {drawerState.open()}
+                        }
                     }
                 ) { values ->
                     Box(modifier = Modifier.fillMaxSize()) {
