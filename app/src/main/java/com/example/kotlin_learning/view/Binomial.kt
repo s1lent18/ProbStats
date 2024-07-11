@@ -1,6 +1,8 @@
 package com.example.kotlin_learning.view
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,12 +10,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ElevatedButton
@@ -35,10 +40,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.kotlin_learning.R
@@ -232,30 +239,50 @@ fun Binomial(
                                     is NetworkResponse.Success -> {
                                         if (display) {
                                             Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X<$x):", value = result.data.less)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X<=$x):", value = result.data.lessequal)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X>$x):", value = result.data.greater)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X>=$x):", value = result.data.greaterequal)
-                                            Spacer50()
-                                            if (!isSubmitted && userId != null) {
-                                                authViewModel.sendbinomial(
-                                                    userId = userId,
-                                                    x = x.toFloat(),
-                                                    n = n.toFloat(),
-                                                    p = p.toFloat(),
-                                                    equal = result.data.equal,
-                                                    greater = result.data.greater,
-                                                    greaterequal = result.data.greaterequal,
-                                                    less = result.data.less,
-                                                    lessequal = result.data.lessequal
+                                            Card(
+                                                shape = RoundedCornerShape(20.dp),
+                                                colors = CardDefaults.cardColors(
+                                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                                ),
+                                                modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                                                elevation = CardDefaults.cardElevation(10.dp),
+                                                border = BorderStroke(
+                                                    1.dp,
+                                                    Color.Blue
                                                 )
-                                                authViewModel.incrementcount(userId)
-                                                isSubmitted = true
+                                            ) {
+                                                Column(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                ) {
+                                                    Spacer50()
+                                                    Text("P(X=$x):    ${result.data.equal}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X<$x):    ${result.data.less}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X<=$x):  ${result.data.lessequal}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X>$x):    ${result.data.greater}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X>=$x):  ${result.data.greaterequal}", fontSize = 20.sp)
+                                                    Spacer50()
+                                                    if (!isSubmitted && userId != null) {
+                                                        authViewModel.sendbinomial(
+                                                            userId = userId,
+                                                            x = x.toFloat(),
+                                                            n = n.toFloat(),
+                                                            p = p.toFloat(),
+                                                            equal = result.data.equal,
+                                                            greater = result.data.greater,
+                                                            greaterequal = result.data.greaterequal,
+                                                            less = result.data.less,
+                                                            lessequal = result.data.lessequal
+                                                        )
+                                                        authViewModel.incrementcount(userId)
+                                                        isSubmitted = true
+                                                    }
+                                                }
                                             }
                                         }
                                     }

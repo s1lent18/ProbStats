@@ -1,6 +1,11 @@
 package com.example.kotlin_learning.view
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,12 +13,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ElevatedButton
@@ -35,10 +43,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.kotlin_learning.R
@@ -55,7 +66,17 @@ import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
 import kotlinx.coroutines.launch
 
-
+@Composable
+fun RowScope.TableCell(text: String, weight: Float, fontWeight: FontWeight? = null) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .weight(weight)
+            .padding(8.dp),
+        fontSize = 12.sp,
+        fontWeight = fontWeight
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -266,43 +287,77 @@ fun Anova(
                                     is NetworkResponse.Success -> {
                                         if (display) {
                                             Spacer50()
-                                            FloatAnswer(text = "SS [Between]:", value = result.data.SSB)
-                                            Spacer50()
-                                            FloatAnswer(text = "SS [Within]:", value = result.data.SSW)
-                                            Spacer50()
-                                            FloatAnswer(text = "d.f [Between]:", value = result.data.dfB.toFloat())
-                                            Spacer50()
-                                            FloatAnswer(text = "d.f [Within]:", value = result.data.dfW.toFloat())
-                                            Spacer50()
-                                            FloatAnswer(text = "MS [Between]:", value = result.data.MSB)
-                                            Spacer50()
-                                            FloatAnswer(text = "MS [Within]:", value = result.data.MSW)
-                                            Spacer50()
-                                            FloatAnswer(text = "F Ratio:", value = result.data.fratio)
-                                            Spacer50()
-                                            StringAnswer(text = "Hypothesis: ${result.data.hypothesis}",
-                                                Modifier
-                                                    .fillMaxWidth(fraction = 0.9f)
-                                                    .height(50.dp))
-                                            Spacer50()
-                                            if (!isSubmitted && userId != null) {
-                                                authViewModel.sendanova(
-                                                    userId = userId,
-                                                    n = stoff(n),
-                                                    sl = sl.toFloat(),
-                                                    SSB = result.data.SSB,
-                                                    SSW = result.data.SSW,
-                                                    MSB = result.data.MSB,
-                                                    MSW = result.data.MSW,
-                                                    dfB = result.data.dfB,
-                                                    dfW = result.data.dfW,
-                                                    fratio = result.data.fratio,
-                                                    hypothesis = result.data.hypothesis,
-                                                    size = arraySize.toInt()
+                                            Card(
+                                                shape = RoundedCornerShape(20.dp),
+                                                colors = CardDefaults.cardColors(
+                                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                                ),
+                                                modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                                                elevation = CardDefaults.cardElevation(10.dp),
+                                                border = BorderStroke(
+                                                    1.dp,
+                                                    Color.Blue
                                                 )
-                                                authViewModel.incrementcount(userId)
-                                                isSubmitted = true
+                                            ) {
+                                                Column(modifier = Modifier.padding(16.dp)) {
+                                                    // Table Header
+                                                    Row(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                            .background(Color(0xFFCAF0F8), shape = RoundedCornerShape(4.dp))
+                                                            .padding(8.dp)
+                                                    ) {
+                                                        TableCell(text = "S.V.", weight = 1f, fontWeight = FontWeight.Bold)
+                                                        TableCell(text = "SS", weight = 1f, fontWeight = FontWeight.Bold)
+                                                        TableCell(text = "d.f.", weight = 1f, fontWeight = FontWeight.Bold)
+                                                        TableCell(text = "MS", weight = 1f, fontWeight = FontWeight.Bold)
+                                                        TableCell(text = "F-ratio", weight = 1f, fontWeight = FontWeight.Bold)
+                                                    }
+
+                                                    // Table Rows
+                                                    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                                                        TableCell(text = "Between", weight = 1f)
+                                                        TableCell(text = "160.13", weight = 1f)
+                                                        TableCell(text = "2", weight = 1f)
+                                                        TableCell(text = "80.07", weight = 1f)
+                                                        TableCell(text = "9.17", weight = 1f)
+                                                    }
+                                                    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                                                        TableCell(text = "Within (error)", weight = 1f)
+                                                        TableCell(text = "104.80", weight = 1f)
+                                                        TableCell(text = "12", weight = 1f)
+                                                        TableCell(text = "8.73", weight = 1f)
+                                                        TableCell(text = "", weight = 1f)
+                                                    }
+                                                    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                                                        TableCell(text = "Total", weight = 1f)
+                                                        TableCell(text = "264.93", weight = 1f)
+                                                        TableCell(text = "14", weight = 1f)
+                                                        TableCell(text = "", weight = 1f)
+                                                        TableCell(text = "", weight = 1f)
+                                                    }
+                                                    if (!isSubmitted && userId != null) {
+                                                        authViewModel.sendanova(
+                                                            userId = userId,
+                                                            n = stoff(n),
+                                                            sl = sl.toFloat(),
+                                                            SSB = result.data.SSB,
+                                                            SSW = result.data.SSW,
+                                                            MSB = result.data.MSB,
+                                                            MSW = result.data.MSW,
+                                                            dfB = result.data.dfB,
+                                                            dfW = result.data.dfW,
+                                                            fratio = result.data.fratio,
+                                                            hypothesis = result.data.hypothesis,
+                                                            size = arraySize.toInt()
+                                                        )
+                                                        authViewModel.incrementcount(userId)
+                                                        isSubmitted = true
+                                                    }
+                                                }
                                             }
+                                            Spacer50()
                                         }
                                     }
                                     null -> {
