@@ -305,7 +305,7 @@ fun Anova(
                                                     Row(
                                                         modifier = Modifier
                                                             .fillMaxWidth()
-                                                            .background(Color(0xFFCAF0F8), shape = RoundedCornerShape(4.dp))
+                                                            .background( if (isSystemInDarkTheme()) Color(0xFFCCC5B9) else Color(0xFF124559), shape = RoundedCornerShape(4.dp))
                                                             .padding(8.dp)
                                                     ) {
                                                         TableCell(text = "S.V.", weight = 1f, fontWeight = FontWeight.Bold)
@@ -318,22 +318,22 @@ fun Anova(
                                                     // Table Rows
                                                     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                                                         TableCell(text = "Between", weight = 1f)
-                                                        TableCell(text = "160.13", weight = 1f)
-                                                        TableCell(text = "2", weight = 1f)
-                                                        TableCell(text = "80.07", weight = 1f)
-                                                        TableCell(text = "9.17", weight = 1f)
+                                                        TableCell(text = "${result.data.SSB}", weight = 1f)
+                                                        TableCell(text = "${result.data.dfB}", weight = 1f)
+                                                        TableCell(text = "${result.data.MSB}", weight = 1f)
+                                                        TableCell(text = "${result.data.fratio}", weight = 1f)
                                                     }
                                                     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                                                         TableCell(text = "Within (error)", weight = 1f)
-                                                        TableCell(text = "104.80", weight = 1f)
-                                                        TableCell(text = "12", weight = 1f)
-                                                        TableCell(text = "8.73", weight = 1f)
+                                                        TableCell(text = "${result.data.SSW}", weight = 1f)
+                                                        TableCell(text = "${result.data.dfW}", weight = 1f)
+                                                        TableCell(text = "${result.data.MSW}", weight = 1f)
                                                         TableCell(text = "", weight = 1f)
                                                     }
                                                     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                                                         TableCell(text = "Total", weight = 1f)
-                                                        TableCell(text = "264.93", weight = 1f)
-                                                        TableCell(text = "14", weight = 1f)
+                                                        TableCell(text = "${result.data.SSB + result.data.SSW}", weight = 1f)
+                                                        TableCell(text = "${result.data.dfB + result.data.dfW}", weight = 1f)
                                                         TableCell(text = "", weight = 1f)
                                                         TableCell(text = "", weight = 1f)
                                                     }

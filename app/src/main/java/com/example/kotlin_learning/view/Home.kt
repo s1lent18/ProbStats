@@ -72,7 +72,9 @@ fun ScrollableList(navController: NavController, items: List<Pair<String, String
     val bodysize = if(screentype == "Compact") 15.sp else if(screentype == "Medium") 20.sp else 15.sp
 
     Card (
-        modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp),
+        modifier = Modifier
+            .fillMaxWidth(fraction = 0.9f)
+            .height(50.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
             contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
@@ -97,7 +99,9 @@ fun ScrollableList(navController: NavController, items: List<Pair<String, String
     ) {
         items(items) { item ->
             FloatingActionButton(
-                modifier = Modifier.width(width).height(height),
+                modifier = Modifier
+                    .width(width)
+                    .height(height),
                 onClick = {
                     when (item.first) {
                         "Poisson" -> {
@@ -153,8 +157,12 @@ fun SidebarItem(
     isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
-    val backgroundColor = if (isSelected) darkmodebackground else Color.Transparent
-    val textColor = if (isSelected) darkmodefontcolor else darkmodebackground
+    val backgroundColor = if (isSelected) {if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground} else Color.Transparent
+    val textColor = if (isSelected) {
+        if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+    } else {
+        if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
+    }
 
     Row(
         modifier = Modifier
@@ -232,7 +240,10 @@ fun Home(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet (modifier = Modifier.background(uicolor).fillMaxHeight().fillMaxWidth(fraction = 0.8f)) {
+            ModalDrawerSheet (modifier = Modifier
+                .background(uicolor)
+                .fillMaxHeight()
+                .fillMaxWidth(fraction = 0.8f)) {
                 LazyColumn (
                     modifier = Modifier.padding(16.dp)
                 ){
@@ -240,7 +251,9 @@ fun Home(
                         Icon(
                             painter = painterResource(R.drawable.prob_stats),
                             contentDescription = "Icon",
-                            modifier = Modifier.fillMaxWidth().fillMaxHeight(fraction = 0.3f),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(fraction = 0.3f),
                             tint = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
                         )
                         SidebarItem(
@@ -291,7 +304,9 @@ fun Home(
         when (windowInfo.screenWidthInfo) {
             WindowInfo.WindowType.Compact -> {
                 Scaffold (
-                    modifier = Modifier.fillMaxSize().nestedScroll(scrollbehavior.nestedScrollConnection),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .nestedScroll(scrollbehavior.nestedScrollConnection),
                     topBar = {
                         Appbar("Home") {
                             scope.launch {drawerState.open()}
@@ -299,7 +314,9 @@ fun Home(
                     }
                 ) { values ->
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize().padding(values)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(values)
                     ) {
                         item {
                             Column (
@@ -316,7 +333,9 @@ fun Home(
             }
             WindowInfo.WindowType.Expanded -> {
                 Scaffold (
-                    modifier = Modifier.fillMaxSize().nestedScroll(scrollbehavior.nestedScrollConnection),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .nestedScroll(scrollbehavior.nestedScrollConnection),
                     topBar = {
                         Appbar("Calculators") {
                             scope.launch {drawerState.open()}
@@ -324,7 +343,9 @@ fun Home(
                     }
                 ) { values ->
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize().padding(values)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(values)
                     ) {
                         item {
                             Column (
@@ -341,7 +362,9 @@ fun Home(
             }
             WindowInfo.WindowType.Medium -> {
                 Scaffold (
-                    modifier = Modifier.fillMaxSize().nestedScroll(scrollbehavior.nestedScrollConnection),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .nestedScroll(scrollbehavior.nestedScrollConnection),
                     topBar = {
                         Appbar("Calculators") {
                             scope.launch {drawerState.open()}
@@ -349,7 +372,9 @@ fun Home(
                     }
                 ) { values ->
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize().padding(values)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(values)
                     ) {
                         item {
                             Column (

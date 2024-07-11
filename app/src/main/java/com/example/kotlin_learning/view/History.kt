@@ -1,6 +1,7 @@
 package com.example.kotlin_learning.view
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,6 +51,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -154,7 +156,7 @@ fun AnovaItem(anova: Anovaclass) {
         modifier = Modifier.fillMaxSize()
     ) {
         Spacer50()
-        for(i in 0 ..<anova.size) {
+        for(i in 0 ..<anova.n.size) {
             StringAnswer("n$i : ${anova.n[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.height(20.dp))
         }
@@ -163,22 +165,58 @@ fun AnovaItem(anova: Anovaclass) {
         Spacer50()
         StringAnswer("sl: ${anova.sl}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        StringAnswer("MSB: ${anova.msb}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("MSW: ${anova.msw}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("SSB: ${anova.ssb}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("SSW: ${anova.ssw}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("dfB: ${anova.dfB}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("dfW: ${anova.dfW}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("fratio: ${anova.fratio}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("Hypothesis: ${anova.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
+        Card(
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+            ),
+            modifier = Modifier.fillMaxWidth(fraction = 0.9f).align(Alignment.CenterHorizontally),
+            elevation = CardDefaults.cardElevation(10.dp),
+            border = BorderStroke(
+                1.dp,
+                Color.Blue
+            )
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                // Table Header
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background( if (isSystemInDarkTheme()) Color(0xFFEFF6E0) else Color(0xFF0d1b2a), shape = RoundedCornerShape(4.dp))
+                        .padding(8.dp)
+                ) {
+                    TableCell(text = "S.V.", weight = 1f, fontWeight = FontWeight.Bold)
+                    TableCell(text = "SS", weight = 1f, fontWeight = FontWeight.Bold)
+                    TableCell(text = "d.f.", weight = 1f, fontWeight = FontWeight.Bold)
+                    TableCell(text = "MS", weight = 1f, fontWeight = FontWeight.Bold)
+                    TableCell(text = "F-ratio", weight = 1f, fontWeight = FontWeight.Bold)
+                }
+
+                // Table Rows
+                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                    TableCell(text = "Between", weight = 1f)
+                    TableCell(text = "${anova.ssb}", weight = 1f)
+                    TableCell(text = "${anova.dfB}", weight = 1f)
+                    TableCell(text = "${anova.msb}", weight = 1f)
+                    TableCell(text = "${anova.fratio}", weight = 1f)
+                }
+                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                    TableCell(text = "Within (error)", weight = 1f)
+                    TableCell(text = "${anova.ssw}", weight = 1f)
+                    TableCell(text = "${anova.dfW}", weight = 1f)
+                    TableCell(text = "${anova.msw}", weight = 1f)
+                    TableCell(text = "", weight = 1f)
+                }
+                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                    TableCell(text = "Total", weight = 1f)
+                    TableCell(text = "${anova.ssb + anova.ssw}", weight = 1f)
+                    TableCell(text = "${anova.dfB + anova.dfW}", weight = 1f)
+                    TableCell(text = "", weight = 1f)
+                    TableCell(text = "", weight = 1f)
+                }
+            }
+        }
     }
 }
 
