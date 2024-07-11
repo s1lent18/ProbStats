@@ -53,6 +53,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.kotlin_learning.R
@@ -85,15 +86,36 @@ fun PoissonItem(poisson: Poissonclass) {
         Spacer50()
         StringAnswer("Lamda: ${poisson.lamda}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        StringAnswer("P(X=${poisson.x}) = ${poisson.equal}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("P(X=${poisson.x}) = ${poisson.less}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("P(X=${poisson.x}) = ${poisson.lessequal}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("P(X=${poisson.x}) = ${poisson.greater}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("P(X=${poisson.x}) = ${poisson.greaterequal}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
+        Card(
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+            ),
+            modifier = Modifier.fillMaxWidth(fraction = 0.9f).align(Alignment.CenterHorizontally),
+            elevation = CardDefaults.cardElevation(10.dp),
+            border = BorderStroke(
+                1.dp,
+                Color.Blue
+            )
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer50()
+                Text("P(X=${poisson.x}):    ${poisson.equal}", fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(20.dp))
+                Text("P(X<${poisson.x}):    ${poisson.less}", fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(20.dp))
+                Text("P(X<=${poisson.x}):  ${poisson.lessequal}", fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(20.dp))
+                Text("P(X>${poisson.x}):    ${poisson.greater}", fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(20.dp))
+                Text("P(X>=${poisson.x}):  ${poisson.greaterequal}", fontSize = 20.sp)
+                Spacer50()
+            }
+        }
         Spacer50()
     }
 }
@@ -110,15 +132,36 @@ fun BinomialItem(binomial: Binomialclass) {
         Spacer50()
         StringAnswer("p: ${binomial.p}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        StringAnswer("P(X=${binomial.x}) = ${binomial.equal}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("P(X=${binomial.x}) = ${binomial.less}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("P(X=${binomial.x}) = ${binomial.lessequal}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("P(X=${binomial.x}) = ${binomial.greater}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-        Spacer50()
-        StringAnswer("P(X=${binomial.x}) = ${binomial.greaterequal}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
+        Card(
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+            ),
+            modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+            elevation = CardDefaults.cardElevation(10.dp),
+            border = BorderStroke(
+                1.dp,
+                Color.Blue
+            )
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer50()
+                Text("P(X=${binomial.x}):    ${binomial.equal}", fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(20.dp))
+                Text("P(X<${binomial.x}):    ${binomial.less}", fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(20.dp))
+                Text("P(X<=${binomial.x}):  ${binomial.lessequal}", fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(20.dp))
+                Text("P(X>${binomial.x}):    ${binomial.greater}", fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(20.dp))
+                Text("P(X>=${binomial.x}):  ${binomial.greaterequal}", fontSize = 20.sp)
+                Spacer50()
+            }
+        }
         Spacer50()
     }
 }
@@ -179,7 +222,6 @@ fun AnovaItem(anova: Anovaclass) {
             )
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                // Table Header
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -193,7 +235,6 @@ fun AnovaItem(anova: Anovaclass) {
                     TableCell(text = "F-ratio", weight = 1f, fontWeight = FontWeight.Bold)
                 }
 
-                // Table Rows
                 Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                     TableCell(text = "Between", weight = 1f)
                     TableCell(text = "${anova.ssb}", weight = 1f)
