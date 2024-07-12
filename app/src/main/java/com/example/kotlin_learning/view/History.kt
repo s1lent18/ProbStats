@@ -363,7 +363,7 @@ fun UnGroupedItem(ungrouped: UnGroupedclass) {
                         if (temp.isNotEmpty()) {
                             arr.add(temp)
                         }
-                        temp = ArrayList() // Create a new instance of ArrayList
+                        temp = ArrayList()
                         str.add(i)
                     }
                     else -> {
