@@ -37,6 +37,7 @@ import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -368,6 +369,29 @@ fun UnGroupedItem(ungrouped: UnGroupedclass) {
             ),
             border = BorderStroke(1.dp, color = Color.Blue)
         ) {
+            val arr: ArrayList<ArrayList<Any>> = ArrayList()
+            var temp: ArrayList<Any> = ArrayList()
+            val str: ArrayList<Any> = ArrayList()
+
+            for (i in ungrouped.stemleaf) {
+                when (i) {
+                    is String -> {
+                        if (temp.isNotEmpty()) {
+                            arr.add(temp)
+                        }
+                        temp = ArrayList() // Create a new instance of ArrayList
+                        str.add(i)
+                    }
+                    else -> {
+                        temp.add(i)
+                    }
+                }
+            }
+
+            if (temp.isNotEmpty()) {
+                arr.add(temp)
+            }
+
             Row(
                 modifier = Modifier.fillMaxHeight(),
                 verticalAlignment = Alignment.CenterVertically
@@ -379,20 +403,13 @@ fun UnGroupedItem(ungrouped: UnGroupedclass) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    for (i in ungrouped.stemleaf) {
+                    for (i in str) {
                         Spacer(modifier = Modifier.height(20.dp))
-                        when (i) {
-                            is String -> Text("$i")
-                        }
+                        Text(i.toString())
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                 }
-                HorizontalDivider(
-                    color = Color.Black,
-                    modifier = Modifier
-                        .fillMaxHeight(fraction = 0.8f)
-                        .width(1.dp)
-                )
+
                 Column(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -400,14 +417,13 @@ fun UnGroupedItem(ungrouped: UnGroupedclass) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.Start
                 ) {
-                    for (i in ungrouped.stemleaf) {
+                    for (i in arr) {
                         Spacer(modifier = Modifier.height(20.dp))
                         Row (
                             horizontalArrangement = Arrangement.SpaceAround
                         ){
-                            when (i) {
-                                is String -> {Text("\n")}
-                                else -> Text("$i ")
+                            for(j in i) {
+                                Text(text = "$j ")
                             }
                         }
 
