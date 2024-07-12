@@ -258,7 +258,7 @@ class AuthViewModel : ViewModel() {
             hypothesis = hypothesis,
             r = r,
             t = t,
-            Y = Y
+            yy = Y
         )
         addslr(userId, slr)
     }

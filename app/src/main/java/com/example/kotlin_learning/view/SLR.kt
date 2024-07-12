@@ -257,10 +257,7 @@ fun SLR(
                                     label = "$p:",
                                     index = p,
                                     values = x,
-                                    onValueChange = {
-                                        setx(it)
-                                        display = false
-                                    }
+                                    onValueChange = setx
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -278,10 +275,7 @@ fun SLR(
                                     label = "$p:",
                                     index = p,
                                     values = y,
-                                    onValueChange = {
-                                        sety(it)
-                                        display = false
-                                    }
+                                    onValueChange = sety
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }

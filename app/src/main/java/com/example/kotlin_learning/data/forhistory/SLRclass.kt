@@ -11,5 +11,5 @@ data class SLRclass (
     val hypothesis: String = "",
     val r: Float = 0f,
     val t: Float = 0f,
-    val Y: String = ""
+    val yy: String = ""
 )
