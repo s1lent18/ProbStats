@@ -28,7 +28,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -37,7 +36,6 @@ import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -77,20 +75,6 @@ import com.example.kotlin_learning.viewModel.WindowInfo
 import com.example.kotlin_learning.viewModel.rWindowInfo
 import kotlinx.coroutines.launch
 
-fun convertListToMap(list: List<Any>): Map<String, FloatArray> {
-    val result = mutableMapOf<String, FloatArray>()
-
-    // Iterate through the list in steps of 2 (key, value pairs)
-    for (i in list.indices step 2) {
-        val key = list[i] as? String ?: continue // Get the key
-        val values = list.getOrNull(i + 1) as? List<Float> ?: continue // Get the values
-
-        // Convert List<Float> to FloatArray
-        result[key] = values.toFloatArray()
-    }
-
-    return result
-}
 
 @Composable
 fun PoissonItem(poisson: Poissonclass) {
