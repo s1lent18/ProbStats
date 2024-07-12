@@ -1,6 +1,6 @@
 package com.example.kotlin_learning.data.forhistory
 
-data class UnGroupedclass (
+data class UnGroupedclass(
     val ungroupedId: String = "",
     val userId: String = "",
     val n: List<Float> = listOf(),
@@ -12,7 +12,7 @@ data class UnGroupedclass (
     val q1: Float = 0f,
     val q3: Float = 0f,
     val sd: Float = 0f,
-    val stemleaf: Map<String, List<Float>> = mapOf("" to listOf()),
+    val stemleaf: List<Any> = listOf(),
     val three: Float = 0f,
     val two: Float = 0f,
     val variance: Float = 0f

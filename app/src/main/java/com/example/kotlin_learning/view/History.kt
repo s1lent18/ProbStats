@@ -76,6 +76,20 @@ import com.example.kotlin_learning.viewModel.WindowInfo
 import com.example.kotlin_learning.viewModel.rWindowInfo
 import kotlinx.coroutines.launch
 
+fun convertListToMap(list: List<Any>): Map<String, FloatArray> {
+    val result = mutableMapOf<String, FloatArray>()
+
+    // Iterate through the list in steps of 2 (key, value pairs)
+    for (i in list.indices step 2) {
+        val key = list[i] as? String ?: continue // Get the key
+        val values = list.getOrNull(i + 1) as? List<Float> ?: continue // Get the values
+
+        // Convert List<Float> to FloatArray
+        result[key] = values.toFloatArray()
+    }
+
+    return result
+}
 
 @Composable
 fun PoissonItem(poisson: Poissonclass) {
@@ -305,7 +319,7 @@ fun SLRItem(slr: SLRclass) {
         Spacer50()
         FloatAnswer(value = slr.t, text = "t: ")
         Spacer50()
-        StringAnswer("Y: ${slr.Y}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
+        StringAnswer("Y: ${slr.yy}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
     }
 }
@@ -345,7 +359,7 @@ fun UnGroupedItem(ungrouped: UnGroupedclass) {
         StringAnswer("Stem Leaf: ", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
         Card (
-            modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+            modifier = Modifier.fillMaxWidth(fraction = 0.9f).align(Alignment.CenterHorizontally),
             shape = RoundedCornerShape(20.dp),
             elevation = CardDefaults.cardElevation(10.dp),
             colors = CardDefaults.cardColors(
@@ -367,7 +381,9 @@ fun UnGroupedItem(ungrouped: UnGroupedclass) {
                 ) {
                     for (i in ungrouped.stemleaf) {
                         Spacer(modifier = Modifier.height(20.dp))
-                        Text(text = i.key)
+                        when (i) {
+                            is String -> Text("$i")
+                        }
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                 }
@@ -389,8 +405,9 @@ fun UnGroupedItem(ungrouped: UnGroupedclass) {
                         Row (
                             horizontalArrangement = Arrangement.SpaceAround
                         ){
-                            for(j in i.value) {
-                                Text(text = "$j ")
+                            when (i) {
+                                is String -> {Text("\n")}
+                                else -> Text("$i ")
                             }
                         }
 

@@ -319,9 +319,11 @@ fun UnGrouped(
                                             }
                                             Spacer50()
                                             if(userId != null && !isSubmitted) {
-                                                val resultDataStemLeaf: Map<String, FloatArray> = result.data.stemleaf
-                                                val convertedStemLeaf: Map<String, List<Float>> = resultDataStemLeaf.mapValues { entry ->
+                                                val convertedStemLeaf: Map<String, List<Float>> = result.data.stemleaf.mapValues { entry ->
                                                     entry.value.toList()
+                                                }
+                                                val listAny: List<Any> = convertedStemLeaf.flatMap { entry ->
+                                                    listOf(entry.key) + entry.value
                                                 }
                                                 authViewModel.sendungrouped(
                                                     userId,
@@ -336,7 +338,7 @@ fun UnGrouped(
                                                     q1 = result.data.q1,
                                                     q3 = result.data.q3,
                                                     variance = result.data.variance,
-                                                    stemleaf = convertedStemLeaf,
+                                                    stemleaf = listAny,
                                                     sd = result.data.sd
                                                 )
                                                 authViewModel.incrementcount(userId)
@@ -516,9 +518,12 @@ fun UnGrouped(
                                             }
                                             Spacer50()
                                             if(userId != null && !isSubmitted) {
-                                                val resultDataStemLeaf: Map<String, FloatArray> = result.data.stemleaf
-                                                val convertedStemLeaf: Map<String, List<Float>> = resultDataStemLeaf.mapValues { entry ->
+                                                val convertedStemLeaf: Map<String, List<Float>> = result.data.stemleaf.mapValues { entry ->
                                                     entry.value.toList()
+                                                }
+                                                val listAny: List<Any> = convertedStemLeaf.flatMap { entry ->
+                                                    // Create a list containing the key and its associated list
+                                                    listOf(entry.key) + entry.value
                                                 }
                                                 authViewModel.sendungrouped(
                                                     userId,
@@ -533,7 +538,7 @@ fun UnGrouped(
                                                     q1 = result.data.q1,
                                                     q3 = result.data.q3,
                                                     variance = result.data.variance,
-                                                    stemleaf = convertedStemLeaf,
+                                                    stemleaf = listAny,
                                                     sd = result.data.sd
                                                 )
                                                 authViewModel.incrementcount(userId)
@@ -713,9 +718,11 @@ fun UnGrouped(
                                             }
                                             Spacer50()
                                             if(userId != null && !isSubmitted) {
-                                                val resultDataStemLeaf: Map<String, FloatArray> = result.data.stemleaf
-                                                val convertedStemLeaf: Map<String, List<Float>> = resultDataStemLeaf.mapValues { entry ->
+                                                val convertedStemLeaf: Map<String, List<Float>> = result.data.stemleaf.mapValues { entry ->
                                                     entry.value.toList()
+                                                }
+                                                val listAny: List<Any> = convertedStemLeaf.flatMap { entry ->
+                                                    listOf(entry.key) + entry.value
                                                 }
                                                 authViewModel.sendungrouped(
                                                     userId,
@@ -730,7 +737,7 @@ fun UnGrouped(
                                                     q1 = result.data.q1,
                                                     q3 = result.data.q3,
                                                     variance = result.data.variance,
-                                                    stemleaf = convertedStemLeaf,
+                                                    stemleaf = listAny,
                                                     sd = result.data.sd
                                                 )
                                                 authViewModel.incrementcount(userId)

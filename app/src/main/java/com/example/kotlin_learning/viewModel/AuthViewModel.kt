@@ -263,7 +263,7 @@ class AuthViewModel : ViewModel() {
         addslr(userId, slr)
     }
 
-    fun sendungrouped(userId: String, n: List<Float>, shape: String, mean: Float, median: Float, mode: String, one: Float, q1: Float, q3: Float, sd: Float, stemleaf: Map<String, List<Float>>, three: Float, two: Float, variance: Float) {
+    fun sendungrouped(userId: String, n: List<Float>, shape: String, mean: Float, median: Float, mode: String, one: Float, q1: Float, q3: Float, sd: Float, stemleaf: List<Any>, three: Float, two: Float, variance: Float) {
         val ungrouped = UnGroupedclass (
             userId = userId,
             n = n,
