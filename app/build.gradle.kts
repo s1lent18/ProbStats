@@ -81,6 +81,7 @@ dependencies {
     implementation (libs.androidx.hilt.navigation.compose)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.androidx.storage)
+    implementation(libs.androidx.lifecycle.process)
     kapt(libs.hilt.android.compiler)
     implementation (libs.kotlinx.coroutines.android)
     //implementation (libs.androidx.core.splashscreen)

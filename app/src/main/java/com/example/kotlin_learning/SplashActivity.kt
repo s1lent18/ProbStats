@@ -14,15 +14,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kotlin_learning.ui.theme.KotlinLearningTheme
 import com.example.kotlin_learning.ui.theme.darkmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodebackground
+import com.example.kotlin_learning.viewModel.AuthViewModel
 import kotlinx.coroutines.delay
 
 @SuppressLint("CustomSplashScreen")
@@ -32,24 +35,37 @@ class SplashActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             KotlinLearningTheme {
-                SplashScreen()
+                SplashScreen {
+                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                    finish() // Make sure to finish the splash activity so it's removed from the back stack
+                }
             }
         }
     }
 
     @Composable
-    private fun SplashScreen() {
-        val alpha  = remember {
+    private fun SplashScreen(onSplashFinished: () -> Unit) {
+        val alpha = remember {
             Animatable(0f)
         }
-        LaunchedEffect(key1 = true) {
+        val authViewModel: AuthViewModel = viewModel()
+        val isLoggedIn = authViewModel.loggedin.observeAsState(initial = false).value
+
+        LaunchedEffect(isLoggedIn) {
+            if (isLoggedIn) {
+                authViewModel.signout()
+            }
+        }
+
+        LaunchedEffect(Unit) {
             alpha.animateTo(
                 targetValue = 1f,
                 animationSpec = tween(1500)
             )
             delay(2000)
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            onSplashFinished()
         }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
