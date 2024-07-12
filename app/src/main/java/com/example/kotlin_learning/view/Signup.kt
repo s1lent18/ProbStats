@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -47,7 +48,6 @@ import com.example.kotlin_learning.ui.theme.darkmodebackground
 import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
-
 
 @Composable
 fun SignupButton(
@@ -170,7 +170,7 @@ fun Signup(
                             )
                             Spacer(modifier = Modifier.height(150.dp))
                             Text(text = "Signup", style = TextStyle(color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground, fontSize = 30.sp, fontWeight = FontWeight.Bold))
-                            Spacer(modifier = Modifier.height(30.dp))
+                            Spacer(modifier = Modifier.height(35.dp))
                             LoginTextField(
                                 label = "Email",
                                 value = email,
@@ -179,7 +179,7 @@ fun Signup(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.80f),
                                 onClick = {}
                             )
-                            Spacer(modifier = Modifier.height(15.dp))
+                            Spacer(modifier = Modifier.height(10.dp))
                             LoginTextField(
                                 label = "Username",
                                 value = username,
@@ -188,7 +188,7 @@ fun Signup(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.80f),
                                 onClick = {}
                             )
-                            Spacer(modifier = Modifier.height(15.dp))
+                            Spacer(modifier = Modifier.height(10.dp))
                             LoginTextField(
                                 label = "Password",
                                 value = password,
@@ -196,7 +196,7 @@ fun Signup(
                                 trailing = "",
                                 modifier = Modifier.fillMaxWidth(fraction = 0.80f),
                                 onClick = {})
-                            Spacer(modifier = Modifier.height(15.dp))
+                            Spacer(modifier = Modifier.height(10.dp))
                             SignupButton(
                                 iconId = R.drawable.unlock,
                                 contentDescription = "Signup",
@@ -205,9 +205,9 @@ fun Signup(
                                         authViewModel.signup(email, password, username = username)
                                     }
                                 })
-                            Spacer(modifier = Modifier.height(15.dp))
+                            Spacer(modifier = Modifier.height(10.dp))
                             Text(text = "Or Continue with")
-                            Spacer(modifier = Modifier.height(15.dp))
+                            Spacer(modifier = Modifier.height(10.dp))
                             Row (
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth(fraction = 0.8f)
