@@ -702,7 +702,7 @@ fun HypothesisList(hypothesiss: List<Hypothesisclass>, navController: NavControl
 @Composable
 fun History(
     authViewModel: AuthViewModel = viewModel(),
-    navController: NavController
+    navController: NavController,
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()

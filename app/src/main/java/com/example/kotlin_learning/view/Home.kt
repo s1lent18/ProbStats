@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -38,6 +40,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.kotlin_learning.R
+import com.example.kotlin_learning.data.model.Probability
 import com.example.kotlin_learning.viewModel.AuthViewModel
 import com.example.kotlin_learning.viewModel.Screen
 import com.example.kotlin_learning.viewModel.WindowInfo
@@ -60,10 +64,11 @@ import com.example.kotlin_learning.ui.theme.darkmodebackground
 import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
+import com.example.kotlin_learning.viewModel.HomeViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun ScrollableList(navController: NavController, items: List<Pair<String, String>>, title: String, screentype: String) {
+fun ScrollableList(navController: NavController, items: List<Probability>, title: String, screentype: String) {
 
     val width = 250.dp
     val height = 450.dp
@@ -103,7 +108,7 @@ fun ScrollableList(navController: NavController, items: List<Pair<String, String
                     .width(width)
                     .height(height),
                 onClick = {
-                    when (item.first) {
+                    when (item.title) {
                         "Poisson" -> {
                             navController.navigate(route = Screen.Poisson.route)
                         }
@@ -140,9 +145,9 @@ fun ScrollableList(navController: NavController, items: List<Pair<String, String
                 Column(
                     modifier = Modifier.padding(20.dp),
                 ) {
-                    Text(text = item.first, fontSize = titlesize)
+                    Text(text = item.title, fontSize = titlesize)
                     Spacer(modifier = Modifier.height(30.dp))
-                    Text(text = item.second, fontSize = bodysize)
+                    Text(text = item.description, fontSize = bodysize)
                 }
             }
         }
@@ -218,24 +223,27 @@ fun Appbar(title: String, openDrawer: () -> Unit) {
 @Composable
 fun Home(
     navController: NavController,
-    authViewModel: AuthViewModel = viewModel()
+    authViewModel: AuthViewModel = viewModel(),
+    homeviewmodel: HomeViewModel = viewModel()
 ) {
     val uicolor = if (isSystemInDarkTheme()) Color(0xFF023047) else Color(0xFF0077B6)
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
+    val isLoading by homeviewmodel.isLoading
+    val probs by homeviewmodel.probs
 
-    val probs = listOf(
-        "Poisson" to "the number of outcomes occurring during a given time interval or in a specified region, are called Poisson experiments.",
-        "Binomial" to "The number X of successes in n Bernoulli trials is called a binomial random variable. The probability distribution of this discrete random variable is called the binomial distribution" ,
-        "Multinomial" to "The binomial experiment becomes a multinomial experiment if we let each trial have more than two possible outcomes. The classification of a manufactured product as being light, heavy, or acceptable and the recording of accidents at a certain intersection according to the day of the week constitute multinomial experiments.",
-        "Anova" to "Often the problem of analyzing the quality of the estimated regression line is handled by an analysis-of-variance (ANOVA) approach: a procedure whereby the total variation in the dependent variable is subdivided into meaningful components that are then observed and treated in a systematic fashion.",
-        "Bayes Rule" to "Bayesian statistics is a collection of tools that is used in a special form of statistical inference which applies in the analysis of experimental data in many practical situations in science and engineering.",
-        "SLR" to "The relationship between two variables X (independent variable) and Y (dependent variable) is modeled by a linear equation. This is called simple linear regression.",
-        "UnGrouped" to "Find:\n- Mean\n- Median\n- Mode\n- First Quartile\n- Third Quartile\n- Standard Deviation\n- Variance\n- Stemleaf\n- Shape Distribution\n- Empirical Rule",
-        "Grouped" to "Find:\n- Mean\n- Median\n- Mode\n- Standard Deviation\n- variance",
-        "Hypothesis" to "The process of making decisions about population parameters based on sample data is called hypothesis testing. The probability distribution used to determine the likelihood of the sample data under the null hypothesis is called the sampling distribution."
-    )
+//    val probs = listOf(
+//        "Poisson" to "the number of outcomes occurring during a given time interval or in a specified region, are called Poisson experiments.",
+//        "Binomial" to "The number X of successes in n Bernoulli trials is called a binomial random variable. The probability distribution of this discrete random variable is called the binomial distribution" ,
+//        "Multinomial" to "The binomial experiment becomes a multinomial experiment if we let each trial have more than two possible outcomes. The classification of a manufactured product as being light, heavy, or acceptable and the recording of accidents at a certain intersection according to the day of the week constitute multinomial experiments.",
+//        "Anova" to "Often the problem of analyzing the quality of the estimated regression line is handled by an analysis-of-variance (ANOVA) approach: a procedure whereby the total variation in the dependent variable is subdivided into meaningful components that are then observed and treated in a systematic fashion.",
+//        "Bayes Rule" to "Bayesian statistics is a collection of tools that is used in a special form of statistical inference which applies in the analysis of experimental data in many practical situations in science and engineering.",
+//        "SLR" to "The relationship between two variables X (independent variable) and Y (dependent variable) is modeled by a linear equation. This is called simple linear regression.",
+//        "UnGrouped" to "Find:\n- Mean\n- Median\n- Mode\n- First Quartile\n- Third Quartile\n- Standard Deviation\n- Variance\n- Stemleaf\n- Shape Distribution\n- Empirical Rule",
+//        "Grouped" to "Find:\n- Mean\n- Median\n- Mode\n- Standard Deviation\n- variance",
+//        "Hypothesis" to "The process of making decisions about population parameters based on sample data is called hypothesis testing. The probability distribution used to determine the likelihood of the sample data under the null hypothesis is called the sampling distribution."
+//    )
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -313,19 +321,30 @@ fun Home(
                         }
                     }
                 ) { values ->
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(values)
-                    ) {
-                        item {
-                            Column (
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ){
-                                Spacer(modifier = Modifier.height(35.dp))
-                                ScrollableList(navController, probs, "Probability and Statistics", "Compact")
-                                Spacer(modifier = Modifier.height(35.dp))
+                    if (isLoading) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(values),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(values)
+                        ) {
+                            item {
+                                Column (
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ){
+                                    Spacer(modifier = Modifier.height(35.dp))
+                                    ScrollableList(navController, probs, "Probability and Statistics", "Compact")
+                                    Spacer(modifier = Modifier.height(35.dp))
+                                }
                             }
                         }
                     }
