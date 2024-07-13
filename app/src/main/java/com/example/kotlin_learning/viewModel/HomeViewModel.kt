@@ -28,7 +28,7 @@ class HomeViewModel: ViewModel() {
         }
     }
 
-    private suspend fun fetchProbabilities(): List<Probability> {
+    private fun fetchProbabilities(): List<Probability> {
         // Replace with actual data fetching logic
         return listOf(
             Probability("Poisson", "the number of outcomes occurring during a given time interval or in a specified region, are called Poisson experiments."),
