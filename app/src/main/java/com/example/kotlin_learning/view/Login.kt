@@ -17,10 +17,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,8 +34,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +47,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -191,21 +198,79 @@ fun Login(
         val resetpass by authViewModel.send.observeAsState()
         val showresetdialog = remember { mutableStateOf(false) }
         val emailenter = remember { mutableStateOf(false) }
+        val errorcount = remember { mutableIntStateOf(0) }
+        val errordialogbox = remember { mutableStateOf(false) }
+        val (email, setEmail) = remember { mutableStateOf("") }
 
         LaunchedEffect(errorMessage) {
             if (errorMessage != null) {
                 showDialog.value = true
+                errorcount.intValue++
             }
         }
 
         LaunchedEffect(resetpass) {
             if (resetpass != null) {
                 showresetdialog.value = true
+                errorcount.intValue = 0
             }
         }
 
         LaunchedEffect(Unit) {
             internetViewModel.checkInternetConnection()
+        }
+
+        if(errorcount.intValue > 2) {
+            errordialogbox.value = true
+        }
+
+        if(errordialogbox.value) {
+            AlertDialog(
+                textContentColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                titleContentColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                onDismissRequest = {
+                      errordialogbox.value = false
+                },
+                title = {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = "", style = MaterialTheme.typography.titleLarge)
+                    }
+                },
+                text = {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Text(text = "Forgot Password?", fontSize = 15.sp)
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        if (email != "") {
+                            authViewModel.sendPasswordviaemail(email)
+                        } else {
+                            emailenter.value = true
+                        }
+                    }) {
+                        Text("OK", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            errordialogbox.value = false
+                            errorcount.intValue = 0
+                        }
+                    ) {
+                        Text("Dismiss")
+                    }
+                }
+            )
         }
 
         if (emailenter.value) {
@@ -255,9 +320,10 @@ fun Login(
                     }
                 } else {
                     Column(modifier = Modifier.fillMaxSize()) {
-                        val (email, setEmail) = remember { mutableStateOf("") }
+                        //val (email, setEmail) = remember { mutableStateOf("") }
                         val (password, setpassword) = remember { mutableStateOf("") }
                         val image = if (isSystemInDarkTheme()) R.drawable.shape1 else R.drawable.shape
+                        var passwordvisibility by remember { mutableStateOf(false) }
 
                         Box (
                             contentAlignment = Alignment.TopCenter
@@ -301,19 +367,52 @@ fun Login(
                                     onClick = {}
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
-                                LoginTextField(
-                                    label = "Password",
+
+                                val icon = if (passwordvisibility)
+                                    painterResource(id = R.drawable.vision)
+                                else
+                                    painterResource(id = R.drawable.eyelock)
+
+                                TextField(
+                                    modifier = Modifier.fillMaxWidth(fraction = 0.80f),
                                     value = password,
                                     onValueChange = setpassword,
-                                    trailing = "Forgot?",
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.80f),
-                                    onClick = {
-                                        if (email != "") {
-                                            authViewModel.sendPasswordviaemail(email)
-                                        } else {
-                                            emailenter.value = true
+                                    label = {
+                                        Text(
+                                            text = "Password",
+                                            style = MaterialTheme.typography.labelMedium,
+                                            color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                        )
+                                    },
+                                    shape = RoundedCornerShape(16.dp),
+                                    colors = TextFieldDefaults.colors(
+                                        disabledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                        disabledTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                                        unfocusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                                        focusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
+                                        unfocusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                        focusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                    ),
+                                    trailingIcon = {
+                                        Box(
+                                            modifier = Modifier.padding(end = 8.dp) // Add padding to the end of the Box
+                                        ) {
+                                            Row {
+                                                IconButton(
+                                                    onClick = {
+                                                        passwordvisibility = !passwordvisibility
+                                                    }
+                                                ) {
+                                                    Icon(painter = icon, contentDescription = "Icon", tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                                                }
+                                            }
                                         }
-                                    }
+                                    },
+                                    keyboardOptions = KeyboardOptions(
+                                        keyboardType = KeyboardType.Password
+                                    ),
+                                    visualTransformation = if (passwordvisibility) VisualTransformation.None
+                                    else PasswordVisualTransformation()
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                                 Row (
@@ -328,7 +427,6 @@ fun Login(
                                             if (email != "" && password != "") {
                                                 authViewModel.signin(email, password)
                                             }
-
                                         },
                                         check = true)
                                     Spacer(modifier = Modifier.width(8.dp))
@@ -370,7 +468,7 @@ fun Login(
                 } else {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
                         item {
-                            val (email, setEmail) = remember { mutableStateOf("") }
+                            //val (email, setEmail) = remember { mutableStateOf("") }
                             val (password, setpassword) = remember { mutableStateOf("") }
                             val image = if (isSystemInDarkTheme()) R.drawable.shape1 else R.drawable.shape
 
@@ -480,7 +578,7 @@ fun Login(
                 } else {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
                         item {
-                            val (email, setEmail) = remember { mutableStateOf("") }
+                            //val (email, setEmail) = remember { mutableStateOf("") }
                             val (password, setpassword) = remember { mutableStateOf("") }
                             val image = if (isSystemInDarkTheme()) R.drawable.shape1 else R.drawable.shape
 
