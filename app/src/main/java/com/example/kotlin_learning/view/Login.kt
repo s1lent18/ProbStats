@@ -267,7 +267,7 @@ fun Login(
                             errorcount.intValue = 0
                         }
                     ) {
-                        Text("Dismiss")
+                        Text("Dismiss", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground)
                     }
                 }
             )
