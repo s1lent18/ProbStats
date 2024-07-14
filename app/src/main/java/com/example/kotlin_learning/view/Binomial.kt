@@ -400,7 +400,7 @@ fun Binomial(
                                             Spacer50()
                                             FloatAnswer(text = "P(X<=$x):", value = result.data.lessequal)
                                             Spacer50()
-                                            FloatAnswer(text = "P(X >$x):", value = result.data.greater)
+                                            FloatAnswer(text = "P(X1>$x):", value = result.data.greater)
                                             Spacer50()
                                             FloatAnswer(text = "P(X>=$x):", value = result.data.greaterequal)
                                             Spacer50()
