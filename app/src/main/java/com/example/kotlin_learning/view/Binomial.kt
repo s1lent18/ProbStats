@@ -81,6 +81,16 @@ fun Binomial(
     var isSubmitted by remember { mutableStateOf(false) }
     var isupdated by remember { mutableStateOf(false) }
     var display by remember { mutableStateOf(false) }
+    val showDialog = remember { mutableStateOf(false) }
+
+    if(showDialog.value) {
+        DialogBox(
+            title = "Error",
+            text = "The Probability should be less than or equal to 1",
+            setShowDialog = showDialog,
+            onClick = { showDialog.value = false }
+        )
+    }
 
     LaunchedEffect(isupdated) {
         if(isupdated) {
@@ -209,10 +219,14 @@ fun Binomial(
                                 onClick = {
                                     keyboardController?.hide()
                                     if (n != "" && p != "" && x != "") {
-                                        isSubmitted = false
-                                        isupdated = true
-                                        display = true
-                                        keyboardController?.hide()
+                                        if (p.toFloat() > 1 || x.toFloat() > n.toFloat()) {
+                                            showDialog.value = true
+                                        } else {
+                                            isSubmitted = false
+                                            isupdated = true
+                                            display = true
+                                            keyboardController?.hide()
+                                        }
                                     }
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(

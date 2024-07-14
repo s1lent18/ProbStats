@@ -74,6 +74,16 @@ fun BayesRule(
     var isSubmitted by remember { mutableStateOf(false) }
     var isupdated by remember { mutableStateOf(false) }
     var display by remember { mutableStateOf(false) }
+    val showDialog = remember { mutableStateOf(false) }
+
+    if(showDialog.value) {
+        DialogBox(
+            title = "Error",
+            text = "The Probabilities should be less than or equal to 1",
+            setShowDialog = showDialog,
+            onClick = { showDialog.value = false }
+        )
+    }
 
     LaunchedEffect (isupdated) {
         if(isupdated) {
@@ -201,10 +211,15 @@ fun BayesRule(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     if (pA != "" && pB != "" && pAB != "") {
-                                        isSubmitted = false
-                                        isupdated = true
-                                        display = true
-                                        keyboardController?.hide()
+                                        if(pA.toFloat() > 1 || pB.toFloat() > 1 || pAB.toFloat() > 1) {
+                                            showDialog.value = true
+                                        } else {
+                                            isSubmitted = false
+                                            isupdated = true
+                                            display = true
+                                            keyboardController?.hide()
+                                            showDialog.value = false
+                                        }
                                     }
                                 },
                                 elevation = ButtonDefaults.elevatedButtonElevation(
