@@ -712,7 +712,7 @@ fun History(
     val userId = authViewModel.getuserid() ?: return
     val boolList = List(9) { true }
     var arr by remember { mutableStateOf(boolList) }
-
+    val uicolor = if (isSystemInDarkTheme()) Color(0xFF023047) else Color(0xFF0077B6)
     val poissonState = remember { mutableStateOf<List<Poissonclass>>(emptyList()) }
     val binomialState = remember { mutableStateOf<List<Binomialclass>>(emptyList()) }
     val multinomialState = remember { mutableStateOf<List<Multinomialclass>>(emptyList()) }
@@ -791,7 +791,10 @@ fun History(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet {
+            ModalDrawerSheet (modifier = Modifier
+                .background(uicolor)
+                .fillMaxHeight()
+                .fillMaxWidth(fraction = 0.8f)) {
                 LazyColumn (
                     modifier = Modifier.padding(16.dp),
                 ){

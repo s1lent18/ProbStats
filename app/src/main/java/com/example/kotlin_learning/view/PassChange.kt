@@ -78,8 +78,8 @@ fun PassChange(
     val (newpass, setnewpass) = remember {mutableStateOf("")}
     val (connewpass, setconnewpass) = remember {mutableStateOf("")}
     val showDialog = remember { mutableStateOf(false) }
+    val showerrorDialog = remember { mutableStateOf(false) }
     val loggedIn by authViewModel.loggedin.observeAsState(initial = true)
-
 
 
     LaunchedEffect (Unit) {
@@ -93,6 +93,15 @@ fun PassChange(
         if(ddone) {
             showDialog.value = true
         }
+    }
+
+    if(showerrorDialog.value) {
+        DialogBox(
+            title = "Failed",
+            text = "Fill all the fields",
+            setShowDialog = showerrorDialog,
+            onClick = { showerrorDialog.value = false }
+        )
     }
 
     if(showDialog.value) {
@@ -153,6 +162,8 @@ fun PassChange(
                                 onClick = {
                                     if(email != null && oldpass != "" && newpass != "" && connewpass != "" && newpass == connewpass) {
                                         authViewModel.reauthenticateAndChangePassword(email!!, oldpass, newpass)
+                                    } else {
+                                        showerrorDialog.value = true
                                     }
                                 },
                                 elevation = ButtonDefaults.elevatedButtonElevation(
@@ -163,7 +174,7 @@ fun PassChange(
                                     contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                                 )
                             ) {
-                                Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                                Text(text = "Change Password", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
                         }
                     }
