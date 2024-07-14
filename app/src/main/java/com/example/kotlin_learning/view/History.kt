@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -708,6 +709,7 @@ fun History(
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
     val userId = authViewModel.getuserid() ?: return
+    val arr = Array(9) { true }
     val poissonState = remember { mutableStateOf<List<Poissonclass>>(emptyList()) }
     val binomialState = remember { mutableStateOf<List<Binomialclass>>(emptyList()) }
     val multinomialState = remember { mutableStateOf<List<Multinomialclass>>(emptyList()) }
@@ -724,54 +726,63 @@ fun History(
         authViewModel.receiverpoisson(userId) { messages ->
             poissonState.value = messages
         }
+        arr[0] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receiverbinomial(userId) { bm ->
             binomialState.value = bm
         }
+        arr[1] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receivermultinomial(userId) { m ->
             multinomialState.value = m
         }
+        arr[2] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receiveranova(userId) { a ->
             anovaState.value = a
         }
+        arr[3] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receiverbayesrule(userId) { ba ->
             bayesruleState.value = ba
         }
+        arr[4] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receiverslr(userId) { s ->
             slrState.value = s
         }
+        arr[5] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receiverungrouped(userId) { ug ->
             ungroupedState.value = ug
         }
+        arr[6] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receivergrouped(userId) { g ->
             groupedState.value = g
         }
+        arr[7] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receiverhypothesis(userId) { h ->
             hypothesisState.value = h
         }
+        arr[8] = false
     }
 
     ModalNavigationDrawer(
@@ -867,31 +878,85 @@ fun History(
                         Spacer(modifier = Modifier.height(20.dp))
                         when (selectedTabIndex) {
                             0 -> {
-                                PoissonList(poissons = poissonState.value, navController)
+                                if(arr[0]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    PoissonList(poissons = poissonState.value, navController)
+                                }
                             }
                             1 -> {
-                                BinomialList(binomials = binomialState.value, navController)
+                                if(arr[1]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    BinomialList(binomials = binomialState.value, navController)
+                                }
                             }
                             2 -> {
-                                MultinomialList(multinomials = multinomialState.value, navController)
+                                if(arr[2]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    MultinomialList(multinomials = multinomialState.value, navController)
+                                }
                             }
                             3 -> {
-                                AnovaList(anovas = anovaState.value, navController)
+                                if(arr[3]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    AnovaList(anovas = anovaState.value, navController)
+                                }
                             }
                             4 -> {
-                                BayesRuleList(bayesrules = bayesruleState.value, navController)
+                                if(arr[4]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    BayesRuleList(bayesrules = bayesruleState.value, navController)
+                                }
                             }
                             5 -> {
-                                SLRList(slrs = slrState.value, navController)
+                                if(arr[5]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    SLRList(slrs = slrState.value, navController)
+                                }
                             }
                             6 -> {
-                                UnGroupedList(ungroupeds = ungroupedState.value, navController)
+                                if(arr[6]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    UnGroupedList(ungroupeds = ungroupedState.value, navController)
+                                }
                             }
                             7 -> {
-                                GroupedList(groupeds = groupedState.value, navController)
+                                if(arr[7]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    GroupedList(groupeds = groupedState.value, navController)
+                                }
                             }
                             8 -> {
-                                HypothesisList(hypothesiss = hypothesisState.value, navController)
+                                if(arr[8]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    HypothesisList(hypothesiss = hypothesisState.value, navController)
+                                }
                             }
                         }
                     }
