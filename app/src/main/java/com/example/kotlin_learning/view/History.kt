@@ -138,7 +138,7 @@ fun BinomialItem(binomial: Binomialclass) {
                 containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
                 contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
             ),
-            modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+            modifier = Modifier.fillMaxWidth(fraction = 0.9f).align(Alignment.CenterHorizontally),
             elevation = CardDefaults.cardElevation(10.dp),
             border = BorderStroke(
                 1.dp,
@@ -258,6 +258,7 @@ fun AnovaItem(anova: Anovaclass) {
                 }
             }
         }
+        Spacer50()
     }
 }
 
@@ -301,9 +302,9 @@ fun SLRItem(slr: SLRclass) {
         Spacer50()
         StringAnswer("hypothesis: ${slr.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        FloatAnswer(value = slr.r, text = "r: ")
+        StringAnswer("r: ${slr.r}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        FloatAnswer(value = slr.t, text = "t: ")
+        StringAnswer("t: ${slr.t}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
         StringAnswer("Y: ${slr.yy}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
@@ -709,7 +710,9 @@ fun History(
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
     val userId = authViewModel.getuserid() ?: return
-    val arr = Array(9) { true }
+    val boolList = List(9) { true }
+    var arr by remember { mutableStateOf(boolList) }
+
     val poissonState = remember { mutableStateOf<List<Poissonclass>>(emptyList()) }
     val binomialState = remember { mutableStateOf<List<Binomialclass>>(emptyList()) }
     val multinomialState = remember { mutableStateOf<List<Multinomialclass>>(emptyList()) }
@@ -725,64 +728,64 @@ fun History(
     LaunchedEffect(userId) {
         authViewModel.receiverpoisson(userId) { messages ->
             poissonState.value = messages
+            arr = arr.toMutableList().apply { this[0] = false }
         }
-        arr[0] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receiverbinomial(userId) { bm ->
             binomialState.value = bm
+            arr = arr.toMutableList().apply { this[1] = false }
         }
-        arr[1] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receivermultinomial(userId) { m ->
             multinomialState.value = m
+            arr = arr.toMutableList().apply { this[2] = false }
         }
-        arr[2] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receiveranova(userId) { a ->
             anovaState.value = a
+            arr = arr.toMutableList().apply { this[3] = false }
         }
-        arr[3] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receiverbayesrule(userId) { ba ->
             bayesruleState.value = ba
+            arr = arr.toMutableList().apply { this[4] = false }
         }
-        arr[4] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receiverslr(userId) { s ->
             slrState.value = s
+            arr = arr.toMutableList().apply { this[5] = false }
         }
-        arr[5] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receiverungrouped(userId) { ug ->
             ungroupedState.value = ug
+            arr = arr.toMutableList().apply { this[6] = false }
         }
-        arr[6] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receivergrouped(userId) { g ->
             groupedState.value = g
+            arr = arr.toMutableList().apply { this[7] = false }
         }
-        arr[7] = false
     }
 
     LaunchedEffect(userId) {
         authViewModel.receiverhypothesis(userId) { h ->
             hypothesisState.value = h
+            arr = arr.toMutableList().apply { this[8] = false }
         }
-        arr[8] = false
     }
 
     ModalNavigationDrawer(
