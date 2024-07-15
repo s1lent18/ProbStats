@@ -1,6 +1,7 @@
 package com.example.kotlin_learning.view
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -100,7 +101,10 @@ fun UnGrouped(
     ModalNavigationDrawer(
         drawerState = drawerstate,
         drawerContent = {
-            ModalDrawerSheet {
+            ModalDrawerSheet (modifier = Modifier
+                .background(if (isSystemInDarkTheme()) Color(0xFF023047) else Color(0xFF0077B6))
+                .fillMaxHeight()
+                .fillMaxWidth(fraction = 0.8f)) {
                 LazyColumn(
                     modifier = Modifier.padding(16.dp)
                 ) {

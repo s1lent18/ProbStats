@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -116,7 +117,10 @@ fun Anova(
     ModalNavigationDrawer(
         drawerState = drawerstate,
         drawerContent = {
-            ModalDrawerSheet {
+            ModalDrawerSheet (modifier = Modifier
+                .background(if (isSystemInDarkTheme()) Color(0xFF023047) else Color(0xFF0077B6))
+                .fillMaxHeight()
+                .fillMaxWidth(fraction = 0.8f)) {
                 LazyColumn(
                     modifier = Modifier.padding(16.dp)
                 ) {

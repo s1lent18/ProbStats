@@ -120,7 +120,7 @@ fun PassChange(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            color = if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White
+                            color = if (isSystemInDarkTheme()) Color(0xFF101720) else Color.White
                         )
                 ) {
                     Card (
