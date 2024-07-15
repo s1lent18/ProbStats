@@ -425,7 +425,7 @@ fun Grouped(
                                             FloatAnswer(text = "Variance:", value = result.data.variance)
                                             Spacer50()
                                             if(!isSubmitted && userId != null) {
-                                                authViewModel.sendgrouped(
+                                                repository.sendgrouped(
                                                     userId = userId,
                                                     n = stoff(first),
                                                     second = stoff(second),
@@ -436,7 +436,7 @@ fun Grouped(
                                                     sd = result.data.sd,
                                                     variance = result.data.variance
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }
@@ -573,7 +573,7 @@ fun Grouped(
                                             FloatAnswer(text = "Variance:", value = result.data.variance)
                                             Spacer50()
                                             if(!isSubmitted && userId != null) {
-                                                authViewModel.sendgrouped(
+                                                repository.sendgrouped(
                                                     userId = userId,
                                                     n = stoff(first),
                                                     second = stoff(second),
@@ -584,7 +584,7 @@ fun Grouped(
                                                     sd = result.data.sd,
                                                     variance = result.data.variance
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }

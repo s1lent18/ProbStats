@@ -457,14 +457,14 @@ fun Multinomial(
                                             FloatAnswer(text = "Probability:", value = result.data.ans)
                                             Spacer(modifier = Modifier.height(50.dp))
                                             if (!isSubmitted && userId != null) {
-                                                authViewModel.sendmultinomial(
+                                                repository.sendmultinomial(
                                                     userId = userId,
                                                     n = n.toFloat(),
                                                     x = stoff(x),
                                                     p = stoff(p),
                                                     ans = result.data.ans
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }
@@ -586,14 +586,14 @@ fun Multinomial(
                                             FloatAnswer(text = "Probability:", value = result.data.ans)
                                             Spacer(modifier = Modifier.height(50.dp))
                                             if (!isSubmitted && userId != null) {
-                                                authViewModel.sendmultinomial(
+                                                repository.sendmultinomial(
                                                     userId = userId,
                                                     n = n.toFloat(),
                                                     x = stoff(x),
                                                     p = stoff(p),
                                                     ans = result.data.ans
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }

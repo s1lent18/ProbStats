@@ -405,7 +405,7 @@ fun Hypothesis(
                                             StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                             Spacer50()
                                             if(userId != null && !isSubmitted) {
-                                                authViewModel.sendhypothesis(
+                                                repository.sendhypothesis(
                                                     userId = userId,
                                                     smean = smean.toFloat(),
                                                     sl = sl.toFloat(),
@@ -416,7 +416,7 @@ fun Hypothesis(
                                                     n = n.toInt(),
                                                     hypothesis = result.data.hypothesis
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }
@@ -541,7 +541,7 @@ fun Hypothesis(
                                             StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                             Spacer50()
                                             if(userId != null && !isSubmitted) {
-                                                authViewModel.sendhypothesis(
+                                                repository.sendhypothesis(
                                                     userId = userId,
                                                     smean = smean.toFloat(),
                                                     sl = sl.toFloat(),
@@ -552,7 +552,7 @@ fun Hypothesis(
                                                     n = n.toInt(),
                                                     hypothesis = result.data.hypothesis
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }

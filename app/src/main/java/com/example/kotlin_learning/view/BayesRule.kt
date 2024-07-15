@@ -329,10 +329,15 @@ fun BayesRule(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     if (pA != "" && pB != "" && pAB != "") {
-                                        isSubmitted = false
-                                        isupdated = true
-                                        display = true
-                                        keyboardController?.hide()
+                                        if(pA.toFloat() > 1 || pB.toFloat() > 1 || pAB.toFloat() > 1) {
+                                            showDialog.value = true
+                                        } else {
+                                            isSubmitted = false
+                                            isupdated = true
+                                            display = true
+                                            keyboardController?.hide()
+                                            showDialog.value = false
+                                        }
                                     }
                                 },
                                 elevation = ButtonDefaults.elevatedButtonElevation(
@@ -365,14 +370,14 @@ fun BayesRule(
                                             FloatAnswer(value = result.data.ans, text = "Probability: ")
                                             Spacer50()
                                             if(userId != null && !isSubmitted) {
-                                                authViewModel.sendbayesrule(
+                                                repository.sendbayesrule(
                                                     userId = userId,
                                                     pa = pA.toFloat(),
                                                     pb = pB.toFloat(),
                                                     pab = pAB.toFloat(),
                                                     ans = result.data.ans
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }
@@ -440,10 +445,15 @@ fun BayesRule(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.9f),
                                 onClick = {
                                     if (pA != "" && pB != "" && pAB != "") {
-                                        isSubmitted = false
-                                        isupdated = true
-                                        display = true
-                                        keyboardController?.hide()
+                                        if(pA.toFloat() > 1 || pB.toFloat() > 1 || pAB.toFloat() > 1) {
+                                            showDialog.value = true
+                                        } else {
+                                            isSubmitted = false
+                                            isupdated = true
+                                            display = true
+                                            keyboardController?.hide()
+                                            showDialog.value = false
+                                        }
                                     }
                                 },
                                 elevation = ButtonDefaults.elevatedButtonElevation(
@@ -476,14 +486,14 @@ fun BayesRule(
                                             FloatAnswer(value = result.data.ans, text = "Probability: ")
                                             Spacer50()
                                             if(userId != null && !isSubmitted) {
-                                                authViewModel.sendbayesrule(
+                                                repository.sendbayesrule(
                                                     userId = userId,
                                                     pa = pA.toFloat(),
                                                     pb = pB.toFloat(),
                                                     pab = pAB.toFloat(),
                                                     ans = result.data.ans
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }

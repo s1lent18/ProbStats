@@ -524,10 +524,9 @@ fun UnGrouped(
                                                     entry.value.toList()
                                                 }
                                                 val listAny: List<Any> = convertedStemLeaf.flatMap { entry ->
-                                                    // Create a list containing the key and its associated list
                                                     listOf(entry.key) + entry.value
                                                 }
-                                                authViewModel.sendungrouped(
+                                                repository.sendungrouped(
                                                     userId,
                                                     n = stoff(n),
                                                     shape = result.data.Shape_of_the_Distribution,
@@ -543,7 +542,7 @@ fun UnGrouped(
                                                     stemleaf = listAny,
                                                     sd = result.data.sd
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }
@@ -726,7 +725,7 @@ fun UnGrouped(
                                                 val listAny: List<Any> = convertedStemLeaf.flatMap { entry ->
                                                     listOf(entry.key) + entry.value
                                                 }
-                                                authViewModel.sendungrouped(
+                                                repository.sendungrouped(
                                                     userId,
                                                     n = stoff(n),
                                                     shape = result.data.Shape_of_the_Distribution,
@@ -742,7 +741,7 @@ fun UnGrouped(
                                                     stemleaf = listAny,
                                                     sd = result.data.sd
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }

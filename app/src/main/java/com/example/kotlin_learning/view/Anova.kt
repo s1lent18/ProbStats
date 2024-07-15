@@ -486,43 +486,77 @@ fun Anova(
                                     is NetworkResponse.Success -> {
                                         if (display) {
                                             Spacer50()
-                                            FloatAnswer(text = "SS [Between]:", value = result.data.SSB)
-                                            Spacer50()
-                                            FloatAnswer(text = "SS [Within]:", value = result.data.SSW)
-                                            Spacer50()
-                                            FloatAnswer(text = "d.f [Between]:", value = result.data.dfB.toFloat())
-                                            Spacer50()
-                                            FloatAnswer(text = "d.f [Within]:", value = result.data.dfW.toFloat())
-                                            Spacer50()
-                                            FloatAnswer(text = "MS [Between]:", value = result.data.MSB)
-                                            Spacer50()
-                                            FloatAnswer(text = "MS [Within]:", value = result.data.MSW)
-                                            Spacer50()
-                                            FloatAnswer(text = "F Ratio:", value = result.data.fratio)
-                                            Spacer50()
-                                            StringAnswer(text = "Hypothesis: ${result.data.hypothesis}",
-                                                Modifier
-                                                    .fillMaxWidth(fraction = 0.9f)
-                                                    .height(50.dp))
-                                            Spacer50()
-                                            if (!isSubmitted && userId != null) {
-                                                repository.sendanova(
-                                                    userId = userId,
-                                                    n = stoff(n),
-                                                    sl = sl.toFloat(),
-                                                    SSB = result.data.SSB,
-                                                    SSW = result.data.SSW,
-                                                    MSB = result.data.MSB,
-                                                    MSW = result.data.MSW,
-                                                    dfB = result.data.dfB,
-                                                    dfW = result.data.dfW,
-                                                    fratio = result.data.fratio,
-                                                    hypothesis = result.data.hypothesis,
-                                                    size = arraySize.toInt()
+                                            Card(
+                                                shape = RoundedCornerShape(20.dp),
+                                                colors = CardDefaults.cardColors(
+                                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                                ),
+                                                modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                                                elevation = CardDefaults.cardElevation(10.dp),
+                                                border = BorderStroke(
+                                                    1.dp,
+                                                    Color.Blue
                                                 )
-                                                repository.incrementcount(userId)
-                                                isSubmitted = true
+                                            ) {
+                                                Column(modifier = Modifier.padding(16.dp)) {
+                                                    // Table Header
+                                                    Row(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                            .background( if (isSystemInDarkTheme()) Color(0xFFCCC5B9) else Color(0xFF124559), shape = RoundedCornerShape(4.dp))
+                                                            .padding(8.dp)
+                                                    ) {
+                                                        TableCell(text = "S.V.", weight = 1f, fontWeight = FontWeight.Bold)
+                                                        TableCell(text = "SS", weight = 1f, fontWeight = FontWeight.Bold)
+                                                        TableCell(text = "d.f.", weight = 1f, fontWeight = FontWeight.Bold)
+                                                        TableCell(text = "MS", weight = 1f, fontWeight = FontWeight.Bold)
+                                                        TableCell(text = "F-ratio", weight = 1f, fontWeight = FontWeight.Bold)
+                                                    }
+
+                                                    // Table Rows
+                                                    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                                                        TableCell(text = "Between", weight = 1f)
+                                                        TableCell(text = "${result.data.SSB}", weight = 1f)
+                                                        TableCell(text = "${result.data.dfB}", weight = 1f)
+                                                        TableCell(text = "${result.data.MSB}", weight = 1f)
+                                                        TableCell(text = "${result.data.fratio}", weight = 1f)
+                                                    }
+                                                    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                                                        TableCell(text = "Within (error)", weight = 1f)
+                                                        TableCell(text = "${result.data.SSW}", weight = 1f)
+                                                        TableCell(text = "${result.data.dfW}", weight = 1f)
+                                                        TableCell(text = "${result.data.MSW}", weight = 1f)
+                                                        TableCell(text = "", weight = 1f)
+                                                    }
+                                                    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                                                        TableCell(text = "Total", weight = 1f)
+                                                        TableCell(text = "${result.data.SSB + result.data.SSW}", weight = 1f)
+                                                        TableCell(text = "${result.data.dfB + result.data.dfW}", weight = 1f)
+                                                        TableCell(text = "", weight = 1f)
+                                                        TableCell(text = "", weight = 1f)
+                                                    }
+                                                    if (!isSubmitted && userId != null) {
+                                                        repository.sendanova(
+                                                            userId = userId,
+                                                            n = stoff(n),
+                                                            sl = sl.toFloat(),
+                                                            SSB = result.data.SSB,
+                                                            SSW = result.data.SSW,
+                                                            MSB = result.data.MSB,
+                                                            MSW = result.data.MSW,
+                                                            dfB = result.data.dfB,
+                                                            dfW = result.data.dfW,
+                                                            fratio = result.data.fratio,
+                                                            hypothesis = result.data.hypothesis,
+                                                            size = arraySize.toInt()
+                                                        )
+                                                        repository.incrementcount(userId)
+                                                        isSubmitted = true
+                                                    }
+                                                }
                                             }
+                                            Spacer50()
                                         }
                                     }
                                     null -> {
@@ -649,43 +683,77 @@ fun Anova(
                                     is NetworkResponse.Success -> {
                                         if (display) {
                                             Spacer50()
-                                            FloatAnswer(text = "SS [Between]:", value = result.data.SSB)
-                                            Spacer50()
-                                            FloatAnswer(text = "SS [Within]:", value = result.data.SSW)
-                                            Spacer50()
-                                            FloatAnswer(text = "d.f [Between]:", value = result.data.dfB.toFloat())
-                                            Spacer50()
-                                            FloatAnswer(text = "d.f [Within]:", value = result.data.dfW.toFloat())
-                                            Spacer50()
-                                            FloatAnswer(text = "MS [Between]:", value = result.data.MSB)
-                                            Spacer50()
-                                            FloatAnswer(text = "MS [Within]:", value = result.data.MSW)
-                                            Spacer50()
-                                            FloatAnswer(text = "F Ratio:", value = result.data.fratio)
-                                            Spacer50()
-                                            StringAnswer(text = "Hypothesis: ${result.data.hypothesis}",
-                                                Modifier
-                                                    .fillMaxWidth(fraction = 0.9f)
-                                                    .height(50.dp))
-                                            Spacer50()
-                                            if (!isSubmitted && userId != null) {
-                                                authViewModel.sendanova(
-                                                    userId = userId,
-                                                    n = stoff(n),
-                                                    sl = sl.toFloat(),
-                                                    SSB = result.data.SSB,
-                                                    SSW = result.data.SSW,
-                                                    MSB = result.data.MSB,
-                                                    MSW = result.data.MSW,
-                                                    dfB = result.data.dfB,
-                                                    dfW = result.data.dfW,
-                                                    fratio = result.data.fratio,
-                                                    hypothesis = result.data.hypothesis,
-                                                    size = arraySize.toInt()
+                                            Card(
+                                                shape = RoundedCornerShape(20.dp),
+                                                colors = CardDefaults.cardColors(
+                                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                                ),
+                                                modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                                                elevation = CardDefaults.cardElevation(10.dp),
+                                                border = BorderStroke(
+                                                    1.dp,
+                                                    Color.Blue
                                                 )
-                                                authViewModel.incrementcount(userId)
-                                                isSubmitted = true
+                                            ) {
+                                                Column(modifier = Modifier.padding(16.dp)) {
+                                                    // Table Header
+                                                    Row(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                            .background( if (isSystemInDarkTheme()) Color(0xFFCCC5B9) else Color(0xFF124559), shape = RoundedCornerShape(4.dp))
+                                                            .padding(8.dp)
+                                                    ) {
+                                                        TableCell(text = "S.V.", weight = 1f, fontWeight = FontWeight.Bold)
+                                                        TableCell(text = "SS", weight = 1f, fontWeight = FontWeight.Bold)
+                                                        TableCell(text = "d.f.", weight = 1f, fontWeight = FontWeight.Bold)
+                                                        TableCell(text = "MS", weight = 1f, fontWeight = FontWeight.Bold)
+                                                        TableCell(text = "F-ratio", weight = 1f, fontWeight = FontWeight.Bold)
+                                                    }
+
+                                                    // Table Rows
+                                                    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                                                        TableCell(text = "Between", weight = 1f)
+                                                        TableCell(text = "${result.data.SSB}", weight = 1f)
+                                                        TableCell(text = "${result.data.dfB}", weight = 1f)
+                                                        TableCell(text = "${result.data.MSB}", weight = 1f)
+                                                        TableCell(text = "${result.data.fratio}", weight = 1f)
+                                                    }
+                                                    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                                                        TableCell(text = "Within (error)", weight = 1f)
+                                                        TableCell(text = "${result.data.SSW}", weight = 1f)
+                                                        TableCell(text = "${result.data.dfW}", weight = 1f)
+                                                        TableCell(text = "${result.data.MSW}", weight = 1f)
+                                                        TableCell(text = "", weight = 1f)
+                                                    }
+                                                    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                                                        TableCell(text = "Total", weight = 1f)
+                                                        TableCell(text = "${result.data.SSB + result.data.SSW}", weight = 1f)
+                                                        TableCell(text = "${result.data.dfB + result.data.dfW}", weight = 1f)
+                                                        TableCell(text = "", weight = 1f)
+                                                        TableCell(text = "", weight = 1f)
+                                                    }
+                                                    if (!isSubmitted && userId != null) {
+                                                        repository.sendanova(
+                                                            userId = userId,
+                                                            n = stoff(n),
+                                                            sl = sl.toFloat(),
+                                                            SSB = result.data.SSB,
+                                                            SSW = result.data.SSW,
+                                                            MSB = result.data.MSB,
+                                                            MSW = result.data.MSW,
+                                                            dfB = result.data.dfB,
+                                                            dfW = result.data.dfW,
+                                                            fratio = result.data.fratio,
+                                                            hypothesis = result.data.hypothesis,
+                                                            size = arraySize.toInt()
+                                                        )
+                                                        repository.incrementcount(userId)
+                                                        isSubmitted = true
+                                                    }
+                                                }
                                             }
+                                            Spacer50()
                                         }
                                     }
                                     null -> {

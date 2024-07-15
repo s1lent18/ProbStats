@@ -366,10 +366,14 @@ fun Binomial(
                                 onClick = {
                                     keyboardController?.hide()
                                     if (n != "" && p != "" && x != "") {
-                                        isSubmitted = false
-                                        isupdated = true
-                                        display = true
-                                        keyboardController?.hide()
+                                        if (p.toFloat() > 1 || x.toFloat() > n.toFloat()) {
+                                            showDialog.value = true
+                                        } else {
+                                            isSubmitted = false
+                                            isupdated = true
+                                            display = true
+                                            keyboardController?.hide()
+                                        }
                                     }
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
@@ -396,30 +400,50 @@ fun Binomial(
                                     is NetworkResponse.Success -> {
                                         if (display) {
                                             Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X<$x):", value = result.data.less)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X<=$x):", value = result.data.lessequal)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X1>$x):", value = result.data.greater)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X>=$x):", value = result.data.greaterequal)
-                                            Spacer50()
-                                            if (!isSubmitted && userId != null) {
-                                                authViewModel.sendbinomial(
-                                                    userId = userId,
-                                                    x = x.toFloat(),
-                                                    n = n.toFloat(),
-                                                    p = p.toFloat(),
-                                                    equal = result.data.equal,
-                                                    greater = result.data.greater,
-                                                    greaterequal = result.data.greaterequal,
-                                                    less = result.data.less,
-                                                    lessequal = result.data.lessequal
+                                            Card(
+                                                shape = RoundedCornerShape(20.dp),
+                                                colors = CardDefaults.cardColors(
+                                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                                ),
+                                                modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                                                elevation = CardDefaults.cardElevation(10.dp),
+                                                border = BorderStroke(
+                                                    1.dp,
+                                                    Color.Blue
                                                 )
-                                                authViewModel.incrementcount(userId)
-                                                isSubmitted = true
+                                            ) {
+                                                Column(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                ) {
+                                                    Spacer50()
+                                                    Text("P(X=$x):    ${result.data.equal}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X<$x):    ${result.data.less}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X<=$x):  ${result.data.lessequal}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X>$x):    ${result.data.greater}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X>=$x):  ${result.data.greaterequal}", fontSize = 20.sp)
+                                                    Spacer50()
+                                                    if (!isSubmitted && userId != null) {
+                                                        repository.sendbinomial(
+                                                            userId = userId,
+                                                            x = x.toFloat(),
+                                                            n = n.toFloat(),
+                                                            p = p.toFloat(),
+                                                            equal = result.data.equal,
+                                                            greater = result.data.greater,
+                                                            greaterequal = result.data.greaterequal,
+                                                            less = result.data.less,
+                                                            lessequal = result.data.lessequal
+                                                        )
+                                                        repository.incrementcount(userId)
+                                                        isSubmitted = true
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -432,7 +456,6 @@ fun Binomial(
                     }
                 }
             }
-
             else -> {
                 Scaffold (
                     modifier = Modifier
@@ -487,10 +510,14 @@ fun Binomial(
                                 onClick = {
                                     keyboardController?.hide()
                                     if (n != "" && p != "" && x != "") {
-                                        isSubmitted = false
-                                        isupdated = true
-                                        display = true
-                                        keyboardController?.hide()
+                                        if (p.toFloat() > 1 || x.toFloat() > n.toFloat()) {
+                                            showDialog.value = true
+                                        } else {
+                                            isSubmitted = false
+                                            isupdated = true
+                                            display = true
+                                            keyboardController?.hide()
+                                        }
                                     }
                                 },
                                 colors = ButtonDefaults.elevatedButtonColors(
@@ -517,30 +544,50 @@ fun Binomial(
                                     is NetworkResponse.Success -> {
                                         if (display) {
                                             Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X<$x):", value = result.data.less)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X<=$x):", value = result.data.lessequal)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X>$x):", value = result.data.greater)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X>=$x):", value = result.data.greaterequal)
-                                            Spacer50()
-                                            if (!isSubmitted && userId != null) {
-                                                authViewModel.sendbinomial(
-                                                    userId = userId,
-                                                    x = x.toFloat(),
-                                                    n = n.toFloat(),
-                                                    p = p.toFloat(),
-                                                    equal = result.data.equal,
-                                                    greater = result.data.greater,
-                                                    greaterequal = result.data.greaterequal,
-                                                    less = result.data.less,
-                                                    lessequal = result.data.lessequal
+                                            Card(
+                                                shape = RoundedCornerShape(20.dp),
+                                                colors = CardDefaults.cardColors(
+                                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                                ),
+                                                modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                                                elevation = CardDefaults.cardElevation(10.dp),
+                                                border = BorderStroke(
+                                                    1.dp,
+                                                    Color.Blue
                                                 )
-                                                authViewModel.incrementcount(userId)
-                                                isSubmitted = true
+                                            ) {
+                                                Column(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                ) {
+                                                    Spacer50()
+                                                    Text("P(X=$x):    ${result.data.equal}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X<$x):    ${result.data.less}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X<=$x):  ${result.data.lessequal}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X>$x):    ${result.data.greater}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X>=$x):  ${result.data.greaterequal}", fontSize = 20.sp)
+                                                    Spacer50()
+                                                    if (!isSubmitted && userId != null) {
+                                                        repository.sendbinomial(
+                                                            userId = userId,
+                                                            x = x.toFloat(),
+                                                            n = n.toFloat(),
+                                                            p = p.toFloat(),
+                                                            equal = result.data.equal,
+                                                            greater = result.data.greater,
+                                                            greaterequal = result.data.greaterequal,
+                                                            less = result.data.less,
+                                                            lessequal = result.data.lessequal
+                                                        )
+                                                        repository.incrementcount(userId)
+                                                        isSubmitted = true
+                                                    }
+                                                }
                                             }
                                         }
                                     }

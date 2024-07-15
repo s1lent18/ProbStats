@@ -467,29 +467,49 @@ fun Poisson(
                                     is NetworkResponse.Success -> {
                                         if (display) {
                                             Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.less)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.lessequal)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.greater)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.greaterequal)
-                                            Spacer50()
-                                            if (!isSubmitted && userId != null) {
-                                                authViewModel.sendpoisson(
-                                                    userId = userId,
-                                                    x = x.toFloat(),
-                                                    lamda = lamda.toFloat(),
-                                                    equal = result.data.equal,
-                                                    greater = result.data.greater,
-                                                    greaterequal = result.data.greaterequal,
-                                                    less = result.data.less,
-                                                    lessequal = result.data.lessequal
+                                            Card(
+                                                shape = RoundedCornerShape(20.dp),
+                                                colors = CardDefaults.cardColors(
+                                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                                ),
+                                                modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                                                elevation = CardDefaults.cardElevation(10.dp),
+                                                border = BorderStroke(
+                                                    1.dp,
+                                                    Color.Blue
                                                 )
-                                                authViewModel.incrementcount(userId)
-                                                isSubmitted = true
+                                            ) {
+                                                Column(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                ) {
+                                                    Spacer50()
+                                                    Text("P(X=$x):    ${result.data.equal}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X<$x):    ${result.data.less}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X<=$x):  ${result.data.lessequal}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X>$x):    ${result.data.greater}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X>=$x):  ${result.data.greaterequal}", fontSize = 20.sp)
+                                                    Spacer50()
+                                                    if (!isSubmitted && userId != null) {
+                                                        repository.sendpoisson(
+                                                            userId = userId,
+                                                            x = x.toFloat(),
+                                                            lamda = lamda.toFloat(),
+                                                            equal = result.data.equal,
+                                                            greater = result.data.greater,
+                                                            greaterequal = result.data.greaterequal,
+                                                            less = result.data.less,
+                                                            lessequal = result.data.lessequal
+                                                        )
+                                                        repository.incrementcount(userId)
+                                                        isSubmitted = true
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -577,29 +597,49 @@ fun Poisson(
                                     is NetworkResponse.Success -> {
                                         if (display) {
                                             Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.equal)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.less)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.lessequal)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.greater)
-                                            Spacer50()
-                                            FloatAnswer(text = "P(X=$x):", value = result.data.greaterequal)
-                                            Spacer50()
-                                            if (!isSubmitted && userId != null) {
-                                                authViewModel.sendpoisson(
-                                                    userId = userId,
-                                                    x = x.toFloat(),
-                                                    lamda = lamda.toFloat(),
-                                                    equal = result.data.equal,
-                                                    greater = result.data.greater,
-                                                    greaterequal = result.data.greaterequal,
-                                                    less = result.data.less,
-                                                    lessequal = result.data.lessequal
+                                            Card(
+                                                shape = RoundedCornerShape(20.dp),
+                                                colors = CardDefaults.cardColors(
+                                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                                ),
+                                                modifier = Modifier.fillMaxWidth(fraction = 0.9f),
+                                                elevation = CardDefaults.cardElevation(10.dp),
+                                                border = BorderStroke(
+                                                    1.dp,
+                                                    Color.Blue
                                                 )
-                                                authViewModel.incrementcount(userId)
-                                                isSubmitted = true
+                                            ) {
+                                                Column(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                ) {
+                                                    Spacer50()
+                                                    Text("P(X=$x):    ${result.data.equal}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X<$x):    ${result.data.less}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X<=$x):  ${result.data.lessequal}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X>$x):    ${result.data.greater}", fontSize = 20.sp)
+                                                    Spacer(modifier = Modifier.height(20.dp))
+                                                    Text("P(X>=$x):  ${result.data.greaterequal}", fontSize = 20.sp)
+                                                    Spacer50()
+                                                    if (!isSubmitted && userId != null) {
+                                                        repository.sendpoisson(
+                                                            userId = userId,
+                                                            x = x.toFloat(),
+                                                            lamda = lamda.toFloat(),
+                                                            equal = result.data.equal,
+                                                            greater = result.data.greater,
+                                                            greaterequal = result.data.greaterequal,
+                                                            less = result.data.less,
+                                                            lessequal = result.data.lessequal
+                                                        )
+                                                        repository.incrementcount(userId)
+                                                        isSubmitted = true
+                                                    }
+                                                }
                                             }
                                         }
                                     }

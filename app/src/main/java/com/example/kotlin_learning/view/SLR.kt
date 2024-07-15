@@ -426,10 +426,7 @@ fun SLR(
                                     label = "$p:",
                                     index = p,
                                     values = x,
-                                    onValueChange = {
-                                        setx(it)
-                                        display = false
-                                    }
+                                    onValueChange = setx
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -447,10 +444,7 @@ fun SLR(
                                     label = "$p:",
                                     index = p,
                                     values = y,
-                                    onValueChange = {
-                                        sety(it)
-                                        display = false
-                                    }
+                                    onValueChange = sety
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -511,7 +505,7 @@ fun SLR(
                                                     .height(50.dp))
                                             Spacer(modifier = Modifier.height(50.dp))
                                             if (userId != null && !isSubmitted) {
-                                                authViewModel.sendslr(
+                                                repository.sendslr(
                                                     userId = userId,
                                                     n = n.toInt(),
                                                     x = stoff(x),
@@ -523,7 +517,7 @@ fun SLR(
                                                     t = result.data.t,
                                                     Y = result.data.Y
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }
@@ -599,10 +593,7 @@ fun SLR(
                                     label = "$p:",
                                     index = p,
                                     values = x,
-                                    onValueChange = {
-                                        setx(it)
-                                        display = false
-                                    }
+                                    onValueChange = setx
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -620,10 +611,7 @@ fun SLR(
                                     label = "$p:",
                                     index = p,
                                     values = y,
-                                    onValueChange = {
-                                        sety(it)
-                                        display = false
-                                    }
+                                    onValueChange = sety
                                 )
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
@@ -684,7 +672,7 @@ fun SLR(
                                                     .height(50.dp))
                                             Spacer(modifier = Modifier.height(50.dp))
                                             if (userId != null && !isSubmitted) {
-                                                authViewModel.sendslr(
+                                                repository.sendslr(
                                                     userId = userId,
                                                     n = n.toInt(),
                                                     x = stoff(x),
@@ -696,7 +684,7 @@ fun SLR(
                                                     t = result.data.t,
                                                     Y = result.data.Y
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }
