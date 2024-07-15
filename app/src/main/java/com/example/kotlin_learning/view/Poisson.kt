@@ -67,6 +67,7 @@ import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Repository
 import kotlinx.coroutines.launch
 
 fun String.isNumericOrFloat(): Boolean {
@@ -180,6 +181,7 @@ fun Poisson(
     poissonViewModel: PoissonViewModel = hiltViewModel(),
     authViewModel: AuthViewModel = viewModel()
 ) {
+    val repository = Repository()
     val userId = authViewModel.getuserid()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -364,7 +366,7 @@ fun Poisson(
                                                     Text("P(X>=$x):  ${result.data.greaterequal}", fontSize = 20.sp)
                                                     Spacer50()
                                                     if (!isSubmitted && userId != null) {
-                                                        authViewModel.sendpoisson(
+                                                        repository.sendpoisson(
                                                             userId = userId,
                                                             x = x.toFloat(),
                                                             lamda = lamda.toFloat(),
@@ -374,7 +376,7 @@ fun Poisson(
                                                             less = result.data.less,
                                                             lessequal = result.data.lessequal
                                                         )
-                                                        authViewModel.incrementcount(userId)
+                                                        repository.incrementcount(userId)
                                                         isSubmitted = true
                                                     }
                                                 }

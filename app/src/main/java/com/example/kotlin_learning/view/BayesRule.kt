@@ -53,6 +53,7 @@ import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Repository
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,6 +63,7 @@ fun BayesRule(
     viewModel: BayesRuleViewModel,
     authViewModel: AuthViewModel = viewModel()
 ) {
+    val repository = Repository()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
@@ -252,14 +254,14 @@ fun BayesRule(
                                             FloatAnswer(value = result.data.ans, text = "Probability: ")
                                             Spacer50()
                                             if(userId != null && !isSubmitted) {
-                                                authViewModel.sendbayesrule(
+                                                repository.sendbayesrule(
                                                     userId = userId,
                                                     pa = pA.toFloat(),
                                                     pb = pB.toFloat(),
                                                     pab = pAB.toFloat(),
                                                     ans = result.data.ans
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }

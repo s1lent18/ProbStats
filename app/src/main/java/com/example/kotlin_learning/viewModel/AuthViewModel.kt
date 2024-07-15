@@ -31,28 +31,28 @@ class AuthViewModel : ViewModel() {
 
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
-    private fun adduser(email: String, username: String) {
-        val usersRef = database.child("users")
-        val currentUser = FirebaseAuth.getInstance().currentUser
-
-        if (currentUser != null) {
-            val userId = currentUser.uid
-
-            val user = Users(
-                username = username,
-                email = email,
-                numberofSolutions = 0
-            )
-
-            usersRef.child(userId).setValue(user)
-                .addOnSuccessListener {
-                    // User successfully added
-                }
-                .addOnFailureListener {
-                    // Handle the error
-                }
-        }
-    }
+//    private fun adduser(email: String, username: String) {
+//        val usersRef = database.child("users")
+//        val currentUser = FirebaseAuth.getInstance().currentUser
+//
+//        if (currentUser != null) {
+//            val userId = currentUser.uid
+//
+//            val user = Users(
+//                username = username,
+//                email = email,
+//                numberofSolutions = 0
+//            )
+//
+//            usersRef.child(userId).setValue(user)
+//                .addOnSuccessListener {
+//                    // User successfully added
+//                }
+//                .addOnFailureListener {
+//                    // Handle the error
+//                }
+//        }
+//    }
 
     fun incrementcount(userId: String) {
         val database = FirebaseDatabase.getInstance().reference
@@ -313,96 +313,97 @@ class AuthViewModel : ViewModel() {
         addhypothesis(userId, Hypothesis)
     }
 
-    fun receiverpoisson(userid: String, callback: (List<Poissonclass>) -> Unit) {
-        database.child("users")
-            .child(userid)
-            .child("poisson")
-            .get().addOnSuccessListener { snapshot ->
-                val poissons = snapshot.children.mapNotNull { it.getValue(Poissonclass::class.java) }
-                callback(poissons)
-            }
-    }
+//    fun receiverpoisson(userid: String, callback: (List<Poissonclass>) -> Unit) {
+//        database.child("users")
+//            .child(userid)
+//            .child("poisson")
+//            .get().addOnSuccessListener { snapshot ->
+//                val poissons = snapshot.children.mapNotNull { it.getValue(Poissonclass::class.java) }
+//                callback(poissons)
+//            }
+//    }
+//
+//    fun receiverbinomial(userid: String, callback: (List<Binomialclass>) -> Unit) {
+//        database.child("users")
+//            .child(userid)
+//            .child("binomial")
+//            .get().addOnSuccessListener { snapshot ->
+//                val binomials = snapshot.children.mapNotNull { it.getValue(Binomialclass::class.java) }
+//                callback(binomials)
+//            }
+//    }
+//
+//    fun receivermultinomial(userid: String, callback: (List<Multinomialclass>) -> Unit) {
+//        database.child("users")
+//            .child(userid)
+//            .child("multinomial")
+//            .get().addOnSuccessListener { snapshot ->
+//                val multinomials = snapshot.children.mapNotNull { it.getValue(Multinomialclass::class.java) }
+//                callback(multinomials)
+//            }
+//    }
+//
+//    fun receiveranova(userid: String, callback: (List<Anovaclass>) -> Unit) {
+//        database.child("users")
+//            .child(userid)
+//            .child("anova")
+//            .get().addOnSuccessListener { snapshot ->
+//                val anovas = snapshot.children.mapNotNull { it.getValue(Anovaclass::class.java) }
+//                callback(anovas)
+//            }
+//    }
+//
+//    fun receiverbayesrule(userid: String, callback: (List<BayesRuleclass>) -> Unit) {
+//        database.child("users")
+//            .child(userid)
+//            .child("bayesrule")
+//            .get().addOnSuccessListener { snapshot ->
+//                val bayesrules = snapshot.children.mapNotNull { it.getValue(BayesRuleclass::class.java) }
+//                callback(bayesrules)
+//            }
+//    }
+//
+//    fun receiverslr(userid: String, callback: (List<SLRclass>) -> Unit) {
+//        database.child("users")
+//            .child(userid)
+//            .child("slr")
+//            .get().addOnSuccessListener { snapshot ->
+//                val slrs = snapshot.children.mapNotNull { it.getValue(SLRclass::class.java) }
+//                callback(slrs)
+//            }
+//    }
+//
+//    fun receiverungrouped(userid: String, callback: (List<UnGroupedclass>) -> Unit) {
+//        database.child("users")
+//            .child(userid)
+//            .child("ungrouped")
+//            .get().addOnSuccessListener { snapshot ->
+//                val ungroupeds = snapshot.children.mapNotNull { it.getValue(UnGroupedclass::class.java) }
+//                callback(ungroupeds)
+//            }
+//    }
+//
+//    fun receivergrouped(userid: String, callback: (List<Groupedclass>) -> Unit) {
+//        database.child("users")
+//            .child(userid)
+//            .child("grouped")
+//            .get().addOnSuccessListener { snapshot ->
+//                val groupeds = snapshot.children.mapNotNull { it.getValue(Groupedclass::class.java) }
+//                callback(groupeds)
+//            }
+//    }
+//
+//    fun receiverhypothesis(userid: String, callback: (List<Hypothesisclass>) -> Unit) {
+//        database.child("users")
+//            .child(userid)
+//            .child("hypothesis")
+//            .get().addOnSuccessListener { snapshot ->
+//                val hypothesiss = snapshot.children.mapNotNull { it.getValue(Hypothesisclass::class.java) }
+//                callback(hypothesiss)
+//            }
+//    }
 
-    fun receiverbinomial(userid: String, callback: (List<Binomialclass>) -> Unit) {
-        database.child("users")
-            .child(userid)
-            .child("binomial")
-            .get().addOnSuccessListener { snapshot ->
-                val binomials = snapshot.children.mapNotNull { it.getValue(Binomialclass::class.java) }
-                callback(binomials)
-            }
-    }
-
-    fun receivermultinomial(userid: String, callback: (List<Multinomialclass>) -> Unit) {
-        database.child("users")
-            .child(userid)
-            .child("multinomial")
-            .get().addOnSuccessListener { snapshot ->
-                val multinomials = snapshot.children.mapNotNull { it.getValue(Multinomialclass::class.java) }
-                callback(multinomials)
-            }
-    }
-
-    fun receiveranova(userid: String, callback: (List<Anovaclass>) -> Unit) {
-        database.child("users")
-            .child(userid)
-            .child("anova")
-            .get().addOnSuccessListener { snapshot ->
-                val anovas = snapshot.children.mapNotNull { it.getValue(Anovaclass::class.java) }
-                callback(anovas)
-            }
-    }
-
-    fun receiverbayesrule(userid: String, callback: (List<BayesRuleclass>) -> Unit) {
-        database.child("users")
-            .child(userid)
-            .child("bayesrule")
-            .get().addOnSuccessListener { snapshot ->
-                val bayesrules = snapshot.children.mapNotNull { it.getValue(BayesRuleclass::class.java) }
-                callback(bayesrules)
-            }
-    }
-
-    fun receiverslr(userid: String, callback: (List<SLRclass>) -> Unit) {
-        database.child("users")
-            .child(userid)
-            .child("slr")
-            .get().addOnSuccessListener { snapshot ->
-                val slrs = snapshot.children.mapNotNull { it.getValue(SLRclass::class.java) }
-                callback(slrs)
-            }
-    }
-
-    fun receiverungrouped(userid: String, callback: (List<UnGroupedclass>) -> Unit) {
-        database.child("users")
-            .child(userid)
-            .child("ungrouped")
-            .get().addOnSuccessListener { snapshot ->
-                val ungroupeds = snapshot.children.mapNotNull { it.getValue(UnGroupedclass::class.java) }
-                callback(ungroupeds)
-            }
-    }
-
-    fun receivergrouped(userid: String, callback: (List<Groupedclass>) -> Unit) {
-        database.child("users")
-            .child(userid)
-            .child("grouped")
-            .get().addOnSuccessListener { snapshot ->
-                val groupeds = snapshot.children.mapNotNull { it.getValue(Groupedclass::class.java) }
-                callback(groupeds)
-            }
-    }
-
-    fun receiverhypothesis(userid: String, callback: (List<Hypothesisclass>) -> Unit) {
-        database.child("users")
-            .child(userid)
-            .child("hypothesis")
-            .get().addOnSuccessListener { snapshot ->
-                val hypothesiss = snapshot.children.mapNotNull { it.getValue(Hypothesisclass::class.java) }
-                callback(hypothesiss)
-            }
-    }
-
+    private val repository = Repository()
     private val firebaseauth = Firebase.auth
     private val _loggedin = MutableLiveData<Boolean>()
     val loggedin: LiveData<Boolean> = _loggedin
@@ -439,12 +440,12 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signup(email: String, password: String, username: String) {
-        checkUsernameAvailability(username) { isAvailable ->
+        repository.checkUsernameAvailability(username) { isAvailable ->
             if (isAvailable) {
                 firebaseauth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            adduser(email = email, username = username)
+                            repository.adduser(email = email, username = username)
                             _signedup.value = true
                         } else {
                             _errorMessage.value = "Email Already in use"
@@ -457,18 +458,18 @@ class AuthViewModel : ViewModel() {
 
     }
 
-    private fun checkUsernameAvailability(username: String, onResult: (Boolean) -> Unit) {
-        database.child("users").orderByChild("username").equalTo(username)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    onResult(!snapshot.exists())
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    onResult(false)
-                }
-            })
-    }
+//    private fun checkUsernameAvailability(username: String, onResult: (Boolean) -> Unit) {
+//        database.child("users").orderByChild("username").equalTo(username)
+//            .addListenerForSingleValueEvent(object : ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    onResult(!snapshot.exists())
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//                    onResult(false)
+//                }
+//            })
+//    }
 
     fun signout() {
         firebaseauth.signOut()

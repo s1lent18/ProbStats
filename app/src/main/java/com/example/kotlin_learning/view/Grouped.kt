@@ -56,6 +56,7 @@ import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Repository
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,7 +66,7 @@ fun Grouped(
         viewModel: GroupedViewModel,
         authViewModel: AuthViewModel = viewModel()
     ) {
-
+    val repository = Repository()
     val drawerstate = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
@@ -276,7 +277,7 @@ fun Grouped(
                                             FloatAnswer(text = "Variance:", value = result.data.variance)
                                             Spacer50()
                                             if(!isSubmitted && userId != null) {
-                                                authViewModel.sendgrouped(
+                                                repository.sendgrouped(
                                                     userId = userId,
                                                     n = stoff(first),
                                                     second = stoff(second),
@@ -287,7 +288,7 @@ fun Grouped(
                                                     sd = result.data.sd,
                                                     variance = result.data.variance
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }

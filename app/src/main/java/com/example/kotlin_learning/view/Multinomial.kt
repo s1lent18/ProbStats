@@ -60,6 +60,7 @@ import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Repository
 import kotlinx.coroutines.launch
 
 fun stof(stringArray: Array<String>): FloatArray {
@@ -123,6 +124,7 @@ fun Multinomial(
     viewModel: MultinomialViewModel,
     authViewModel: AuthViewModel = viewModel()
 ) {
+    val repository = Repository()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
@@ -326,14 +328,14 @@ fun Multinomial(
                                             FloatAnswer(text = "Probability:", value = result.data.ans)
                                             Spacer(modifier = Modifier.height(50.dp))
                                             if (!isSubmitted && userId != null) {
-                                                authViewModel.sendmultinomial(
+                                                repository.sendmultinomial(
                                                     userId = userId,
                                                     n = n.toFloat(),
                                                     x = stoff(x),
                                                     p = stoff(p),
                                                     ans = result.data.ans
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }

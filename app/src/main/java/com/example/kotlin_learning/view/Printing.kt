@@ -49,6 +49,7 @@ import com.example.kotlin_learning.data.forhistory.UnGroupedclass
 import com.example.kotlin_learning.ui.theme.darkmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Repository
 import com.example.kotlin_learning.viewModel.Screen
 import com.example.kotlin_learning.viewModel.WindowInfo
 import com.example.kotlin_learning.viewModel.rWindowInfo
@@ -63,6 +64,7 @@ fun Printing(
     index: Int,
     tabindex: Int
 ) {
+    val repository = Repository()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
@@ -80,55 +82,55 @@ fun Printing(
 
 
     LaunchedEffect(userId) {
-        authViewModel.receiverpoisson(userId) { messages ->
+        repository.receiverpoisson(userId) { messages ->
             poissonState.value = messages
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receiverbinomial(userId) { bm ->
+        repository.receiverbinomial(userId) { bm ->
             binomialState.value = bm
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receivermultinomial(userId) { m ->
+        repository.receivermultinomial(userId) { m ->
             multinomialState.value = m
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receiveranova(userId) {a ->
+        repository.receiveranova(userId) {a ->
             anovaState.value = a
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receiverbayesrule(userId) {ba ->
+        repository.receiverbayesrule(userId) {ba ->
             bayesruleState.value = ba
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receiverslr(userId) { s ->
+        repository.receiverslr(userId) { s ->
             slrState.value = s
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receiverungrouped(userId) { ug ->
+        repository.receiverungrouped(userId) { ug ->
             ungroupedState.value = ug
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receivergrouped(userId) { g ->
+        repository.receivergrouped(userId) { g ->
             groupedState.value = g
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receiverhypothesis(userId) { h ->
+        repository.receiverhypothesis(userId) { h ->
             hypothesisState.value = h
         }
     }

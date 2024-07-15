@@ -64,6 +64,7 @@ import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Repository
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,6 +74,7 @@ fun UnGrouped(
     viewModel: UnGroupedViewModel,
     authViewModel: AuthViewModel = viewModel()
 ) {
+    val repository = Repository()
     val drawerstate = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
@@ -325,7 +327,7 @@ fun UnGrouped(
                                                 val listAny: List<Any> = convertedStemLeaf.flatMap { entry ->
                                                     listOf(entry.key) + entry.value
                                                 }
-                                                authViewModel.sendungrouped(
+                                                repository.sendungrouped(
                                                     userId,
                                                     n = stoff(n),
                                                     shape = result.data.Shape_of_the_Distribution,
@@ -341,7 +343,7 @@ fun UnGrouped(
                                                     stemleaf = listAny,
                                                     sd = result.data.sd
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }

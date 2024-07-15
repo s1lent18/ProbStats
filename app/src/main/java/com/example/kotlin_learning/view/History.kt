@@ -71,6 +71,7 @@ import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Repository
 import com.example.kotlin_learning.viewModel.Screen
 import com.example.kotlin_learning.viewModel.WindowInfo
 import com.example.kotlin_learning.viewModel.rWindowInfo
@@ -706,6 +707,7 @@ fun History(
     authViewModel: AuthViewModel = viewModel(),
     navController: NavController,
 ) {
+    val repository = Repository()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
@@ -726,63 +728,63 @@ fun History(
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(userId) {
-        authViewModel.receiverpoisson(userId) { messages ->
+        repository.receiverpoisson(userId) { messages ->
             poissonState.value = messages
             arr = arr.toMutableList().apply { this[0] = false }
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receiverbinomial(userId) { bm ->
+        repository.receiverbinomial(userId) { bm ->
             binomialState.value = bm
             arr = arr.toMutableList().apply { this[1] = false }
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receivermultinomial(userId) { m ->
+        repository.receivermultinomial(userId) { m ->
             multinomialState.value = m
             arr = arr.toMutableList().apply { this[2] = false }
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receiveranova(userId) { a ->
+        repository.receiveranova(userId) { a ->
             anovaState.value = a
             arr = arr.toMutableList().apply { this[3] = false }
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receiverbayesrule(userId) { ba ->
+        repository.receiverbayesrule(userId) { ba ->
             bayesruleState.value = ba
             arr = arr.toMutableList().apply { this[4] = false }
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receiverslr(userId) { s ->
+        repository.receiverslr(userId) { s ->
             slrState.value = s
             arr = arr.toMutableList().apply { this[5] = false }
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receiverungrouped(userId) { ug ->
+        repository.receiverungrouped(userId) { ug ->
             ungroupedState.value = ug
             arr = arr.toMutableList().apply { this[6] = false }
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receivergrouped(userId) { g ->
+        repository.receivergrouped(userId) { g ->
             groupedState.value = g
             arr = arr.toMutableList().apply { this[7] = false }
         }
     }
 
     LaunchedEffect(userId) {
-        authViewModel.receiverhypothesis(userId) { h ->
+        repository.receiverhypothesis(userId) { h ->
             hypothesisState.value = h
             arr = arr.toMutableList().apply { this[8] = false }
         }

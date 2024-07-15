@@ -53,6 +53,7 @@ import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Repository
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,6 +63,7 @@ fun Hypothesis(
     viewModel: HypothesisViewModel,
     authViewModel: AuthViewModel = viewModel()
 ) {
+    val repository = Repository()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
@@ -267,7 +269,7 @@ fun Hypothesis(
                                             StringAnswer(text = "Hypothesis: ${result.data.hypothesis}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
                                             Spacer50()
                                             if(userId != null && !isSubmitted) {
-                                                authViewModel.sendhypothesis(
+                                                repository.sendhypothesis(
                                                     userId = userId,
                                                     smean = smean.toFloat(),
                                                     sl = sl.toFloat(),
@@ -278,7 +280,7 @@ fun Hypothesis(
                                                     n = n.toInt(),
                                                     hypothesis = result.data.hypothesis
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }

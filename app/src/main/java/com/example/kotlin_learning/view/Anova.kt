@@ -64,6 +64,7 @@ import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Repository
 import kotlinx.coroutines.launch
 
 @Composable
@@ -85,6 +86,7 @@ fun Anova(
     viewModel: AnovaViewModel,
     authViewModel: AuthViewModel = viewModel()
 ) {
+    val repository = Repository()
     val drawerstate = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
@@ -338,7 +340,7 @@ fun Anova(
                                                         TableCell(text = "", weight = 1f)
                                                     }
                                                     if (!isSubmitted && userId != null) {
-                                                        authViewModel.sendanova(
+                                                        repository.sendanova(
                                                             userId = userId,
                                                             n = stoff(n),
                                                             sl = sl.toFloat(),
@@ -352,7 +354,7 @@ fun Anova(
                                                             hypothesis = result.data.hypothesis,
                                                             size = arraySize.toInt()
                                                         )
-                                                        authViewModel.incrementcount(userId)
+                                                        repository.incrementcount(userId)
                                                         isSubmitted = true
                                                     }
                                                 }
@@ -504,7 +506,7 @@ fun Anova(
                                                     .height(50.dp))
                                             Spacer50()
                                             if (!isSubmitted && userId != null) {
-                                                authViewModel.sendanova(
+                                                repository.sendanova(
                                                     userId = userId,
                                                     n = stoff(n),
                                                     sl = sl.toFloat(),
@@ -518,7 +520,7 @@ fun Anova(
                                                     hypothesis = result.data.hypothesis,
                                                     size = arraySize.toInt()
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }

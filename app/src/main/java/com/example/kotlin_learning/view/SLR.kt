@@ -59,6 +59,7 @@ import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Repository
 import kotlinx.coroutines.launch
 
 @Composable
@@ -105,6 +106,7 @@ fun SLR(
     viewModel: SLRViewModel,
     authViewModel: AuthViewModel = viewModel()
 ) {
+    val repository = Repository()
     val drawerstate = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
@@ -336,7 +338,7 @@ fun SLR(
                                                     .height(50.dp))
                                             Spacer(modifier = Modifier.height(50.dp))
                                             if (userId != null && !isSubmitted) {
-                                                authViewModel.sendslr(
+                                                repository.sendslr(
                                                     userId = userId,
                                                     n = n.toInt(),
                                                     x = stoff(x),
@@ -348,7 +350,7 @@ fun SLR(
                                                     t = result.data.t,
                                                     Y = result.data.Y
                                                 )
-                                                authViewModel.incrementcount(userId)
+                                                repository.incrementcount(userId)
                                                 isSubmitted = true
                                             }
                                         }

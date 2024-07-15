@@ -60,6 +60,7 @@ import com.example.kotlin_learning.ui.theme.darkmodefontcolor
 import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.ui.theme.lightmodefontcolor
 import com.example.kotlin_learning.viewModel.AuthViewModel
+import com.example.kotlin_learning.viewModel.Repository
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +70,7 @@ fun Binomial(
     viewModel: BinomialViewModel,
     authViewModel: AuthViewModel = viewModel()
 ) {
+    val repository = Repository()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scrollbehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
@@ -282,7 +284,7 @@ fun Binomial(
                                                     Text("P(X>=$x):  ${result.data.greaterequal}", fontSize = 20.sp)
                                                     Spacer50()
                                                     if (!isSubmitted && userId != null) {
-                                                        authViewModel.sendbinomial(
+                                                        repository.sendbinomial(
                                                             userId = userId,
                                                             x = x.toFloat(),
                                                             n = n.toFloat(),
@@ -293,7 +295,7 @@ fun Binomial(
                                                             less = result.data.less,
                                                             lessequal = result.data.lessequal
                                                         )
-                                                        authViewModel.incrementcount(userId)
+                                                        repository.incrementcount(userId)
                                                         isSubmitted = true
                                                     }
                                                 }
