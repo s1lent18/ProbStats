@@ -726,6 +726,7 @@ fun History(
     val hypothesisState = remember { mutableStateOf<List<Hypothesisclass>>(emptyList()) }
     val calculators = listOf("Poisson", "Binomial", "Multinomial", "Anova", "Bayes Rule", "SLR", "UnGrouped", "Grouped", "Hypothesis")
     var selectedTabIndex by remember { mutableIntStateOf(0) }
+    val windowInfo = rWindowInfo()
 
     LaunchedEffect(userId) {
         repository.receiverpoisson(userId) { messages ->
@@ -790,13 +791,19 @@ fun History(
         }
     }
 
+    val drawerWidth = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+        Modifier.fillMaxWidth(fraction = 0.8f)
+    } else {
+        Modifier.width(300.dp)
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet (modifier = Modifier
                 .background(uicolor)
                 .fillMaxHeight()
-                .fillMaxWidth(fraction = 0.8f)) {
+                .then(drawerWidth)) {
                 LazyColumn (
                     modifier = Modifier.padding(16.dp),
                 ){
@@ -852,7 +859,6 @@ fun History(
             }
         }
     ) {
-        val windowInfo = rWindowInfo()
         when (windowInfo.screenWidthInfo) {
             WindowInfo.WindowType.Compact -> {
                 Scaffold (

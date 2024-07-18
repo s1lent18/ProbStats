@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -140,6 +141,7 @@ fun Multinomial(
     var display by remember { mutableStateOf(false) }
     val userId = authViewModel.getuserid()
     val showDialog = remember { mutableStateOf(false) }
+    val windowInfo = rWindowInfo()
 
     if(showDialog.value) {
         DialogBox(
@@ -162,13 +164,19 @@ fun Multinomial(
         }
     }
 
+    val drawerWidth = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+        Modifier.fillMaxWidth(fraction = 0.8f)
+    } else {
+        Modifier.width(300.dp)
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet (modifier = Modifier
                 .background(if (isSystemInDarkTheme()) Color(0xFF023047) else Color(0xFF0077B6))
                 .fillMaxHeight()
-                .fillMaxWidth(fraction = 0.8f)) {
+                .then(drawerWidth)) {
                 LazyColumn (
                     modifier = Modifier.padding(16.dp),
                 ){
@@ -224,7 +232,6 @@ fun Multinomial(
             }
         }
     ) {
-        val windowInfo = rWindowInfo()
         when (windowInfo.screenWidthInfo) {
             is WindowInfo.WindowType.Compact -> {
                 Scaffold (

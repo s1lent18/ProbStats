@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -83,7 +84,7 @@ fun Printing(
     val groupedState = remember { mutableStateOf<List<Groupedclass>>(emptyList()) }
     val hypothesisState = remember { mutableStateOf<List<Hypothesisclass>>(emptyList()) }
     val showsearch = remember { mutableStateOf(false) }
-
+    val windowInfo = rWindowInfo()
 
     LaunchedEffect(userId) {
         repository.receiverpoisson(userId) { messages ->
@@ -139,13 +140,19 @@ fun Printing(
         }
     }
 
+    val drawerWidth = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+        Modifier.fillMaxWidth(fraction = 0.8f)
+    } else {
+        Modifier.width(300.dp)
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet (modifier = Modifier
                 .background(if (isSystemInDarkTheme()) Color(0xFF023047) else Color(0xFF0077B6))
                 .fillMaxHeight()
-                .fillMaxWidth(fraction = 0.8f)) {
+                .then(drawerWidth)) {
                 LazyColumn (
                     modifier = Modifier.padding(16.dp),
                 ){
@@ -201,7 +208,6 @@ fun Printing(
             }
         }
     ) {
-        val windowInfo = rWindowInfo()
         when (windowInfo.screenWidthInfo) {
             WindowInfo.WindowType.Compact -> {
                 Scaffold (

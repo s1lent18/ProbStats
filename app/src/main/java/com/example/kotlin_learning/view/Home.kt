@@ -231,6 +231,13 @@ fun Home(
     val scope = rememberCoroutineScope()
     val isLoading by homeviewmodel.isLoading
     val probs by homeviewmodel.probs
+    val windowInfo = rWindowInfo()
+
+    val drawerWidth = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+        Modifier.fillMaxWidth(fraction = 0.8f)
+    } else {
+        Modifier.width(300.dp)
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -238,7 +245,7 @@ fun Home(
             ModalDrawerSheet (modifier = Modifier
                 .background(if (isSystemInDarkTheme()) Color(0xFF023047) else Color(0xFF0077B6))
                 .fillMaxHeight()
-                .fillMaxWidth(fraction = 0.8f)) {
+                .then(drawerWidth)) {
                 LazyColumn (
                     modifier = Modifier.padding(16.dp)
                 ){
@@ -295,7 +302,6 @@ fun Home(
             }
         }
     ) {
-        val windowInfo = rWindowInfo()
         when (windowInfo.screenWidthInfo) {
             WindowInfo.WindowType.Compact -> {
                 Scaffold (

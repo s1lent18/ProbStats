@@ -83,6 +83,7 @@ fun Grouped(
     var isupdated by remember { mutableStateOf(false) }
     var display by remember { mutableStateOf(false) }
     val userId = authViewModel.getuserid()
+    val windowInfo = rWindowInfo()
 
     LaunchedEffect(isupdated) {
         if(isupdated) {
@@ -96,13 +97,19 @@ fun Grouped(
         }
     }
 
+    val drawerWidth = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+        Modifier.fillMaxWidth(fraction = 0.8f)
+    } else {
+        Modifier.width(300.dp)
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerstate,
         drawerContent = {
             ModalDrawerSheet (modifier = Modifier
                 .background(if (isSystemInDarkTheme()) Color(0xFF023047) else Color(0xFF0077B6))
                 .fillMaxHeight()
-                .fillMaxWidth(fraction = 0.8f)) {
+                .then(drawerWidth)) {
                 LazyColumn(
                     modifier = Modifier.padding(16.dp)
                 ) {
@@ -158,7 +165,6 @@ fun Grouped(
             }
         }
     ) {
-        val windowInfo = rWindowInfo()
         when (windowInfo.screenWidthInfo) {
             WindowInfo.WindowType.Compact -> {
                 Scaffold(

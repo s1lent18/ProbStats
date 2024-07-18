@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -195,6 +196,7 @@ fun Poisson(
     var isSubmitted by remember { mutableStateOf(false) }
     var isupdated by remember { mutableStateOf(false) }
     var display by remember { mutableStateOf(false) }
+    val windowInfo = rWindowInfo()
 
     LaunchedEffect(isupdated) {
         if (isupdated) {
@@ -204,13 +206,19 @@ fun Poisson(
         }
     }
 
+    val drawerWidth = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+        Modifier.fillMaxWidth(fraction = 0.8f)
+    } else {
+        Modifier.width(300.dp)
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet (modifier = Modifier
                 .background(if (isSystemInDarkTheme()) Color(0xFF023047) else Color(0xFF0077B6))
                 .fillMaxHeight()
-                .fillMaxWidth(fraction = 0.8f)) {
+                .then(drawerWidth)) {
                 LazyColumn (
                     modifier = Modifier.padding(16.dp),
                 ){
@@ -266,7 +274,6 @@ fun Poisson(
             }
         }
     ) {
-        val windowInfo = rWindowInfo()
         when (windowInfo.screenWidthInfo) {
             is WindowInfo.WindowType.Compact -> {
                 Scaffold (
