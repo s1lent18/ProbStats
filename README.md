@@ -39,23 +39,21 @@ Also available in Play Store
 ## Screenshots
 
 <p align="center">
-  <img src="screenshots/Home.png" width="250" alt="Home">
-  <img src="screenshots/LoginPage.png" width="250" alt="Login">
-  <img src="screenshots/ChangePasswordL.png" width="250" alt="Change Password">
-  <img src="screenshots/AccountDetails.png" width="250" alt="Account Details">
-  <img src="screenshots/HistoryL.png" width="250" alt="History">
-  <img src="screenshots/SignupPageL.png" width="250" alt="Signup Page">
+  <img src="screenshots/Home.png" width="250" alt="Home Light Mode">
+  <img src="screenshots/LoginPage.png" width="250" alt="Login Light Mode">
+  <img src="screenshots/ChangePasswordL.png" width="250" alt="Change Password Light Mode">
+  <img src="screenshots/AccountDetails.png" width="250" alt="Account Details Light Mode">
+  <img src="screenshots/HistoryL.png" width="250" alt="History Light Mode">
+  <img src="screenshots/SignupPageL.png" width="250" alt="Signup Page Light Mode">
 </p>
 
 <p align="center">
- 
-  <img src="screenshots/pokemon-info-about.png" width="250" alt="Pokemon Info - About">
-</p>
-
-<p align="center">
-  <img src="screenshots/pokemon-info-base-stats.png" width="250" alt="Pokemon Info - Base Stats">
-  <img src="screenshots/pokemon-info-evolution.png" width="250" alt="Pokemon Info - Evolution">
-  <img src="screenshots/news-detail.png" width="250" alt="News Detail">
+  <img src="screenshots/HomeD.png" width="250" alt="Home Dark Mode">
+  <img src="screenshots/LoginPageD.png" width="250" alt="Login Dark Mode">
+  <img src="screenshots/ChangePasswordD.png" width="250" alt="Change Password Dark Mode">
+  <img src="screenshots/AccountDetailsD.png" width="250" alt="Account Details Dark Mode">
+  <img src="screenshots/HistoryD.png" width="250" alt="History Dark Mode">
+  <img src="screenshots/SignupPageD.png" width="250" alt="Signup Page Dark Mode">
 </p>
 
 ## Development Roadmap
