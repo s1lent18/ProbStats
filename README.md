@@ -40,13 +40,13 @@ Also available in Play Store
 
 <p align="center">
   <img src="screenshots/Home.png" width="250" alt="Home">
-  <img src="screenshots/pokedex.png" width="250" alt="Pokedex">
-  <img src="screenshots/pokedex-fab.png" width="250" alt="Pokedex FAB">
+  <img src="screenshots/LoginPage.png" width="250" alt="Login">
+  <img src="screenshots/ChangePasswordL.png" width="250" alt="Change Password">
 </p>
 
 <p align="center">
-  <img src="screenshots/pokedex-fab-search.png" width="250" alt="Pokedex Search">
-  <img src="screenshots/pokedex-fab-generation.png" width="250" alt="Pokedex Generation">
+  <img src="screenshots/AccountDetails.png" width="250" alt="Account Details">
+  <img src="screenshots/HistoryL.png" width="250" alt="History">
   <img src="screenshots/pokemon-info-about.png" width="250" alt="Pokemon Info - About">
 </p>
 
