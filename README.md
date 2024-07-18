@@ -44,6 +44,7 @@ Also available in Play Store
   <img src="screenshots/ChangePasswordL.png" width="250" alt="Change Password">
   <img src="screenshots/AccountDetails.png" width="250" alt="Account Details">
   <img src="screenshots/HistoryL.png" width="250" alt="History">
+  <img src="screenshots/SignupPageL.png" width="250" alt="Signup Page">
 </p>
 
 <p align="center">
