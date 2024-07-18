@@ -3,7 +3,7 @@
   <img src="screenshots/Q-1.png" width="300" alt="Kotlin Pokedex">
 <br>
 <br>
-Pokedex app built with Kotlin
+Probability and Statistics with Jetpack Compose
 </h1>
 
 <p align="center">
