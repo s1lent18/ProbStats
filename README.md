@@ -1,6 +1,6 @@
 <h1 align="center">
 <br>
-  <img src="Screenshots/Q-1.png" width="300" alt="Kotlin Pokedex">
+  <img src="screenshots/Q-1.png" width="300" alt="Kotlin Pokedex">
 <br>
 <br>
 Pokedex app built with Kotlin
@@ -39,7 +39,7 @@ Also available in Play Store
 ## Screenshots
 
 <p align="center">
-  <img src="screenshots/home.png" width="250" alt="Home">
+  <img src="screenshots/Home.png" width="250" alt="Home">
   <img src="screenshots/pokedex.png" width="250" alt="Pokedex">
   <img src="screenshots/pokedex-fab.png" width="250" alt="Pokedex FAB">
 </p>
