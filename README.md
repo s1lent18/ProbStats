@@ -1,6 +1,6 @@
 <h1 align="center">
 <br>
-  <img src="screenshots/Q-1.png" width="300" alt="Kotlin Pokedex">
+  <img src="screenshots/ProbStats" width="300" alt="ProbStats">
 <br>
 <br>
 Probability and Statistics with Jetpack Compose
