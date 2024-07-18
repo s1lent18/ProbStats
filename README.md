@@ -42,11 +42,12 @@ Also available in Play Store
   <img src="screenshots/Home.png" width="250" alt="Home">
   <img src="screenshots/LoginPage.png" width="250" alt="Login">
   <img src="screenshots/ChangePasswordL.png" width="250" alt="Change Password">
+  <img src="screenshots/AccountDetails.png" width="250" alt="Account Details">
+  <img src="screenshots/HistoryL.png" width="250" alt="History">
 </p>
 
 <p align="center">
-  <img src="screenshots/AccountDetails.png" width="250" alt="Account Details">
-  <img src="screenshots/HistoryL.png" width="250" alt="History">
+ 
   <img src="screenshots/pokemon-info-about.png" width="250" alt="Pokemon Info - About">
 </p>
 
