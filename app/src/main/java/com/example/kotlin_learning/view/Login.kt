@@ -449,8 +449,8 @@ fun Login(
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     modifier = Modifier.fillMaxWidth(fraction = 0.8f)
                                 ) {
-                                    SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.facebook, contentDescription = "Facebook", onClick = {}, check = false)
-                                    Spacer(modifier = Modifier.width(8.dp))
+//                                    SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.facebook, contentDescription = "Facebook", onClick = {}, check = false)
+//                                    Spacer(modifier = Modifier.width(8.dp))
                                     SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.google, contentDescription = "Google", onClick = {}, check = false)
                                 }
                             }
