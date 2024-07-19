@@ -109,8 +109,6 @@ fun Spacer50() {
     Spacer(modifier = Modifier.height(50.dp))
 }
 
-// Check Boolean Passed to differentiate between Google/FaceBook and drawable icons
-
 @Composable
 fun SocialIconButton(
     modifier: Modifier,
@@ -393,7 +391,7 @@ fun Login(
                                     ),
                                     trailingIcon = {
                                         Box(
-                                            modifier = Modifier.padding(end = 8.dp) // Add padding to the end of the Box
+                                            modifier = Modifier.padding(end = 8.dp)
                                         ) {
                                             Row {
                                                 IconButton(
@@ -524,7 +522,7 @@ fun Login(
                                     ),
                                     trailingIcon = {
                                         Box(
-                                            modifier = Modifier.padding(end = 8.dp) // Add padding to the end of the Box
+                                            modifier = Modifier.padding(end = 8.dp)
                                         ) {
                                             Row {
                                                 IconButton(
@@ -655,7 +653,7 @@ fun Login(
                                     ),
                                     trailingIcon = {
                                         Box(
-                                            modifier = Modifier.padding(end = 8.dp) // Add padding to the end of the Box
+                                            modifier = Modifier.padding(end = 8.dp)
                                         ) {
                                             Row {
                                                 IconButton(
