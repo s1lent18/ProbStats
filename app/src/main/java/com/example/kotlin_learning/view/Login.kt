@@ -360,7 +360,7 @@ fun Login(
                                     label = "Email",
                                     value = email,
                                     onValueChange = setEmail,
-                                    trailing = "Forgot?",
+                                    trailing = "",
                                     modifier = Modifier.fillMaxWidth(fraction = 0.80f),
                                     onClick = {}
                                 )
@@ -491,7 +491,7 @@ fun Login(
                                     label = "Email",
                                     value = email,
                                     onValueChange = setEmail,
-                                    trailing = "Forgot?",
+                                    trailing = "",
                                     modifier = Modifier.fillMaxWidth(fraction = 0.80f),
                                     onClick = {}
                                 )
@@ -622,7 +622,7 @@ fun Login(
                                     label = "Email",
                                     value = email,
                                     onValueChange = setEmail,
-                                    trailing = "Forgot?",
+                                    trailing = "",
                                     modifier = Modifier.fillMaxWidth(fraction = 0.80f),
                                     onClick = {}
                                 )
