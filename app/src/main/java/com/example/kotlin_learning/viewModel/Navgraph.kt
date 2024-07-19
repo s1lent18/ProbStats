@@ -31,14 +31,14 @@ fun SetupNavgraph (
 ) {
     val owner = LocalViewModelStoreOwner.current
     val slrviewmodel = ViewModelProvider(owner!!)[SLRViewModel::class.java]
-    val anovaviewmodel = ViewModelProvider(owner!!)[AnovaViewModel::class.java]
-    val groupedviewmodel = ViewModelProvider(owner!!)[GroupedViewModel::class.java]
-    val poissonviewmodel = ViewModelProvider(owner!!)[PoissonViewModel::class.java]
-    val binomialviewmodel = ViewModelProvider(owner!!)[BinomialViewModel::class.java]
-    val bayesruleviewmodel = ViewModelProvider(owner!!)[BayesRuleViewModel::class.java]
-    val ungroupedviewmodel = ViewModelProvider(owner!!)[UnGroupedViewModel::class.java]
-    val hypothesisviewmodel = ViewModelProvider(owner!!)[HypothesisViewModel::class.java]
-    val multinomialviewmodel = ViewModelProvider(owner!!)[MultinomialViewModel::class.java]
+    val anovaviewmodel = ViewModelProvider(owner)[AnovaViewModel::class.java]
+    val poissonviewmodel = ViewModelProvider(owner)[PoissonViewModel::class.java]
+    val binomialviewmodel = ViewModelProvider(owner)[BinomialViewModel::class.java]
+    val bayesruleviewmodel = ViewModelProvider(owner)[BayesRuleViewModel::class.java]
+    val ungroupedviewmodel = ViewModelProvider(owner)[UnGroupedViewModel::class.java]
+    val groupedviewmodel = ViewModelProvider(owner)[GroupedViewModel::class.java]
+    val hypothesisviewmodel = ViewModelProvider(owner)[HypothesisViewModel::class.java]
+    val multinomialviewmodel = ViewModelProvider(owner)[MultinomialViewModel::class.java]
 
     NavHost(navController = navController, startDestination = Screen.Login.route) {
 

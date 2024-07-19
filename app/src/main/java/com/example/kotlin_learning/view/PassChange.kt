@@ -120,7 +120,7 @@ fun PassChange(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            color = if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White
+                            color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
                         )
                 ) {
                     Card (
@@ -130,7 +130,7 @@ fun PassChange(
                             .align(Alignment.Center)
                         ,
                         colors = CardDefaults.elevatedCardColors(
-                            containerColor = Color(0xFF101720)
+                            containerColor = if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White
                         ),
                         elevation = CardDefaults.cardElevation(
                             10.dp
