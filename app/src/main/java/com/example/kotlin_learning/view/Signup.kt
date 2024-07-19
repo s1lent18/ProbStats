@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -148,7 +147,7 @@ fun Signup(
                         Image(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight(fraction = 0.46f),
+                                .fillMaxHeight(fraction = 0.50f),
                             painter = painterResource(id = image),
                             contentDescription = "Facebook Logo",
                             contentScale = ContentScale.FillBounds
@@ -162,14 +161,14 @@ fun Signup(
                             verticalArrangement = Arrangement.Center
                         ) {
                             Icon(
-                                modifier = Modifier.size(120.dp),
+                                modifier = Modifier.size(145.dp),
                                 painter = painterResource(id = R.drawable.prob_stats),
                                 contentDescription = stringResource(id = R.string.app_name),
                                 tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                             )
                             Spacer(modifier = Modifier.height(150.dp))
                             Text(text = "Signup", style = TextStyle(color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground, fontSize = 30.sp, fontWeight = FontWeight.Bold))
-                            Spacer(modifier = Modifier.height(35.dp))
+                            Spacer(modifier = Modifier.height(60.dp))
                             LoginTextField(
                                 label = "Email",
                                 value = email,
@@ -178,7 +177,7 @@ fun Signup(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.80f),
                                 onClick = {}
                             )
-                            Spacer(modifier = Modifier.height(10.dp))
+                            Spacer(modifier = Modifier.height(30.dp))
                             LoginTextField(
                                 label = "Username",
                                 value = username,
@@ -187,7 +186,7 @@ fun Signup(
                                 modifier = Modifier.fillMaxWidth(fraction = 0.80f),
                                 onClick = {}
                             )
-                            Spacer(modifier = Modifier.height(10.dp))
+                            Spacer(modifier = Modifier.height(30.dp))
                             LoginTextField(
                                 label = "Password",
                                 value = password,
@@ -195,7 +194,7 @@ fun Signup(
                                 trailing = "",
                                 modifier = Modifier.fillMaxWidth(fraction = 0.80f),
                                 onClick = {})
-                            Spacer(modifier = Modifier.height(10.dp))
+                            Spacer(modifier = Modifier.height(30.dp))
                             SignupButton(
                                 iconId = R.drawable.unlock,
                                 contentDescription = "Signup",
@@ -203,192 +202,156 @@ fun Signup(
                                     if (email.isNotEmpty() && password.isNotEmpty()) {
                                         authViewModel.signup(email, password, username = username)
                                     }
-                                })
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Text(text = "Or Continue with")
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Row (
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier.fillMaxWidth(fraction = 0.8f)
-                            ) {
-//                                SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.facebook, contentDescription = "Facebook", onClick = {}, check = false)
-//                                Spacer(modifier = Modifier.width(8.dp))
-                                SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.google, contentDescription = "Google", onClick = {}, check = false)
-                            }
+                                }
+                            )
                         }
                     }
                 }
             }
             is WindowInfo.WindowType.Medium -> {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    item {
-                        val (email, setEmail) = remember { mutableStateOf("") }
-                        val (password, setpassword) = remember { mutableStateOf("") }
-                        val (username, setusername) = remember { mutableStateOf("") }
-                        val image = if (isSystemInDarkTheme()) R.drawable.shape1 else R.drawable.shape
+                Column(modifier = Modifier.fillMaxSize()) {
+                    val (email, setEmail) = remember { mutableStateOf("") }
+                    val (password, setpassword) = remember { mutableStateOf("") }
+                    val (username, setusername) = remember { mutableStateOf("") }
+                    val image = if (isSystemInDarkTheme()) R.drawable.shape1 else R.drawable.shape
 
-                        Box (
-                            contentAlignment = Alignment.TopCenter
-                        ){
-                            Image(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(fraction = 0.46f),
-                                painter = painterResource(id = image),
-                                contentDescription = "Facebook Logo",
-                                contentScale = ContentScale.FillBounds
+                    Box (
+                        contentAlignment = Alignment.TopCenter
+                    ){
+                        Image(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(fraction = 0.50f),
+                            painter = painterResource(id = image),
+                            contentDescription = "Facebook Logo",
+                            contentScale = ContentScale.FillBounds
+                        )
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 70.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(145.dp),
+                                painter = painterResource(id = R.drawable.prob_stats),
+                                contentDescription = stringResource(id = R.string.app_name),
+                                tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                             )
-
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 70.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Icon(
-                                    modifier = Modifier.size(145.dp),
-                                    painter = painterResource(id = R.drawable.prob_stats),
-                                    contentDescription = stringResource(id = R.string.app_name),
-                                    tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
-                                )
-                                Spacer(modifier = Modifier.height(150.dp))
-                                Text(text = "Signup", style = TextStyle(color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground, fontSize = 30.sp, fontWeight = FontWeight.Bold))
-                                Spacer(modifier = Modifier.height(30.dp))
-                                LoginTextField(
-                                    label = "Email",
-                                    value = email,
-                                    onValueChange = setEmail,
-                                    trailing = "",
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.80f),
-                                    onClick = {}
-                                )
-                                Spacer(modifier = Modifier.height(15.dp))
-                                LoginTextField(
-                                    label = "Username",
-                                    value = username,
-                                    onValueChange = setusername,
-                                    trailing = "",
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.80f),
-                                    onClick = {}
-                                )
-                                Spacer(modifier = Modifier.height(15.dp))
-                                LoginTextField(
-                                    label = "Password",
-                                    value = password,
-                                    onValueChange = setpassword,
-                                    trailing = "",
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.80f),
-                                    onClick = {})
-                                Spacer(modifier = Modifier.height(15.dp))
-                                SignupButton(
-                                    iconId = R.drawable.unlock,
-                                    contentDescription = "Signup",
-                                    onClick = {
-                                        if (email.isNotEmpty() && password.isNotEmpty()) {
-                                            authViewModel.signup(email, password, username = username)
-                                        }
-                                    })
-                                Spacer(modifier = Modifier.height(15.dp))
-                                Text(text = "Or Continue with")
-                                Spacer(modifier = Modifier.height(15.dp))
-                                Row (
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.8f)
-                                ) {
-                                    SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.facebook, contentDescription = "Facebook", onClick = {}, check = false)
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.google, contentDescription = "Google", onClick = {}, check = false)
+                            Spacer(modifier = Modifier.height(150.dp))
+                            Text(text = "Signup", style = TextStyle(color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground, fontSize = 30.sp, fontWeight = FontWeight.Bold))
+                            Spacer(modifier = Modifier.height(60.dp))
+                            LoginTextField(
+                                label = "Email",
+                                value = email,
+                                onValueChange = setEmail,
+                                trailing = "",
+                                modifier = Modifier.fillMaxWidth(fraction = 0.80f),
+                                onClick = {}
+                            )
+                            Spacer(modifier = Modifier.height(30.dp))
+                            LoginTextField(
+                                label = "Username",
+                                value = username,
+                                onValueChange = setusername,
+                                trailing = "",
+                                modifier = Modifier.fillMaxWidth(fraction = 0.80f),
+                                onClick = {}
+                            )
+                            Spacer(modifier = Modifier.height(30.dp))
+                            LoginTextField(
+                                label = "Password",
+                                value = password,
+                                onValueChange = setpassword,
+                                trailing = "",
+                                modifier = Modifier.fillMaxWidth(fraction = 0.80f),
+                                onClick = {})
+                            Spacer(modifier = Modifier.height(30.dp))
+                            SignupButton(
+                                iconId = R.drawable.unlock,
+                                contentDescription = "Signup",
+                                onClick = {
+                                    if (email.isNotEmpty() && password.isNotEmpty()) {
+                                        authViewModel.signup(email, password, username = username)
+                                    }
                                 }
-                                Spacer50()
-                            }
+                            )
                         }
                     }
                 }
             }
             else -> {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    item {
-                        val (email, setEmail) = remember { mutableStateOf("") }
-                        val (password, setpassword) = remember { mutableStateOf("") }
-                        val (username, setusername) = remember { mutableStateOf("") }
-                        val image = if (isSystemInDarkTheme()) R.drawable.shape1 else R.drawable.shape
+                Column(modifier = Modifier.fillMaxSize()) {
+                    val (email, setEmail) = remember { mutableStateOf("") }
+                    val (password, setpassword) = remember { mutableStateOf("") }
+                    val (username, setusername) = remember { mutableStateOf("") }
+                    val image = if (isSystemInDarkTheme()) R.drawable.shape1 else R.drawable.shape
 
-                        Box (
-                            contentAlignment = Alignment.TopCenter
-                        ){
-                            Image(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(fraction = 0.46f),
-                                painter = painterResource(id = image),
-                                contentDescription = "Facebook Logo",
-                                contentScale = ContentScale.FillBounds
+                    Box (
+                        contentAlignment = Alignment.TopCenter
+                    ){
+                        Image(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(fraction = 0.50f),
+                            painter = painterResource(id = image),
+                            contentDescription = "Facebook Logo",
+                            contentScale = ContentScale.FillBounds
+                        )
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 70.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(145.dp),
+                                painter = painterResource(id = R.drawable.prob_stats),
+                                contentDescription = stringResource(id = R.string.app_name),
+                                tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                             )
-
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 70.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Icon(
-                                    modifier = Modifier.size(145.dp),
-                                    painter = painterResource(id = R.drawable.prob_stats),
-                                    contentDescription = stringResource(id = R.string.app_name),
-                                    tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
-                                )
-                                Spacer(modifier = Modifier.height(150.dp))
-                                Text(text = "Signup", style = TextStyle(color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground, fontSize = 30.sp, fontWeight = FontWeight.Bold))
-                                Spacer(modifier = Modifier.height(30.dp))
-                                LoginTextField(
-                                    label = "Email",
-                                    value = email,
-                                    onValueChange = setEmail,
-                                    trailing = "",
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.80f),
-                                    onClick = {}
-                                )
-                                Spacer(modifier = Modifier.height(15.dp))
-                                LoginTextField(
-                                    label = "Username",
-                                    value = username,
-                                    onValueChange = setusername,
-                                    trailing = "",
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.80f),
-                                    onClick = {}
-                                )
-                                Spacer(modifier = Modifier.height(15.dp))
-                                LoginTextField(
-                                    label = "Password",
-                                    value = password,
-                                    onValueChange = setpassword,
-                                    trailing = "",
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.80f),
-                                    onClick = {})
-                                Spacer(modifier = Modifier.height(15.dp))
-                                SignupButton(
-                                    iconId = R.drawable.unlock,
-                                    contentDescription = "Signup",
-                                    onClick = {
-                                        if (email.isNotEmpty() && password.isNotEmpty()) {
-                                            authViewModel.signup(email, password, username = username)
-                                        }
-                                    })
-                                Spacer(modifier = Modifier.height(15.dp))
-                                Text(text = "Or Continue with")
-                                Spacer(modifier = Modifier.height(15.dp))
-                                Row (
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.8f)
-                                ) {
-                                    SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.facebook, contentDescription = "Facebook", onClick = {}, check = false)
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    SocialIconButton(modifier = Modifier.weight(1f),iconId = R.drawable.google, contentDescription = "Google", onClick = {}, check = false)
+                            Spacer(modifier = Modifier.height(150.dp))
+                            Text(text = "Signup", style = TextStyle(color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground, fontSize = 30.sp, fontWeight = FontWeight.Bold))
+                            Spacer(modifier = Modifier.height(60.dp))
+                            LoginTextField(
+                                label = "Email",
+                                value = email,
+                                onValueChange = setEmail,
+                                trailing = "",
+                                modifier = Modifier.fillMaxWidth(fraction = 0.80f),
+                                onClick = {}
+                            )
+                            Spacer(modifier = Modifier.height(30.dp))
+                            LoginTextField(
+                                label = "Username",
+                                value = username,
+                                onValueChange = setusername,
+                                trailing = "",
+                                modifier = Modifier.fillMaxWidth(fraction = 0.80f),
+                                onClick = {}
+                            )
+                            Spacer(modifier = Modifier.height(30.dp))
+                            LoginTextField(
+                                label = "Password",
+                                value = password,
+                                onValueChange = setpassword,
+                                trailing = "",
+                                modifier = Modifier.fillMaxWidth(fraction = 0.80f),
+                                onClick = {})
+                            Spacer(modifier = Modifier.height(30.dp))
+                            SignupButton(
+                                iconId = R.drawable.unlock,
+                                contentDescription = "Signup",
+                                onClick = {
+                                    if (email.isNotEmpty() && password.isNotEmpty()) {
+                                        authViewModel.signup(email, password, username = username)
+                                    }
                                 }
-                                Spacer50()
-                            }
+                            )
                         }
                     }
                 }
