@@ -317,20 +317,19 @@ fun SLR(
                             ) {
                                 Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
                             }
-                            Spacer(modifier = Modifier.height(50.dp))
+                            Spacer50()
                             if (n.isNotEmpty() && alpha.isNotEmpty() && x.isNotEmpty() && y.isNotEmpty() && !isupdated) {
                                 when (val result = rresult.value) {
                                     is NetworkResponse.Failure -> {
-                                        Spacer(modifier = Modifier.height(50.dp))
                                         StringAnswer("Failed To Load",
                                             Modifier
                                                 .fillMaxWidth(fraction = 0.9f)
                                                 .height(50.dp))
-                                        Spacer(modifier = Modifier.height(50.dp))
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        Spacer(modifier = Modifier.height(50.dp))
                                         CircularProgressIndicator()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
                                         if (display) {

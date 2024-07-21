@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 import com.google.firebase.auth.EmailAuthProvider
 
 class AuthViewModel : ViewModel() {
-
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
     private val repository = Repository()
     private val firebaseauth = Firebase.auth

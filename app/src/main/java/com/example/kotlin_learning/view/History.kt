@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -173,20 +174,65 @@ fun MultinomialItem(multinomial: Multinomialclass) {
         modifier = Modifier.fillMaxSize()
     ) {
         Spacer50()
-        StringAnswer("n: ${multinomial.n}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
+        StringAnswer("n: ${multinomial.n.toInt()}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
         StringAnswer("x", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        for (i in 0..<multinomial.x.size) {
-            StringAnswer("x$i: ${multinomial.x[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-            Spacer( modifier = Modifier.height(20.dp))
+        LazyRow (
+            modifier = Modifier.fillMaxWidth(fraction = 0.9f).align(Alignment.CenterHorizontally),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(multinomial.x.size) {
+                Card(
+                    shape = RoundedCornerShape(20.dp),
+                    border = BorderStroke(
+                        1.dp,
+                        color = Color.Blue
+                    ),
+                    elevation = CardDefaults.cardElevation(10.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                        contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                    ),
+                    modifier = Modifier.size(100.dp),
+                ) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("${multinomial.x[it].toInt()}")
+                    }
+                }
+                //StringAnswer("${multinomial.x[it]}", modifier = Modifier.size(100.dp).align(Alignment.CenterHorizontally))
+                Spacer(modifier = Modifier.width(20.dp))
+            }
         }
         Spacer50()
         StringAnswer("p", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        for (i in 0..<multinomial.p.size) {
-            StringAnswer("p$i: ${multinomial.p[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-            Spacer( modifier = Modifier.height(20.dp))
+        LazyRow (
+            modifier = Modifier.fillMaxWidth(fraction = 0.9f).align(Alignment.CenterHorizontally),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(multinomial.p.size) {
+                Card(
+                    shape = RoundedCornerShape(20.dp),
+                    border = BorderStroke(
+                        1.dp,
+                        color = Color.Blue
+                    ),
+                    elevation = CardDefaults.cardElevation(10.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                        contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                    ),
+                    modifier = Modifier.size(100.dp),
+                ) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("${multinomial.p[it]}")
+                    }
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+            }
         }
         Spacer50()
         StringAnswer("ans = ${multinomial.ans}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
@@ -200,11 +246,35 @@ fun AnovaItem(anova: Anovaclass) {
         modifier = Modifier.fillMaxSize()
     ) {
         Spacer50()
-        for(i in 0 ..<anova.n.size) {
-            StringAnswer("n$i : ${anova.n[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-            Spacer(modifier = Modifier.height(20.dp))
+        for(i in 0 ..<(anova.n.size / anova.size)) {
+            LazyRow (
+                modifier = Modifier.fillMaxWidth(fraction = 0.9f).align(Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                items(anova.size) {
+                    Card(
+                        shape = RoundedCornerShape(20.dp),
+                        border = BorderStroke(
+                            1.dp,
+                            color = Color.Blue
+                        ),
+                        elevation = CardDefaults.cardElevation(10.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                            contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                        ),
+                        modifier = Modifier.size(100.dp),
+                    ) {
+                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Text("${anova.n[it + (5 * i)]}")
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(20.dp))
+                }
+            }
+            Spacer50()
         }
-        Spacer50()
         StringAnswer("n: ${anova.size}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
         StringAnswer("sl: ${anova.sl}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
@@ -286,14 +356,62 @@ fun SLRItem(slr: SLRclass) {
     ) {
         StringAnswer("size: ${slr.n}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        for(i in 0 ..<slr.n) {
-            StringAnswer("$i : ${slr.x[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-            Spacer(modifier = Modifier.height(20.dp))
+        StringAnswer("X", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
+        Spacer50()
+        LazyRow (
+            modifier = Modifier.fillMaxWidth(fraction = 0.9f).align(Alignment.CenterHorizontally),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(slr.n) {
+                Card(
+                    shape = RoundedCornerShape(20.dp),
+                    border = BorderStroke(
+                        1.dp,
+                        color = Color.Blue
+                    ),
+                    elevation = CardDefaults.cardElevation(10.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                        contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                    ),
+                    modifier = Modifier.size(100.dp),
+                ) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("${slr.x[it]}")
+                    }
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+            }
         }
         Spacer50()
-        for(i in 0 ..<slr.n) {
-            StringAnswer("$i : ${slr.y[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-            Spacer(modifier = Modifier.height(20.dp))
+        StringAnswer("Y", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
+        Spacer50()
+        LazyRow (
+            modifier = Modifier.fillMaxWidth(fraction = 0.9f).align(Alignment.CenterHorizontally),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(slr.n) {
+                Card(
+                    shape = RoundedCornerShape(20.dp),
+                    border = BorderStroke(
+                        1.dp,
+                        color = Color.Blue
+                    ),
+                    elevation = CardDefaults.cardElevation(10.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                        contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                    ),
+                    modifier = Modifier.size(100.dp),
+                ) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("${slr.y[it]}")
+                    }
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+            }
         }
         Spacer50()
         StringAnswer("alpha: ${slr.alpha}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
@@ -317,11 +435,33 @@ fun UnGroupedItem(ungrouped: UnGroupedclass) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        StringAnswer("size: ${ungrouped.n}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
+        StringAnswer("size: ${ungrouped.n.size}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        for(i in 0 ..<ungrouped.n.size) {
-            StringAnswer("$i : ${ungrouped.n[i]}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
-            Spacer(modifier = Modifier.height(20.dp))
+        LazyRow (
+            modifier = Modifier.fillMaxWidth(fraction = 0.9f).align(Alignment.CenterHorizontally),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(ungrouped.n.size) {
+                Card(
+                    shape = RoundedCornerShape(20.dp),
+                    border = BorderStroke(
+                        1.dp,
+                        color = Color.Blue
+                    ),
+                    elevation = CardDefaults.cardElevation(10.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                        contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                    ),
+                    modifier = Modifier.size(100.dp),
+                ) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("${ungrouped.n[it]}")
+                    }
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+            }
         }
         Spacer50()
         StringAnswer("Shape of the Distribution: ${ungrouped.Shape_of_the_Distribution}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
@@ -330,13 +470,18 @@ fun UnGroupedItem(ungrouped: UnGroupedclass) {
         Spacer50()
         StringAnswer("median: ${ungrouped.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        StringAnswer("mode: ${ungrouped.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
+        val mo: String = if (ungrouped.mode == "") {
+            "No Mode"
+        } else {
+            ungrouped.mode
+        }
+        StringAnswer("mode: $mo", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        StringAnswer("one: ${ungrouped.one}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
+        StringAnswer("one: ${ungrouped.one}%", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        StringAnswer("two: ${ungrouped.two}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
+        StringAnswer("two: ${ungrouped.two}%", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        StringAnswer("three: ${ungrouped.three}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
+        StringAnswer("three: ${ungrouped.three}%", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
         StringAnswer("q1: ${ungrouped.q1}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
@@ -459,7 +604,12 @@ fun GroupedItem(grouped: Groupedclass) {
         Spacer50()
         StringAnswer("median: ${grouped.median}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
-        StringAnswer("mode: ${grouped.mode}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
+        val mo: String = if (grouped.mode == "") {
+            "No Mode"
+        } else {
+            grouped.mode
+        }
+        StringAnswer("mode: $mo", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()
         StringAnswer("sd: ${grouped.sd}", modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp).align(Alignment.CenterHorizontally))
         Spacer50()

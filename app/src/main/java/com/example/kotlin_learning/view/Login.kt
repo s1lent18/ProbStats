@@ -2,6 +2,8 @@ package com.example.kotlin_learning.view
 
 import android.app.Activity
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +25,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -39,6 +42,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -198,6 +203,12 @@ fun Login(
         val errorcount = remember { mutableIntStateOf(0) }
         val errordialogbox = remember { mutableStateOf(false) }
         val (email, setEmail) = remember { mutableStateOf("") }
+        val (password, setpassword) = remember { mutableStateOf("") }
+        val image = if (isSystemInDarkTheme()) R.drawable.shape1 else R.drawable.shape
+        var passwordvisibility by remember { mutableStateOf(false) }
+        //var rememberMe by remember { mutableStateOf(false) }
+        val gradient = Brush.verticalGradient(colors = listOf(Color(0xFF14213d), Color(0xFF219ebc)))
+        val icon = if (passwordvisibility) painterResource(id = R.drawable.vision) else painterResource(id = R.drawable.eyelock)
 
         LaunchedEffect(errorMessage) {
             if (errorMessage != null) {
@@ -317,123 +328,106 @@ fun Login(
                     }
                 } else {
                     Column(modifier = Modifier.fillMaxSize()) {
-                        val (password, setpassword) = remember { mutableStateOf("") }
-                        val image = if (isSystemInDarkTheme()) R.drawable.shape1 else R.drawable.shape
-                        var passwordvisibility by remember { mutableStateOf(false) }
-
-                        Box (
-                            contentAlignment = Alignment.TopCenter
-                        ){
-                            Image(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(fraction = 0.50f),
-                                painter = painterResource(id = image),
-                                contentDescription = "Cover Image",
-                                contentScale = ContentScale.FillBounds
+                        Box(
+                            modifier = Modifier.fillMaxHeight(fraction = 0.40f).clip(RoundedCornerShape(bottomStart = 50.dp, bottomEnd = 50.dp)).fillMaxWidth().background(gradient),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(145.dp),
+                                painter = painterResource(id = R.drawable.prob_stats),
+                                contentDescription = stringResource(id = R.string.app_name),
+                                tint = lightmodefontcolor
                             )
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 70.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Icon(
-                                    modifier = Modifier.size(145.dp),
-                                    painter = painterResource(id = R.drawable.prob_stats),
-                                    contentDescription = stringResource(id = R.string.app_name),
-                                    tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
-                                )
-                                Spacer(modifier = Modifier.height(150.dp))
-                                Text(
-                                    text = "Login",
-                                    style = TextStyle(
-                                        color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                                        fontSize = 30.sp,
-                                        fontWeight = FontWeight.Bold
-                                    ))
-                                Spacer(modifier = Modifier.height(60.dp))
-                                LoginTextField(
-                                    label = "Email",
-                                    value = email,
-                                    onValueChange = setEmail,
-                                    trailing = "",
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.80f),
-                                    onClick = {}
-                                )
-                                Spacer(modifier = Modifier.height(30.dp))
+                        }
+                        Row(
+                            Modifier.padding(top = 25.dp, start = 20.dp)
+                        ) {
+                            Text("Welcome Back",
+                                fontSize = 24.sp,
+                                color = if (isSystemInDarkTheme()) Color.White else Color(0xFF121212),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
 
-                                val icon = if (passwordvisibility)
-                                    painterResource(id = R.drawable.vision)
-                                else
-                                    painterResource(id = R.drawable.eyelock)
-
-                                TextField(
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.80f),
-                                    value = password,
-                                    onValueChange = setpassword,
-                                    label = {
-                                        Text(
-                                            text = "Password",
-                                            style = MaterialTheme.typography.labelMedium,
-                                            color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
-                                        )
-                                    },
-                                    shape = RoundedCornerShape(16.dp),
-                                    colors = TextFieldDefaults.colors(
-                                        disabledContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                                        disabledTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                                        unfocusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                                        focusedTextColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor,
-                                        unfocusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                                        focusedContainerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                                    ),
-                                    trailingIcon = {
-                                        Box(
-                                            modifier = Modifier.padding(end = 8.dp)
-                                        ) {
-                                            Row {
-                                                IconButton(
-                                                    onClick = {
-                                                        passwordvisibility = !passwordvisibility
-                                                    }
-                                                ) {
-                                                    Icon(painter = icon, contentDescription = "Icon", tint = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
-                                                }
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth().padding(16.dp)
+                        ) {
+                            OutlinedTextField(
+                                value = email,
+                                onValueChange = setEmail,
+                                label = { Text("Email") },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = TextFieldDefaults.colors(
+                                    cursorColor = if (isSystemInDarkTheme()) Color.White else Color(0xFF121212)
+                                )
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
+                            OutlinedTextField(
+                                value = password,
+                                onValueChange = setpassword,
+                                label = { Text("Password") },
+                                modifier = Modifier.fillMaxWidth(),
+                                visualTransformation = if (passwordvisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                                colors = TextFieldDefaults.colors(
+                                    cursorColor = if (isSystemInDarkTheme()) Color.White else Color(0xFF121212)
+                                ),
+                                trailingIcon = {
+                                    Box(
+                                        modifier = Modifier.padding(end = 20.dp)
+                                    ) {
+                                        Row {
+                                            IconButton(
+                                                onClick = {
+                                                    passwordvisibility = !passwordvisibility
+                                                },
+                                                modifier = Modifier.size(25.dp)
+                                            ) {
+                                                Icon(painter = icon,
+                                                    contentDescription = "Icon",
+                                                    tint = if (isSystemInDarkTheme()) lightmodefontcolor else darkmodefontcolor
+                                                )
                                             }
                                         }
-                                    },
-                                    keyboardOptions = KeyboardOptions(
-                                        keyboardType = KeyboardType.Password
-                                    ),
-                                    visualTransformation = if (passwordvisibility) VisualTransformation.None
-                                    else PasswordVisualTransformation()
-                                )
-                                Spacer(modifier = Modifier.height(30.dp))
-                                SocialIconButton(
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.8f),
-                                    iconId = R.drawable.unlock,
-                                    contentDescription = "Login",
-                                    onClick = {
-                                        if (email != "" && password != "") {
-                                            authViewModel.signin(email, password)
+                                    }
+                                },
+                            )
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Row(
+                                modifier = Modifier.padding(start = 220.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                Text("Forgot Password?",
+                                    color = if (isSystemInDarkTheme()) Color.White else Color(0xFF121212),
+                                    modifier = Modifier.clickable {
+                                        if (email != "") {
+                                            authViewModel.sendPasswordviaemail(email)
                                         }
-                                    },
-                                    check = true)
-                                Spacer(modifier = Modifier.height(30.dp))
-                                SocialIconButton(
-                                    modifier = Modifier.fillMaxWidth(fraction = 0.8f),
-                                    iconId = R.drawable.add,
-                                    contentDescription = "Add User",
-                                    onClick = {
-                                        navController.navigate(
-                                            route = Screen.Signup.route
-                                        )
-                                    },
-                                    check = true
+                                    }
                                 )
-                                Spacer(modifier = Modifier.height(20.dp))
+                            }
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Button(
+                                onClick = {
+                                    if (email != "" && password != "") {
+                                            authViewModel.signin(email = email, password = password)
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFF219ebc)
+                                ),
+                                modifier = Modifier.fillMaxWidth().height(50.dp)
+                            ) {
+                                Text("Login", color = if (isSystemInDarkTheme()) Color.White else Color(0xFF121212))
+                            }
+                            Spacer(modifier = Modifier.height(20.dp))
+                            TextButton(
+                                onClick = { navController.navigate(route = Screen.Signup.route) }
+                            ) {
+                                Text("You Don't Have Account? Sign Up", color = if (isSystemInDarkTheme()) Color.White else Color(0xFF121212))
                             }
                         }
                     }
@@ -448,9 +442,6 @@ fun Login(
                     }
                 } else {
                     Column(modifier = Modifier.fillMaxSize()) {
-                        val (password, setpassword) = remember { mutableStateOf("") }
-                        val image = if (isSystemInDarkTheme()) R.drawable.shape1 else R.drawable.shape
-                        var passwordvisibility by remember { mutableStateOf(false) }
 
                         Box (
                             contentAlignment = Alignment.TopCenter
@@ -494,12 +485,6 @@ fun Login(
                                     onClick = {}
                                 )
                                 Spacer(modifier = Modifier.height(30.dp))
-
-                                val icon = if (passwordvisibility)
-                                    painterResource(id = R.drawable.vision)
-                                else
-                                    painterResource(id = R.drawable.eyelock)
-
                                 TextField(
                                     modifier = Modifier.fillMaxWidth(fraction = 0.80f),
                                     value = password,
@@ -547,9 +532,9 @@ fun Login(
                                     iconId = R.drawable.unlock,
                                     contentDescription = "Login",
                                     onClick = {
-                                        if (email != "" && password != "") {
-                                            authViewModel.signin(email, password)
-                                        }
+//                                        if (email != "" && password != "") {
+//                                            authViewModel.signin(email, password)
+//                                        }
                                     },
                                     check = true)
                                 Spacer(modifier = Modifier.height(30.dp))
@@ -579,10 +564,6 @@ fun Login(
                     }
                 } else {
                     Column(modifier = Modifier.fillMaxSize()) {
-                        val (password, setpassword) = remember { mutableStateOf("") }
-                        val image = if (isSystemInDarkTheme()) R.drawable.shape1 else R.drawable.shape
-                        var passwordvisibility by remember { mutableStateOf(false) }
-
                         Box (
                             contentAlignment = Alignment.TopCenter
                         ){
@@ -626,10 +607,6 @@ fun Login(
                                 )
                                 Spacer(modifier = Modifier.height(30.dp))
 
-                                val icon = if (passwordvisibility)
-                                    painterResource(id = R.drawable.vision)
-                                else
-                                    painterResource(id = R.drawable.eyelock)
 
                                 TextField(
                                     modifier = Modifier.fillMaxWidth(fraction = 0.80f),
@@ -678,9 +655,9 @@ fun Login(
                                     iconId = R.drawable.unlock,
                                     contentDescription = "Login",
                                     onClick = {
-                                        if (email != "" && password != "") {
-                                            authViewModel.signin(email, password)
-                                        }
+//                                        if (email != "" && password != "") {
+//                                            authViewModel.signin(email, password)
+//                                        }
                                     },
                                     check = true)
                                 Spacer(modifier = Modifier.height(30.dp))

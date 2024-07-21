@@ -327,12 +327,14 @@ fun Multinomial(
                             if (n.isNotEmpty() && p.isNotEmpty() && x.isNotEmpty() && !isupdated) {
                                 when (val result = probability.value) {
                                     is NetworkResponse.Failure -> {
-                                        Spacer(modifier = Modifier.height(50.dp))
+                                        Spacer50()
                                         StringAnswer("Failed To Load", Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp))
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
-                                        Spacer(modifier = Modifier.height(50.dp))
+                                        Spacer50()
                                         CircularProgressIndicator()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
                                         if (display) {
