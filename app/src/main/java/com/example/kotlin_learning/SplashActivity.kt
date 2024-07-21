@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
@@ -23,8 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kotlin_learning.ui.theme.KotlinLearningTheme
-import com.example.kotlin_learning.ui.theme.darkmodebackground
-import com.example.kotlin_learning.ui.theme.lightmodebackground
 import com.example.kotlin_learning.viewModel.AuthViewModel
 import kotlinx.coroutines.delay
 
@@ -77,7 +74,7 @@ class SplashActivity : ComponentActivity() {
             Icon(
                 painter = painterResource(R.drawable.prob_stats),
                 contentDescription = "Icon",
-                tint = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                tint = Color(0xFFFDC500),
                 modifier = Modifier.alpha(alpha.value)
             )
         }
