@@ -306,7 +306,7 @@ fun Poisson(
                             Spacer50()
                             Floatinput(
                                 Modifier.fillMaxWidth(fraction = 0.9f),
-                                label = "Lambda(t):",
+                                label = "λ(t):",
                                 value = lamda,
                                 onValueChange = {
                                     setlamda(it)

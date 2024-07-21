@@ -661,7 +661,7 @@ fun PoissonList(poissons: List<Poissonclass>, navController: NavController) {
                     contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                 )
             ) {
-                Text(text = "$poisson : X = ${poissons[poisson].x} | Lamda: ${poissons[poisson].lamda}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                Text(text = "X = ${poissons[poisson].x} | λ: ${poissons[poisson].lamda}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
             }
         }
     }
@@ -684,7 +684,7 @@ fun BinomialList(binomials: List<Binomialclass>, navController: NavController) {
                     contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                 )
             ) {
-                Text(text = "$binomial : x = ${binomials[binomial].x} | n = ${binomials[binomial].n} | p = ${binomials[binomial].p}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                Text(text = "x = ${binomials[binomial].x} | n = ${binomials[binomial].n} | p = ${binomials[binomial].p}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
             }
         }
     }
@@ -707,7 +707,7 @@ fun MultinomialList(multinomials: List<Multinomialclass>, navController: NavCont
                     contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                 )
             ) {
-                Text(text = "$multinomial : n = ${multinomials[multinomial].n}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                Text(text = "n = ${multinomials[multinomial].n}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
             }
         }
     }
@@ -730,7 +730,7 @@ fun AnovaList(anovas: List<Anovaclass>, navController: NavController) {
                     contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                 )
             ) {
-                Text(text = "$anova : size = ${anovas[anova].size} | Significance Level: ${anovas[anova].sl}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                Text(text = "size = ${anovas[anova].size} | Significance Level: ${anovas[anova].sl}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
             }
         }
     }
@@ -753,7 +753,7 @@ fun BayesRuleList(bayesrules: List<BayesRuleclass>, navController: NavController
                     contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                 )
             ) {
-                Text(text = "$bayesrule : pa: ${bayesrules[bayesrule].pa} | pb: ${bayesrules[bayesrule].pb} | pab: ${bayesrules[bayesrule].pab}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                Text(text = "pa: ${bayesrules[bayesrule].pa} | pb: ${bayesrules[bayesrule].pb} | pab: ${bayesrules[bayesrule].pab}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
             }
         }
     }
@@ -776,7 +776,7 @@ fun SLRList(slrs: List<SLRclass>, navController: NavController) {
                     contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                 )
             ) {
-                Text(text = "$slr : n: ${slrs[slr].n} | alpha: ${slrs[slr].alpha} | Hypo: ${slrs[slr].hypothesis}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                Text(text = "n: ${slrs[slr].n} | alpha: ${slrs[slr].alpha} | Hypo: ${slrs[slr].hypothesis}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
             }
         }
     }
@@ -799,7 +799,7 @@ fun UnGroupedList(ungroupeds: List<UnGroupedclass>, navController: NavController
                     contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                 )
             ) {
-                Text(text = "$ungrouped : mean: ${ungroupeds[ungrouped].mean} | median: ${ungroupeds[ungrouped].median}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                Text(text = "mean: ${ungroupeds[ungrouped].mean} | median: ${ungroupeds[ungrouped].median}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
             }
         }
     }
@@ -822,7 +822,7 @@ fun GroupedList(groupeds: List<Groupedclass>, navController: NavController) {
                     contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                 )
             ) {
-                Text(text = "$grouped : mean: ${groupeds[grouped].mean} | median: ${groupeds[grouped].median}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                Text(text = "mean: ${groupeds[grouped].mean} | median: ${groupeds[grouped].median}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
             }
         }
     }
@@ -845,7 +845,7 @@ fun HypothesisList(hypothesiss: List<Hypothesisclass>, navController: NavControl
                     contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
                 )
             ) {
-                Text(text = "$hypothesis : smean: ${hypothesiss[hypothesis].smean} | hmean: ${hypothesiss[hypothesis].hmean}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                Text(text = "smean: ${hypothesiss[hypothesis].smean} | hmean: ${hypothesiss[hypothesis].hmean}", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
             }
         }
     }
@@ -1158,31 +1158,85 @@ fun History(
                         Spacer(modifier = Modifier.height(20.dp))
                         when (selectedTabIndex) {
                             0 -> {
-                                PoissonList(poissons = poissonState.value, navController)
+                                if(arr[0]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    PoissonList(poissons = poissonState.value, navController)
+                                }
                             }
                             1 -> {
-                                BinomialList(binomials = binomialState.value, navController)
+                                if(arr[1]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    BinomialList(binomials = binomialState.value, navController)
+                                }
                             }
                             2 -> {
-                                MultinomialList(multinomials = multinomialState.value, navController)
+                                if(arr[2]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    MultinomialList(multinomials = multinomialState.value, navController)
+                                }
                             }
                             3 -> {
-                                AnovaList(anovas = anovaState.value, navController)
+                                if(arr[3]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    AnovaList(anovas = anovaState.value, navController)
+                                }
                             }
                             4 -> {
-                                BayesRuleList(bayesrules = bayesruleState.value, navController)
+                                if(arr[4]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    BayesRuleList(bayesrules = bayesruleState.value, navController)
+                                }
                             }
                             5 -> {
-                                SLRList(slrs = slrState.value, navController)
+                                if(arr[5]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    SLRList(slrs = slrState.value, navController)
+                                }
                             }
                             6 -> {
-                                UnGroupedList(ungroupeds = ungroupedState.value, navController)
+                                if(arr[6]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    UnGroupedList(ungroupeds = ungroupedState.value, navController)
+                                }
                             }
                             7 -> {
-                                GroupedList(groupeds = groupedState.value, navController)
+                                if(arr[7]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    GroupedList(groupeds = groupedState.value, navController)
+                                }
                             }
                             8 -> {
-                                HypothesisList(hypothesiss = hypothesisState.value, navController)
+                                if(arr[8]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    HypothesisList(hypothesiss = hypothesisState.value, navController)
+                                }
                             }
                         }
                     }
@@ -1220,31 +1274,85 @@ fun History(
                         Spacer(modifier = Modifier.height(20.dp))
                         when (selectedTabIndex) {
                             0 -> {
-                                PoissonList(poissons = poissonState.value, navController)
+                                if(arr[0]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    PoissonList(poissons = poissonState.value, navController)
+                                }
                             }
                             1 -> {
-                                BinomialList(binomials = binomialState.value, navController)
+                                if(arr[1]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    BinomialList(binomials = binomialState.value, navController)
+                                }
                             }
                             2 -> {
-                                MultinomialList(multinomials = multinomialState.value, navController)
+                                if(arr[2]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    MultinomialList(multinomials = multinomialState.value, navController)
+                                }
                             }
                             3 -> {
-                                AnovaList(anovas = anovaState.value, navController)
+                                if(arr[3]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    AnovaList(anovas = anovaState.value, navController)
+                                }
                             }
                             4 -> {
-                                BayesRuleList(bayesrules = bayesruleState.value, navController)
+                                if(arr[4]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    BayesRuleList(bayesrules = bayesruleState.value, navController)
+                                }
                             }
                             5 -> {
-                                SLRList(slrs = slrState.value, navController)
+                                if(arr[5]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    SLRList(slrs = slrState.value, navController)
+                                }
                             }
                             6 -> {
-                                UnGroupedList(ungroupeds = ungroupedState.value, navController)
+                                if(arr[6]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    UnGroupedList(ungroupeds = ungroupedState.value, navController)
+                                }
                             }
                             7 -> {
-                                GroupedList(groupeds = groupedState.value, navController)
+                                if(arr[7]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    GroupedList(groupeds = groupedState.value, navController)
+                                }
                             }
                             8 -> {
-                                HypothesisList(hypothesiss = hypothesisState.value, navController)
+                                if(arr[8]) {
+                                    Box (modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator()
+                                    }
+                                } else {
+                                    HypothesisList(hypothesiss = hypothesisState.value, navController)
+                                }
                             }
                         }
                     }

@@ -349,24 +349,35 @@ fun Home(
                         .fillMaxSize()
                         .nestedScroll(scrollbehavior.nestedScrollConnection),
                     topBar = {
-                        Appbar("Calculators") {
+                        Appbar("Home") {
                             scope.launch {drawerState.open()}
                         }
                     }
                 ) { values ->
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(values)
-                    ) {
-                        item {
-                            Column (
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ){
-                                Spacer(modifier = Modifier.height(35.dp))
-                                ScrollableList(navController, probs, "Probability and Statistics", "Expanded")
-                                Spacer(modifier = Modifier.height(35.dp))
+                    if (isLoading) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(values),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(values)
+                        ) {
+                            item {
+                                Column (
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ){
+                                    Spacer(modifier = Modifier.height(35.dp))
+                                    ScrollableList(navController, probs, "Probability and Statistics", "Compact")
+                                    Spacer(modifier = Modifier.height(35.dp))
+                                }
                             }
                         }
                     }
@@ -378,24 +389,35 @@ fun Home(
                         .fillMaxSize()
                         .nestedScroll(scrollbehavior.nestedScrollConnection),
                     topBar = {
-                        Appbar("Calculators") {
+                        Appbar("Home") {
                             scope.launch {drawerState.open()}
                         }
                     }
                 ) { values ->
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(values)
-                    ) {
-                        item {
-                            Column (
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ){
-                                Spacer(modifier = Modifier.height(35.dp))
-                                ScrollableList(navController, probs, "Probability and Statistics", "Medium")
-                                Spacer(modifier = Modifier.height(35.dp))
+                    if (isLoading) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(values),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(values)
+                        ) {
+                            item {
+                                Column (
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ){
+                                    Spacer(modifier = Modifier.height(35.dp))
+                                    ScrollableList(navController, probs, "Probability and Statistics", "Compact")
+                                    Spacer(modifier = Modifier.height(35.dp))
+                                }
                             }
                         }
                     }

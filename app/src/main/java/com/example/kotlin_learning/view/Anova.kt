@@ -490,14 +490,15 @@ fun Anova(
                                             Modifier
                                                 .fillMaxWidth(fraction = 0.9f)
                                                 .height(50.dp))
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
                                         Spacer50()
                                         CircularProgressIndicator()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
                                         if (display) {
-                                            Spacer50()
                                             Card(
                                                 shape = RoundedCornerShape(20.dp),
                                                 colors = CardDefaults.cardColors(
@@ -687,14 +688,15 @@ fun Anova(
                                             Modifier
                                                 .fillMaxWidth(fraction = 0.9f)
                                                 .height(50.dp))
+                                        Spacer50()
                                     }
                                     NetworkResponse.Loading -> {
                                         Spacer50()
                                         CircularProgressIndicator()
+                                        Spacer50()
                                     }
                                     is NetworkResponse.Success -> {
                                         if (display) {
-                                            Spacer50()
                                             Card(
                                                 shape = RoundedCornerShape(20.dp),
                                                 colors = CardDefaults.cardColors(
