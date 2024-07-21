@@ -46,5 +46,5 @@ Go to the [releases page](https://github.com/s1lent18/ProbStats/releases) to dow
 - [x] Ungrouped
 
 ## Api
-- [Link](https://github.com/s1lent18/Flask-Apis/blob/main/ProbStats.py)
+- [Flask-Api](https://github.com/s1lent18/Flask-Apis/blob/main/ProbStats.py)
 
