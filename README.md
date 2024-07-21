@@ -15,19 +15,10 @@ Go to the [releases page](https://github.com/s1lent18/ProbStats/releases) to dow
 <p align="center">
   <img src="screenshots/Home.png" width="250" alt="Home Light Mode">
   <img src="screenshots/LoginPage.png" width="250" alt="Login Light Mode">
-  <img src="screenshots/ChangePasswordL.png" width="250" alt="Change Password Light Mode">
+  <img src="screenshots/ChangePassword.png" width="250" alt="Change Password Light Mode">
   <img src="screenshots/AccountDetails.png" width="250" alt="Account Details Light Mode">
-  <img src="screenshots/HistoryL.png" width="250" alt="History Light Mode">
-  <img src="screenshots/SignupPageL.png" width="250" alt="Signup Page Light Mode">
-</p>
-
-<p align="center">
-  <img src="screenshots/HomeD.png" width="250" alt="Home Dark Mode">
-  <img src="screenshots/LoginPageD.png" width="250" alt="Login Dark Mode">
-  <img src="screenshots/ChangePasswordD.png" width="250" alt="Change Password Dark Mode">
-  <img src="screenshots/AccountDetailsD.png" width="250" alt="Account Details Dark Mode">
-  <img src="screenshots/HistoryD.png" width="250" alt="History Dark Mode">
-  <img src="screenshots/SignupPageD.png" width="250" alt="Signup Page Dark Mode">
+  <img src="screenshots/History.png" width="250" alt="History Light Mode">
+  <img src="screenshots/SignupPage.png" width="250" alt="Signup Page Light Mode">
 </p>
 
 ## Development Roadmap
@@ -53,4 +44,7 @@ Go to the [releases page](https://github.com/s1lent18/ProbStats/releases) to dow
 - [x] Poisson
 - [x] Simple Linear Regression
 - [x] Ungrouped
+
+## Api
+- [Flask-Api](https://github.com/s1lent18/Flask-Apis/blob/main/ProbStats.py)
 
