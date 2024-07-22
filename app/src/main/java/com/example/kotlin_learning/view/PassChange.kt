@@ -193,41 +193,62 @@ fun PassChange(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            color = if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White
+                            color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
                         )
                 ) {
-                    Column (
+                    Card (
                         modifier = Modifier
-                            .fillMaxSize()
-                            .align(Alignment.Center),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                            .fillMaxWidth(fraction = 0.9f)
+                            .fillMaxHeight(fraction = 0.8f)
+                            .align(Alignment.Center)
+                        ,
+                        colors = CardDefaults.elevatedCardColors(
+                            containerColor = if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White
+                        ),
+                        elevation = CardDefaults.cardElevation(
+                            10.dp
+                        ),
+                        border = BorderStroke(1.dp, color = Color.Transparent)
                     ) {
-                        Text("Change Password", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground, fontSize = 30.sp)
-                        Spacer50()
-                        StringInput(label = "Old Password", value = oldpass, onValueChange = setoldpass)
-                        Spacer50()
-                        StringInput(label = "New Password", value = newpass, onValueChange = setnewpass)
-                        Spacer50()
-                        StringInput(label = "Confirm New Password", value = connewpass, onValueChange = setconnewpass)
-                        Spacer50()
-                        ElevatedButton(
-                            modifier = Modifier.fillMaxWidth(fraction = 0.9f),
-                            onClick = {
-                                if(email != null && oldpass != "" && newpass != "" && connewpass != "" && newpass == connewpass) {
-                                    authViewModel.reauthenticateAndChangePassword(email!!, oldpass, newpass)
-                                    //authViewModel.signout()
-                                }
-                            },
-                            elevation = ButtonDefaults.elevatedButtonElevation(
-                                10.dp
-                            ),
-                            colors = ButtonDefaults.elevatedButtonColors(
-                                containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                                contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
-                            )
+                        Column (
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
-                            Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                            Text("Change Password",
+                                color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                fontSize = 50.sp,
+                                fontFamily = Amatic
+                            )
+                            Spacer(modifier = Modifier.height(100.dp))
+                            StringInput(label = "Old Password", value = oldpass, onValueChange = setoldpass)
+                            Spacer50()
+                            StringInput(label = "New Password", value = newpass, onValueChange = setnewpass)
+                            Spacer50()
+                            StringInput(label = "Confirm New Password", value = connewpass, onValueChange = setconnewpass)
+                            Spacer(modifier = Modifier.height(70.dp))
+                            ElevatedButton(
+                                modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp),
+                                onClick = {
+                                    if(email != null && oldpass != "" && newpass != "" && connewpass != "" && newpass == connewpass) {
+                                        authViewModel.reauthenticateAndChangePassword(email!!, oldpass, newpass)
+                                    } else {
+                                        showerrorDialog.value = true
+                                    }
+                                },
+                                elevation = ButtonDefaults.elevatedButtonElevation(
+                                    10.dp
+                                ),
+                                colors = ButtonDefaults.elevatedButtonColors(
+                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                )
+                            ) {
+                                Text(text = "Change Password", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                            }
                         }
                     }
                 }
@@ -245,40 +266,62 @@ fun PassChange(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            color = if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White
+                            color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground
                         )
                 ) {
-                    Column (
+                    Card (
                         modifier = Modifier
-                            .fillMaxSize()
-                            .align(Alignment.Center),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                            .fillMaxWidth(fraction = 0.9f)
+                            .fillMaxHeight(fraction = 0.8f)
+                            .align(Alignment.Center)
+                        ,
+                        colors = CardDefaults.elevatedCardColors(
+                            containerColor = if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White
+                        ),
+                        elevation = CardDefaults.cardElevation(
+                            10.dp
+                        ),
+                        border = BorderStroke(1.dp, color = Color.Transparent)
                     ) {
-                        Text("Change Password", color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground, fontSize = 30.sp)
-                        Spacer50()
-                        StringInput(label = "Old Password", value = oldpass, onValueChange = setoldpass)
-                        Spacer50()
-                        StringInput(label = "New Password", value = newpass, onValueChange = setnewpass)
-                        Spacer50()
-                        StringInput(label = "Confirm New Password", value = connewpass, onValueChange = setconnewpass)
-                        Spacer50()
-                        ElevatedButton(
-                            modifier = Modifier.fillMaxWidth(fraction = 0.9f),
-                            onClick = {
-                                if(email != null && oldpass != "" && newpass != "" && connewpass != "" && newpass == connewpass) {
-                                    authViewModel.reauthenticateAndChangePassword(email!!, oldpass, newpass)
-                                }
-                            },
-                            elevation = ButtonDefaults.elevatedButtonElevation(
-                                10.dp
-                            ),
-                            colors = ButtonDefaults.elevatedButtonColors(
-                                containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
-                                contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
-                            )
+                        Column (
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
-                            Text(text = "Generate Answer", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                            Text("Change Password",
+                                color = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                fontSize = 50.sp,
+                                fontFamily = Amatic
+                            )
+                            Spacer(modifier = Modifier.height(100.dp))
+                            StringInput(label = "Old Password", value = oldpass, onValueChange = setoldpass)
+                            Spacer50()
+                            StringInput(label = "New Password", value = newpass, onValueChange = setnewpass)
+                            Spacer50()
+                            StringInput(label = "Confirm New Password", value = connewpass, onValueChange = setconnewpass)
+                            Spacer(modifier = Modifier.height(70.dp))
+                            ElevatedButton(
+                                modifier = Modifier.fillMaxWidth(fraction = 0.9f).height(50.dp),
+                                onClick = {
+                                    if(email != null && oldpass != "" && newpass != "" && connewpass != "" && newpass == connewpass) {
+                                        authViewModel.reauthenticateAndChangePassword(email!!, oldpass, newpass)
+                                    } else {
+                                        showerrorDialog.value = true
+                                    }
+                                },
+                                elevation = ButtonDefaults.elevatedButtonElevation(
+                                    10.dp
+                                ),
+                                colors = ButtonDefaults.elevatedButtonColors(
+                                    containerColor = if (isSystemInDarkTheme()) darkmodebackground else lightmodebackground,
+                                    contentColor = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor
+                                )
+                            ) {
+                                Text(text = "Change Password", color = if (isSystemInDarkTheme()) darkmodefontcolor else lightmodefontcolor)
+                            }
                         }
                     }
                 }
